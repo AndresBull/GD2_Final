@@ -7,12 +7,13 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Collider))]
 public class ClimberBehaviour : MonoBehaviour
 {
+    #region Fields
     [Header("Horizontal Movement")]
     [Tooltip("The maximum speed at which the climber moves around.")][SerializeField]
     private float _maxSpeed = 10f;
     
     [Header("Jumping")]
-    [Tooltip("WARNING: PROTOTYPING ONLY\nThis multiplier can be used during prototyping to increase the jump to reach heights quickly. Not for use in the build. Set to 1 (one) to disable.")][SerializeField]
+    [Tooltip("WARNING: PROTOTYPING ONLY\nThis multiplier can be used during prototyping to increase the jump to reach heights quickly. It will be ignored in the build. Set to 1 (one) to disable.")][SerializeField]
     private float _jumpMultiplier = 1f;
     [Tooltip("The height of the jump (in units).")][SerializeField]
     private float _jumpHeight = 0.5f;
@@ -23,14 +24,16 @@ public class ClimberBehaviour : MonoBehaviour
     [Tooltip("The layers to test collision against. Default tests against everything.")][SerializeField]
     private LayerMask CollisionMask = ~0;
 
-    private Vector3 _colExtents;
-    private float _horizontalMovement;
-    private float _jumpForce = 3.0f;
-    private float _jumpTimer;
+    private Rigidbody _rb;                                  // reference to the rigidbody component attached to this gameobject
+    private Collider _col;                                  // reference to the (base) collider component attached to this gameobject;
 
-    private Rigidbody _rb;
-    private Collider _col;
-    private bool _isJumping = false;
+    private Vector3 _colExtents;                            // the extents of the collider
+    private float _horizontalMovement;                      // float that stores the value of the movement on the x-axis
+    private float _jumpTimer = 0.0f;                        // float to compare the current runtime to the jump call time to determine if the call happened inside the jump delay interval
+    private readonly float _jumpForce = 3.0f;               // the force applied to the rigidbody at the start of a jump
+
+    private bool _isJumping = false;                        // bool to determine if the character is jumping or not
+    #endregion
 
     void Start()
     {
@@ -70,18 +73,18 @@ public class ClimberBehaviour : MonoBehaviour
 
     public void OnPlaceLadder(InputAction.CallbackContext context)
     {
-
+        if (context.ReadValueAsButton())
+        {
+            print("Place Ladder");
+        }
     }
 
     public void OnPickupLadder(InputAction.CallbackContext context)
     {
-
-    }
-
-    private bool IsGrounded()
-    {
-        Physics.BoxCast(transform.position + (0.1f * Vector3.up), _colExtents, Vector3.down, out RaycastHit hit, transform.rotation, 0.1f, CollisionMask);
-        return hit.collider != null && _rb.velocity.y <= 0;
+        if (context.ReadValueAsButton())
+        {
+            print("Pick up Ladder");
+        }
     }
 
     private void UseGravity()
@@ -104,5 +107,11 @@ public class ClimberBehaviour : MonoBehaviour
     {
         _rb.AddForce(Vector3.up * _jumpForce * _jumpMultiplier * _jumpHeight, ForceMode.Impulse);
         _jumpTimer = 0.0f;
+    }
+
+    private bool IsGrounded()
+    {
+        Physics.BoxCast(transform.position + (0.1f * Vector3.up), _colExtents, Vector3.down, out RaycastHit hit, transform.rotation, 0.1f, CollisionMask);
+        return hit.collider != null && _rb.velocity.y <= 0;
     }
 }

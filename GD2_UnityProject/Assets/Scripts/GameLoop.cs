@@ -1,4 +1,7 @@
 ﻿using Assets.Scripts;
+using Assets.Scripts.BoardBase;
+using Assets.Scripts.Utils;
+using Assets.Scripts.Views;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

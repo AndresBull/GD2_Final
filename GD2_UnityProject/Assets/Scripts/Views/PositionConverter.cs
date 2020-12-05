@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Assets.Scripts.BoardBase;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Views
 {
     [CreateAssetMenu(fileName = "DefaultPositionConverter", menuName = "PositionConverter")]
     public class PositionConverter : ScriptableObject

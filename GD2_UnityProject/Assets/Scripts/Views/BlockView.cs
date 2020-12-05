@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.BoardBase;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Views
 {
     [SelectionBase]
     public class BlockView : MonoBehaviour, IPointerClickHandler
@@ -34,7 +35,7 @@ namespace Assets.Scripts
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log($"This block is located at {Model.BlockPosition} in the blockarray");
+            Debug.Log($"This block is located at {Model.BlockPosition.X}, {Model.BlockPosition.Y} in the blockarray");
         }
     }
 }

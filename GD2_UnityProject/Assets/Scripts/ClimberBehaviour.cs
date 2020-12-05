@@ -16,8 +16,10 @@ public class ClimberBehaviour : MonoBehaviour
     [Header("Horizontal Movement")]
     [Tooltip("The maximum speed at which the climber moves around.")][SerializeField]
     private float _maxSpeed = 10f;
-    
+
     [Header("Jumping")]
+    [Tooltip("The kind of jumping system used by the caracter.")]
+    private JumpMode _jumpMode = JumpMode.Simplified;
     [Tooltip("WARNING: PROTOTYPING ONLY\nThis multiplier can be used during prototyping to increase the jump to reach heights quickly. It will be ignored in the build. Set to 1 (one) to disable.")][SerializeField]
     private float _jumpMultiplier = 1f;
     [Tooltip("The height of the jump (in units).")][SerializeField]
@@ -75,13 +77,13 @@ public class ClimberBehaviour : MonoBehaviour
         UseGravity();
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawRay(transform.position, transform.forward * _rayLength);
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position + transform.up * _colExtents.x * 2, transform.forward * _rayLength);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.blue;
+    //    Gizmos.DrawRay(transform.position, transform.forward * _rayLength);
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawRay(transform.position + transform.up * _colExtents.x * 2, transform.forward * _rayLength);
+    //}
     #endregion
 
     private void ConvertCameraToWorldTransform()
@@ -90,7 +92,7 @@ public class ClimberBehaviour : MonoBehaviour
         _cameraTransform.forward = Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up);
     }
 
-    private void CheckLedge()
+    private void CheckLedge() // this method will be replaced by a call to the grid to get the status of the block northeast
     {
         if (!IsGrounded() && _rb.velocity.y > 0 && _rb.velocity.y <= 0.1f)
         {
@@ -127,7 +129,14 @@ public class ClimberBehaviour : MonoBehaviour
 
     private void Jump()
     {
-        _rb.AddForce(Vector3.up * _jumpForce * _jumpMultiplier * _jumpHeight, ForceMode.Impulse);
+        if (_jumpMode == JumpMode.Realistic)
+        {
+            _rb.AddForce(Physics.gravity.normalized * Mathf.Sqrt(2.0f * Physics.gravity.magnitude * _jumpHeight * _jumpMultiplier), ForceMode.Impulse);
+        }
+        else
+        {
+            _rb.AddForce(Vector3.up * _jumpForce * _jumpMultiplier * _jumpHeight, ForceMode.Impulse);
+        }
         _jumpTimer = 0.0f;
         _isHanging = false;
     }
@@ -192,4 +201,11 @@ public class ClimberBehaviour : MonoBehaviour
         }
     }
     #endregion
+}
+
+
+public enum JumpMode
+{
+    Realistic,
+    Simplified
 }

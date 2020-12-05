@@ -23,6 +23,7 @@ public class BlockScript : MonoBehaviour
         while (Application.isPlaying)
         {
             this.transform.position -= Vector3.up * _speed * Time.deltaTime;
+            GameLoop.Instance.ConnectBlockViews(GameLoop.Instance.Array);
             yield return new WaitForSeconds(_dropDownDelay);
         }
     }

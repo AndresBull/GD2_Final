@@ -21,7 +21,7 @@ public class GameLoop : SingletonMonoBehaviour<GameLoop>
         ConnectBlockViews(Array);
     }
 
-    private void ConnectBlockViews(BlockArray array)
+    public void ConnectBlockViews(BlockArray array)
     {
         var blockViews = FindObjectsOfType<BlockView>();
         foreach (var blockView in blockViews)

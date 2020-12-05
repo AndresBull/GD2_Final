@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.BoardBase;
+﻿using BoardBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Assets.Scripts.Views
+namespace Views
 {
     [SelectionBase]
     public class BlockView : MonoBehaviour, IPointerClickHandler

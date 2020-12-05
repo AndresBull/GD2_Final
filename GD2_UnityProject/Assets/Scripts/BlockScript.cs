@@ -30,6 +30,7 @@ public class BlockScript : MonoBehaviour
     {
         if (!collision.gameObject.CompareTag("Player"))
         {
+            this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             _speed = 0;
         }
     }

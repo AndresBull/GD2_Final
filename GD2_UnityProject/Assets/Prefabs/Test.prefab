@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8807962732372760293}
   m_Layer: 0
   m_Name: Test
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,8 +107,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a72b8aece1653e44ebc804149b5a1e87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HoldBlock: {fileID: 375037989509723869, guid: 2ed3f569543165248ab9ff57ce96abe7,
-    type: 3}
+  _blocks:
+  - {fileID: 375037989509723869, guid: 2ed3f569543165248ab9ff57ce96abe7, type: 3}
+  - {fileID: 3661503866413355401, guid: 81cb6f6162f5b604e8bceb8376b864b6, type: 3}
+  - {fileID: 5440022686769529529, guid: 1cd8336807fd2bb41aeb75cd1b35397f, type: 3}
+  - {fileID: 1112811192075156330, guid: 53857c82175bade4aaebd80c7637f7f9, type: 3}
 --- !u!114 &8807962732372760293
 MonoBehaviour:
   m_ObjectHideFlags: 0

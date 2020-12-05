@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Utils
+namespace Utils
 {
     /// <summary>
     /// Inherit from this base class to create a singleton.

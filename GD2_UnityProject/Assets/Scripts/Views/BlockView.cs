@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.BoardBase;
+﻿using BoardBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,35 +7,23 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Assets.Scripts.Views
+namespace Views
 {
     [SelectionBase]
     public class BlockView : MonoBehaviour, IPointerClickHandler
     {
-        private MeshRenderer _meshRenderer;
-        private Block _model;
+        public BlockPosition BottomLeftBlockPosition;
+        public List<BlockPosition> BlockPositions = new List<BlockPosition>();
 
-        public Block Model
+        
+        public void GetAllBlockPositions()
         {
-            get => _model;
-            set
-            {
-                _model = value;
-            }
-        }
 
-        private void Start()
-        {
-            _meshRenderer = GetComponentInChildren<MeshRenderer>();
-        }
-        private void OnDestroy()
-        {
-            Model = null;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log($"This block is located at {Model.BlockPosition.X}, {Model.BlockPosition.Y} in the blockarray");
+            Debug.Log($"This block is located at {BottomLeftBlockPosition.X}, {BottomLeftBlockPosition.Y} in the blockarray");
         }
     }
 }

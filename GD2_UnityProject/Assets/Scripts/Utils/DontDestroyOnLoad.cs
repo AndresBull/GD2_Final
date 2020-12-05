@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Utils
+namespace Utils
 {
     class DontDestroyOnLoad : MonoBehaviour
     {

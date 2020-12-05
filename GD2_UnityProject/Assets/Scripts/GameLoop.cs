@@ -1,6 +1,7 @@
-﻿using BoardBase;
-using Utils;
-using Views;
+﻿using Assets.Scripts;
+using Assets.Scripts.BoardBase;
+using Assets.Scripts.Utils;
+using Assets.Scripts.Views;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class GameLoop : SingletonMonoBehaviour<GameLoop>
     private PositionConverter _positionConverter = null;
 
     public BlockArray Array { get; } = new BlockArray(8,8);
+
+
 
     private void Awake()
     {

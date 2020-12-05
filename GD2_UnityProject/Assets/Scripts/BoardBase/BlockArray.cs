@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace BoardBase
+namespace Assets.Scripts.BoardBase
 {
     public class BlockArray
     {

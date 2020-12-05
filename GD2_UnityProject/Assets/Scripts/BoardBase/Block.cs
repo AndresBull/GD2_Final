@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BoardBase
+namespace Assets.Scripts.BoardBase
 {
     public class Block
     {

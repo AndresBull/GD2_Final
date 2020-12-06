@@ -7,20 +7,24 @@ using UnityEngine.InputSystem;
 public class BlockDropper : MonoBehaviour
 {
     private GameObject HoldBlock;
+    private Vector3 spawnLocation = new Vector3(0, 12, 0);
+    private Vector2 _movementConstraints = new Vector2(-3,3);
     private float _speed = -25.0f;
     private float _horizontalMovement;
     private bool _hasBlock = true;
     private float _dropTimer;
     private float _dropDelay = 5.0f;
     public List<GameObject> _blocks = new List<GameObject>();
-    private void Start()
+    private void Awake()
     {
+        this.gameObject.transform.position = spawnLocation;
         RandomBlock();
     }
     void FixedUpdate()
     {
         float movement = _horizontalMovement * _speed * Time.fixedDeltaTime;
-        transform.position += new Vector3(movement, 0.0f, 0.0f);
+        transform.position = transform.position + new Vector3(movement, 0.0f, 0.0f);
+        Mathf.Clamp(transform.position.x, _movementConstraints.x, _movementConstraints.y);
         DropDelay();
     }
     public void DropDelay()

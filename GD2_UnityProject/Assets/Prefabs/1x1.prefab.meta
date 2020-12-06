@@ -1,12 +1,6 @@
 fileFormatVersion: 2
-<<<<<<< Updated upstream:GD2_UnityProject/Assets/Scripts/BoardBase.meta
-guid: 3975b6f2cf40bf345967d7a09cf8236c
-folderAsset: yes
-DefaultImporter:
-=======
-guid: 53857c82175bade4aaebd80c7637f7f9
+guid: 3224f4b218bf4ff49932e0885410d8da
 PrefabImporter:
->>>>>>> Stashed changes:GD2_UnityProject/Assets/Prefabs/1x1.prefab.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

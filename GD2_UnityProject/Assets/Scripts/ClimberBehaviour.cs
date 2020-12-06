@@ -33,17 +33,31 @@ public class ClimberBehaviour : MonoBehaviour
     [Tooltip("How far in front of the Climber must be tested for collision.")][SerializeField]
     private float _rayLength = 0.5f;
 
+    [Header("Ladders")]
+    [Tooltip("The ladder prefab for this character.")][SerializeField]
+    private GameObject _ladderPrefab;
+
+    // Components
     private Rigidbody _rb;                                  // reference to the rigidbody component attached to this gameobject
     private Collider _col;                                  // reference to the (base) collider component attached to this gameobject;
-
-    private Vector3 _colExtents;                            // the extents of the collider
     private Transform _cameraTransform;                     // holds the camera transform locally to preserve the original transform from changes
+    
+    // Structs
+    private Vector3 _colExtents;                            // the extents of the collider
     private float _horizontalMovement;                      // float that stores the value of the movement on the x-axis
     private float _jumpTimer = 0.0f;                        // float to compare the current runtime to the jump call time to determine if the call happened inside the jump delay interval
     private readonly float _jumpForce = 3.0f;               // the force applied to the rigidbody at the start of a jump
 
     private bool _isJumping = false;                        // bool to determine if the character is jumping or not
     private bool _isHanging = false;                        // bool that keeps track of whether or not the Climber is hanging on a ledge or not
+    private bool _hasLadder = true;                         // backup field that determines if the climber has its ladder or not
+
+    public bool IsCarryingLadder
+    {
+        get => _hasLadder;
+        private set => _hasLadder = value;
+    }
+
     #endregion
 
     #region GameLoop
@@ -189,7 +203,17 @@ public class ClimberBehaviour : MonoBehaviour
     {
         if (context.ReadValueAsButton())
         {
-            print("Place Ladder");
+            if (IsCarryingLadder)
+            {
+                print("Place Ladder");
+                GameObject ladder = Instantiate(_ladderPrefab, transform);
+                ladder.GetComponent<Ladder>().Owner = this.gameObject;
+                IsCarryingLadder = false;
+            }
+            else
+            {
+                print("No ladder available");
+            }
         }
     }
 
@@ -197,7 +221,11 @@ public class ClimberBehaviour : MonoBehaviour
     {
         if (context.ReadValueAsButton())
         {
-            print("Pick up Ladder");
+            if (!IsCarryingLadder)
+            {
+                
+                print("Pick up Ladder");
+            }
         }
     }
     #endregion

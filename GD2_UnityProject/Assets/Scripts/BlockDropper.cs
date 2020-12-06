@@ -24,7 +24,8 @@ public class BlockDropper : MonoBehaviour
     {
         float movement = _horizontalMovement * _speed * Time.fixedDeltaTime;
         transform.position = transform.position + new Vector3(movement, 0.0f, 0.0f);
-        Mathf.Clamp(transform.position.x, _movementConstraints.x, _movementConstraints.y);
+        float clampedX = Mathf.Clamp(transform.position.x, _movementConstraints.x, _movementConstraints.y);
+        transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
         DropDelay();
     }
     public void DropDelay()

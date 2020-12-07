@@ -400,3 +400,4 @@ MonoBehaviour:
   _rayLength: 0.5
   _ladderPrefab: {fileID: 3727280932546348166, guid: 7f827f7fc94c7c44592eaac55c621276,
     type: 3}
+  _range: 1

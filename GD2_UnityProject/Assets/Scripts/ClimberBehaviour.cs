@@ -36,11 +36,14 @@ public class ClimberBehaviour : MonoBehaviour
     [Header("Ladders")]
     [Tooltip("The ladder prefab for this character.")][SerializeField]
     private GameObject _ladderPrefab;
+    [Tooltip("...")][SerializeField]
+    private float _range = 1f;
 
     // Components
     private Rigidbody _rb;                                  // reference to the rigidbody component attached to this gameobject
     private Collider _col;                                  // reference to the (base) collider component attached to this gameobject;
     private Transform _cameraTransform;                     // holds the camera transform locally to preserve the original transform from changes
+    private GameObject _ladder;
     
     // Structs
     private Vector3 _colExtents;                            // the extents of the collider
@@ -201,12 +204,12 @@ public class ClimberBehaviour : MonoBehaviour
 
     public void OnPlaceLadder(InputAction.CallbackContext context)
     {
-        if (context.ReadValueAsButton())
+        if (!context.ReadValueAsButton()) // ! is used to make sure the method gets called only once (need to read up on this bool to understand why)
         {
             if (IsCarryingLadder)
             {
                 print("Place Ladder");
-                GameObject ladder = Instantiate(_ladderPrefab, transform);
+                GameObject ladder = Instantiate(_ladderPrefab, transform.position, transform.rotation);
                 ladder.GetComponent<Ladder>().Owner = this.gameObject;
                 IsCarryingLadder = false;
             }
@@ -219,12 +222,27 @@ public class ClimberBehaviour : MonoBehaviour
 
     public void OnPickupLadder(InputAction.CallbackContext context)
     {
-        if (context.ReadValueAsButton())
+        if (!context.ReadValueAsButton()) // ! is used to make sure the method gets called only once (need to read up on this bool to understand why)
         {
             if (!IsCarryingLadder)
             {
+                // get all objects inside the range and filter for ladders
+                var colliders = Physics.OverlapSphere(transform.position, _range);
                 
-                print("Pick up Ladder");
+                foreach (var collider in colliders)
+                {
+                    if (collider.gameObject.TryGetComponent(out Ladder ladderScript))
+                    {
+                        if (ladderScript.Owner == this.gameObject)
+                        {
+                            Destroy(ladderScript.gameObject);
+                            print("Picked up Ladder");
+                            IsCarryingLadder = true;
+                            break;
+                        }
+                        continue;
+                    }
+                }
             }
         }
     }

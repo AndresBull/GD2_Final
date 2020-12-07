@@ -23,7 +23,7 @@ namespace Views
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log($"This block is located at {BottomLeftBlockPosition.X}, {BottomLeftBlockPosition.Y} in the blockarray");
+            Debug.Log($"Block {gameObject.name} is located at {BottomLeftBlockPosition.X}, {BottomLeftBlockPosition.Y} in the blockarray");
         }
     }
 }

@@ -2,16 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Views;
 
 public class BlockScript : MonoBehaviour
 {
     private float _speed = 100.0f;
     private float _dropDownDelay = 0.5f;
     private GameObject _blockModel;
+    private BlockView _blockView;
 
     // Start is called before the first frame update
     void Start()
     {
+        _blockView = gameObject.GetComponent<BlockView>();
         StartCoroutine(Drop());
     }
 
@@ -23,7 +26,7 @@ public class BlockScript : MonoBehaviour
         while (Application.isPlaying)
         {
             this.transform.position -= Vector3.up * _speed * Time.deltaTime;
-            GameLoop.Instance.ConnectBlockViews(GameLoop.Instance.Array);
+            GameLoop.Instance.ConnectBlockView(GameLoop.Instance.Array, _blockView);
             yield return new WaitForSeconds(_dropDownDelay);
         }
     }

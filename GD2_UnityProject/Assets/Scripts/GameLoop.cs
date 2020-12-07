@@ -18,18 +18,25 @@ public class GameLoop : SingletonMonoBehaviour<GameLoop>
 
     private void Awake()
     {
-        ConnectBlockViews(Array);
+        AllignBlockViews();
     }
 
-    public void ConnectBlockViews(BlockArray array)
+    private void AllignBlockViews()
     {
         var blockViews = FindObjectsOfType<BlockView>();
         foreach (var blockView in blockViews)
         {
+            var boardPosition = _positionConverter.ToBlockPosition(Array, blockView.transform.position);
+            blockView.transform.position = _positionConverter.ToWorldPosition(Array, boardPosition);
+            ConnectBlockView(Array, blockView);
+        }
+    }
+
+    public void ConnectBlockView(BlockArray array, BlockView blockView)
+    {
             var boardPosition = _positionConverter.ToBlockPosition(array, blockView.transform.position);
             blockView.BottomLeftBlockPosition = boardPosition;
             blockView.GetAllBlockPositions();
             array.AddToDictionary(blockView);
-        }
     }
 }

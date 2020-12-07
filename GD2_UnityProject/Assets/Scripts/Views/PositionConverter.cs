@@ -23,10 +23,15 @@ namespace Views
         {
             var boardSize = Vector3.Scale(new Vector3(array.Columns, array.Rows, 1), BlockScale);
 
-            var boardOffset = (BlockScale - boardSize) / 2;
+            var boardOffset = boardSize / 2;
             boardOffset.z = 0;
 
-            var offset = worldPosition - boardOffset;
+            worldPosition = new Vector3(Mathf.Floor(worldPosition.x), Mathf.Floor(worldPosition.y), 0);
+
+            var unevenRowColOffset = new Vector3(array.Columns % 2, array.Rows % 2, 0);
+            worldPosition -= unevenRowColOffset / 2;
+
+            var offset = worldPosition + boardOffset;
 
             var boardPosition = new BlockPosition
             {
@@ -41,10 +46,10 @@ namespace Views
         {
             var boardSize = Vector3.Scale(new Vector3(array.Columns, array.Rows, 1), BlockScale);
 
-            var boardOffset = (BlockScale - boardSize) / 2;
+            var boardOffset = boardSize / 2;
             boardOffset.z = 0;
 
-            var worldPosition = boardOffset + Vector3.Scale(new Vector3(blockPosition.X,blockPosition.Y, 0), BlockScale);
+            var worldPosition = Vector3.Scale(new Vector3(blockPosition.X,blockPosition.Y, 0), BlockScale) - boardOffset;
 
             return worldPosition;
         }

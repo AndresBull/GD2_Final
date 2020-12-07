@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89c5a0e229296214a9c334a550797a66, type: 3}
   m_Name: DefaultPositionConverter
   m_EditorClassIdentifier: 
+  _blockScale: {x: 1, y: 1, z: 1}

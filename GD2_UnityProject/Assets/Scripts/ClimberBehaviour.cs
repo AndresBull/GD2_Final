@@ -18,14 +18,12 @@ public class ClimberBehaviour : MonoBehaviour
     private float _maxSpeed = 10f;
 
     [Header("Jumping")]
-    [Tooltip("The kind of jumping system used by the caracter.")]
-    private JumpMode _jumpMode = JumpMode.Simplified;
-    [Tooltip("WARNING: PROTOTYPING ONLY\nThis multiplier can be used during prototyping to increase the jump to reach heights quickly. It will be ignored in the build. Set to 1 (one) to disable.")][SerializeField]
-    private float _jumpMultiplier = 1f;
-    [Tooltip("The height of the jump (in units).")][SerializeField]
-    private float _jumpHeight = 0.5f;
     [Tooltip("The time interval in which a jump can be called before the player touches the ground (in seconds).")][SerializeField]
     private float _jumpDelay = 0.25f;
+    [Tooltip("The height of the jump (in units).")][SerializeField]
+    private float _jumpHeight = 0.5f;
+    [Tooltip("WARNING: PROTOTYPING ONLY\nThis multiplier can be used during prototyping to increase the jump to reach heights quickly. It will be ignored in the build. Set to 1 (one) to disable.")][SerializeField]
+    private float _jumpMultiplier = 1f;
 
     [Header("Physics")]
     [Tooltip("The layers to test collision against. Default tests against everything.")][SerializeField]
@@ -36,23 +34,23 @@ public class ClimberBehaviour : MonoBehaviour
     [Header("Ladders")]
     [Tooltip("The ladder prefab for this character.")][SerializeField]
     private GameObject _ladderPrefab;
-    [Tooltip("...")][SerializeField]
+    [Tooltip("Interaction range between climber and ladder.")][SerializeField]
     private float _range = 1f;
 
     // Components
-    private Rigidbody _rb;                                  // reference to the rigidbody component attached to this gameobject
     private Collider _col;                                  // reference to the (base) collider component attached to this gameobject;
+    private Rigidbody _rb;                                  // reference to the rigidbody component attached to this gameobject
     private Transform _cameraTransform;                     // holds the camera transform locally to preserve the original transform from changes
-    private GameObject _ladder;
     
     // Structs
     private Vector3 _colExtents;                            // the extents of the collider
     private float _horizontalMovement;                      // float that stores the value of the movement on the x-axis
     private float _jumpTimer = 0.0f;                        // float to compare the current runtime to the jump call time to determine if the call happened inside the jump delay interval
+    private float _placementDistance = 0.5f;
     private readonly float _jumpForce = 3.0f;               // the force applied to the rigidbody at the start of a jump
 
-    private bool _isJumping = false;                        // bool to determine if the character is jumping or not
     private bool _isHanging = false;                        // bool that keeps track of whether or not the Climber is hanging on a ledge or not
+    private bool _isJumping = false;                        // bool to determine if the character is jumping or not
     private bool _hasLadder = true;                         // backup field that determines if the climber has its ladder or not
 
     public bool IsCarryingLadder
@@ -146,14 +144,7 @@ public class ClimberBehaviour : MonoBehaviour
 
     private void Jump()
     {
-        if (_jumpMode == JumpMode.Realistic)
-        {
-            _rb.AddForce(Physics.gravity.normalized * Mathf.Sqrt(2.0f * Physics.gravity.magnitude * _jumpHeight * _jumpMultiplier), ForceMode.Impulse);
-        }
-        else
-        {
-            _rb.AddForce(Vector3.up * _jumpForce * _jumpMultiplier * _jumpHeight, ForceMode.Impulse);
-        }
+        _rb.AddForce(Vector3.up * _jumpForce * _jumpMultiplier * _jumpHeight, ForceMode.Impulse);
         _jumpTimer = 0.0f;
         _isHanging = false;
     }
@@ -208,16 +199,46 @@ public class ClimberBehaviour : MonoBehaviour
         {
             if (IsCarryingLadder)
             {
-                print("Place Ladder");
-                GameObject ladder = Instantiate(_ladderPrefab, transform.position, transform.rotation);
-                ladder.GetComponent<Ladder>().Owner = this.gameObject;
-                IsCarryingLadder = false;
+                bool placeLadderLeft = false;
+                if (GetXLocationOnBlock() >= 0.5f)
+                {
+                    placeLadderLeft = true;
+                }
+                PlaceLadder(placeLadderLeft);
             }
             else
             {
                 print("No ladder available");
             }
         }
+    }
+
+    private void PlaceLadder(bool placeLadderLeft)
+    {
+        Vector3 position = transform.position;
+        position.y -= _colExtents.y;
+        Quaternion rotation;
+
+        if (placeLadderLeft)
+        {
+            print("Place Ladder Left");
+            position.x -= _placementDistance;
+            rotation = Quaternion.LookRotation(-_cameraTransform.right, _cameraTransform.up);
+        }
+        else
+        {
+            print("Place Ladder Right");
+            position.x += _placementDistance;
+            rotation = Quaternion.LookRotation(_cameraTransform.right, _cameraTransform.up);
+        }
+        GameObject ladder = Instantiate(_ladderPrefab, position, rotation);
+        ladder.GetComponent<Ladder>().Owner = this.gameObject;
+        IsCarryingLadder = false;
+    }
+
+    private float GetXLocationOnBlock()
+    {
+        return transform.position.x - Mathf.Floor(transform.position.x);
     }
 
     public void OnPickupLadder(InputAction.CallbackContext context)
@@ -247,11 +268,4 @@ public class ClimberBehaviour : MonoBehaviour
         }
     }
     #endregion
-}
-
-
-public enum JumpMode
-{
-    Realistic,
-    Simplified
 }

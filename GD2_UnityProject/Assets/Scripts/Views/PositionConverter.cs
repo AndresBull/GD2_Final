@@ -18,7 +18,9 @@ namespace Views
 
         public Vector3 BlockScale => _blockScale;
 
-
+        //Get the blockposition of a worldposition
+        //Rounds positions down to the nearest blockposition
+        //Can be used for blocks ans other objects to determine the blockposition they are on
         public BlockPosition ToBlockPosition(BlockArray array, Vector3 worldPosition)
         {
             var boardSize = Vector3.Scale(new Vector3(array.Columns, array.Rows, 1), BlockScale);
@@ -42,6 +44,7 @@ namespace Views
             return boardPosition;
         }
 
+        //Get the worldposition by giving the array an blockposition (has notting to do with a potential block)
         public Vector3 ToWorldPosition(BlockArray array, BlockPosition blockPosition)
         {
             var boardSize = Vector3.Scale(new Vector3(array.Columns, array.Rows, 1), BlockScale);

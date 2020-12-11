@@ -30,6 +30,8 @@ namespace BoardBase
             CreateDictionary();
         }
 
+        //Creates the dictionary
+        //Creates all potential blockpositions and connects them to an empty blockview
         private void CreateDictionary()
         {
             for (int y = 0; y < Rows; y++)
@@ -41,12 +43,15 @@ namespace BoardBase
             }
         }
 
+        //Connect blockviews to their blockpositions
         internal void AddToDictionary(BlockView blockView)
         {
             //Needs way to get all different parts of multi-block building blocks
+            //Blockview has a list of blockpositions that need to be run over (need their positions first though)
             _blocks[blockView.BottomLeftBlockPosition] = blockView;
         }
 
+        //Returns either the blockview at a specified blockposition or null when there is none
         public BlockView BlockAt(BlockPosition blockPosition)
         {
             if (_blocks.TryGetValue(blockPosition, out var foundValue))

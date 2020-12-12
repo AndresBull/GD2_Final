@@ -38,7 +38,7 @@ public class ClimberBehaviour : MonoBehaviour
     private GameObject _ladderPrefab;
     [Tooltip("Interaction range between climber and ladder.")][SerializeField]
     private float _range = 1f;
-    [Tooltip("The max number of blocks a ladder can bridge vertically.")][SerializeField]
+    [Tooltip("The max number of blocks a ladder can bridge vertically. I.e. the maximum length of the ladder.")][SerializeField]
     private int _maxLadderHeight = 3;
 
     // Components
@@ -51,12 +51,12 @@ public class ClimberBehaviour : MonoBehaviour
     private Vector3 _colExtents;                            // the extents of the collider
     private float _horizontalMovement;                      // float that stores the value of the movement on the x-axis
     private float _jumpTimer = 0.0f;                        // float to compare the current runtime to the jump call time to determine if the call happened inside the jump delay interval
-    private float _placementDistance = 0.5f;
+    private float _placementDistance = 0.5f;                // how far from the climber the ladder will be placed
     private readonly float _jumpForce = 3.0f;               // the force applied to the rigidbody at the start of a jump
 
     private bool _isHanging = false;                        // bool that keeps track of whether or not the Climber is hanging on a ledge or not
     private bool _isJumping = false;                        // bool to determine if the character is jumping or not
-    private bool _hasLadder = true;                         // backup field that determines if the climber has its ladder or not
+    private bool _hasLadder = true;                         // backup field that determines if the climber has his ladder or not
 
     public bool IsCarryingLadder
     {
@@ -76,36 +76,70 @@ public class ClimberBehaviour : MonoBehaviour
         }
         ConvertCameraToWorldTransform();
 
+        // store the BlockArray in a field for easy access
         _blockLayout = GameLoop.Instance.Array;
     }
 
-    void Start()
+    private void Start()
     {
+        // set up the components
         _rb = GetComponent<Rigidbody>();
         _col = GetComponent<Collider>();
         _colExtents = _col.bounds.extents;
 
+        // disable the jumpmultiplier in the build
 #if !UNITY_EDITOR
         JumpMultiplier = 1.0f;
 #endif
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         float movement = _horizontalMovement * _maxSpeed * Time.fixedDeltaTime;
         transform.position += new Vector3(movement, 0.0f, 0.0f);
 
-        CheckLedge();
+        Climb();
         UseGravity();
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.blue;
-    //    Gizmos.DrawRay(transform.position, transform.forward * _rayLength);
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawRay(transform.position + transform.up * _colExtents.x * 2, transform.forward * _rayLength);
-    //}
+    private void Climb()
+    {
+        if (_horizontalMovement == 0)
+            return;
+
+        _isHanging = false;
+        BlockPosition climberBlock = GetClimberBlockPosition();
+
+        if (!IsGrounded() && IsAtTopOfJump() && IsNearLedge(climberBlock))
+        {
+            BlockView block;
+            if (_horizontalMovement > 0)
+            {
+                block = _blockLayout.BlockAt(new BlockPosition(climberBlock.X + 1, climberBlock.Y));
+            }
+            else
+            {
+                block = _blockLayout.BlockAt(new BlockPosition(climberBlock.X - 1, climberBlock.Y));
+            }
+            ScaleBlock(block);
+        }
+    }
+
+    private bool IsAtTopOfJump()
+    {
+        return _rb.velocity.y > 0 && _rb.velocity.y <= 0.1f;
+    }
+
+    private void ScaleBlock(BlockView block)
+    {
+        _isHanging = true;
+
+        BlockPosition blockPosition = GameLoop.Instance.PositionConverter.ToBlockPosition(_blockLayout, block.transform.position);
+        BlockView targetCell = _blockLayout.BlockAt(new BlockPosition(blockPosition.X, blockPosition.Y + 1));
+        Vector3 targetPosition = targetCell.transform.position;
+        transform.position = targetPosition;
+    }
+
     #endregion
 
     private void ConvertCameraToWorldTransform()
@@ -114,23 +148,32 @@ public class ClimberBehaviour : MonoBehaviour
         _cameraTransform.forward = Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up);
     }
 
-    private void CheckLedge() // this method will be replaced by a call to the grid to get the status of the block northeast
+    private bool IsNearLedge(BlockPosition currentBlock)
     {
-        if (!IsGrounded() && _rb.velocity.y > 0 && _rb.velocity.y <= 0.1f)
+        // check ledge when moving in that direction
+        if (_horizontalMovement != 0)
         {
-            // cast two rays, one to check if there is a block next to the climber, ...
-            if (Physics.Raycast(new Ray(transform.position, transform.forward), out RaycastHit block, _rayLength, _collisionMask))
-            {
-                // a second one to check if there is NO block on top of the first block
-                if (!Physics.Raycast(new Ray(transform.position + transform.up * _colExtents.x*2, transform.forward), out RaycastHit block2, _rayLength, _collisionMask))
-                {
-                    print("Hang");
-                    _isHanging = true;
-                    return;
-                }
-                _isHanging = false;
-            }
+            return CheckLedgeAdjacentTo(currentBlock, _horizontalMovement);
         }
+        return false;
+    }
+
+    private bool CheckLedgeAdjacentTo(BlockPosition sourceBlock, float direction)
+    {
+        // normalize direction
+        int dirNormal = (int)(direction / Mathf.Abs(direction));
+
+        BlockView adjacentBlock = _blockLayout.BlockAt(new BlockPosition(sourceBlock.X + (1 * dirNormal), sourceBlock.Y));
+
+        if (adjacentBlock == null)
+            return false;
+
+        BlockView adjacentBlockNorth = _blockLayout.BlockAt(new BlockPosition(sourceBlock.X + (1 * dirNormal), sourceBlock.Y + 1));
+
+        if (adjacentBlockNorth != null)
+            return false;
+
+        return true;
     }
 
     private void UseGravity()
@@ -162,7 +205,7 @@ public class ClimberBehaviour : MonoBehaviour
         return hit.collider != null && _rb.velocity.y <= 0;
     }
 
-    private bool FindSuitablePlacementOnSide(int sideNormal, BlockPosition climberBlock, ref int ladderLength, ref bool isAtPreferredSide)
+    private bool FindSuitablePlacementOnSide(int direction, BlockPosition climberBlock, ref int ladderLength, ref bool isAtPreferredSide)
     {
         for (int i = 1; i <= _maxLadderHeight; i++)
         {
@@ -180,11 +223,12 @@ public class ClimberBehaviour : MonoBehaviour
             return false;
         }
 
+        int dirNormal = (int)(direction / Mathf.Abs(direction));
         // check west side
         for (int i = 2; i <= ladderLength; i++)
         {
-            BlockView blockNorthWest = _blockLayout.BlockAt(new BlockPosition(climberBlock.X - (1 * sideNormal), climberBlock.Y + i));
-            BlockView blockUnderNorthWest = _blockLayout.BlockAt(new BlockPosition(climberBlock.X - (1 * sideNormal), climberBlock.Y + i - 1));
+            BlockView blockNorthWest = _blockLayout.BlockAt(new BlockPosition(climberBlock.X - (1 * dirNormal), climberBlock.Y + i));
+            BlockView blockUnderNorthWest = _blockLayout.BlockAt(new BlockPosition(climberBlock.X - (1 * dirNormal), climberBlock.Y + i - 1));
 
             if (blockNorthWest == null && blockUnderNorthWest != null)
             {
@@ -198,8 +242,8 @@ public class ClimberBehaviour : MonoBehaviour
         // check east side
         for (int i = 2; i <= ladderLength; i++)
         {
-            BlockView blockNorthEast = _blockLayout.BlockAt(new BlockPosition(climberBlock.X + (1 * sideNormal), climberBlock.Y + i));
-            BlockView blockUnderNorthEast = _blockLayout.BlockAt(new BlockPosition(climberBlock.X + (1 * sideNormal), climberBlock.Y + i - 1));
+            BlockView blockNorthEast = _blockLayout.BlockAt(new BlockPosition(climberBlock.X + (1 * dirNormal), climberBlock.Y + i));
+            BlockView blockUnderNorthEast = _blockLayout.BlockAt(new BlockPosition(climberBlock.X + (1 * dirNormal), climberBlock.Y + i - 1));
 
             if (blockNorthEast == null && blockUnderNorthEast != null)
             {
@@ -220,16 +264,26 @@ public class ClimberBehaviour : MonoBehaviour
         position.y -= _colExtents.y;
         Quaternion rotation;
 
-        if (placeLadderLeft || !isAtPreferredSide)
+        if (placeLadderLeft)
         {
             print("Place Ladder West/Left");
             position.x -= _placementDistance;
+            if (!isAtPreferredSide)
+            {
+                rotation = Quaternion.LookRotation(_cameraTransform.right, _cameraTransform.up);
+                return;
+            }
             rotation = Quaternion.LookRotation(-_cameraTransform.right, _cameraTransform.up);
         }
         else
         {
             print("Place Ladder East/Right");
             position.x += _placementDistance;
+            if (!isAtPreferredSide)
+            {
+                rotation = Quaternion.LookRotation(-_cameraTransform.right, _cameraTransform.up);
+                return;
+            }
             rotation = Quaternion.LookRotation(_cameraTransform.right, _cameraTransform.up);
         }
         
@@ -310,13 +364,13 @@ public class ClimberBehaviour : MonoBehaviour
 
                 if (GetXLocationOnBlock() >= 0.5f)
                 {
-                    print("Placing Ladder West/Left...");
+                    print("Looking for placement West/Left...");
                     placeLadderWest = true;
                     hasFoundPlacement = FindSuitablePlacementOnSide(1, climberBlock, ref ladderLength, ref isPlacedOnPreferredSide);
                 }
                 else
                 {
-                    print("Placing Ladder East/Right...");
+                    print("Looking for placement East/Right...");
                     placeLadderWest = false;
                     hasFoundPlacement = FindSuitablePlacementOnSide(-1, climberBlock, ref ladderLength, ref isPlacedOnPreferredSide);
                 }
@@ -325,36 +379,6 @@ public class ClimberBehaviour : MonoBehaviour
                 {
                     PlaceLadder(placeLadderWest, isPlacedOnPreferredSide, ladderLength);
                 }
-
-                //for (int i = 1; i <= _maxLadderHeight; i++)
-                //{
-                //    BlockView blockNorthWest = _blockLayout.BlockAt(new BlockPosition(climberBlock.X - 1, climberBlock.Y + i));
-                //    BlockView blockNorthWest2 = _blockLayout.BlockAt(new BlockPosition(climberBlock.X - 1, climberBlock.Y + (i+1)));
-                //    BlockView blockNorth2 = _blockLayout.BlockAt(new BlockPosition(climberBlock.X, climberBlock.Y + (i+1)));
-
-                //    if(blockNorthWest != null && blockNorthWest2 == null && blockNorth2 == null)
-                //    {
-                //        placeLadderWest = true;
-                //        isLadderPlacedAtPreferredSide = true;
-                //        ladderLength = i;
-                //        PlaceLadder(placeLadderWest, isLadderPlacedAtPreferredSide, ladderLength);
-                //        return;
-                //    }
-                //}
-                //for (int i = 1; i <= _maxLadderHeight; i++)
-                //{
-                //    BlockView blockNorthEast = _blockLayout.BlockAt(new BlockPosition(climberBlock.X + 1, climberBlock.Y + i));
-                //    BlockView blockNorthEast2 = _blockLayout.BlockAt(new BlockPosition(climberBlock.X + 1, climberBlock.Y + (i + 1)));
-                //    BlockView blockNorth2 = _blockLayout.BlockAt(new BlockPosition(climberBlock.X, climberBlock.Y + (i + 1)));
-
-                //    if (blockNorthEast != null && blockNorthEast2 == null && blockNorth2 == null)
-                //    {
-                //        placeLadderWest = true;
-                //        isLadderPlacedAtPreferredSide = true;
-                //        ladderLength = i;
-                //        break;
-                //    }
-                //}
             }
             else
             {
@@ -369,6 +393,8 @@ public class ClimberBehaviour : MonoBehaviour
         {
             if (!IsCarryingLadder)
             {
+                BlockPosition climberBlock = GetClimberBlockPosition();
+
                 // get all objects inside the range and filter for ladders
                 var colliders = Physics.OverlapSphere(transform.position, _range);
                 

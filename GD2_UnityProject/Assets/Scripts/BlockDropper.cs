@@ -9,7 +9,7 @@ public class BlockDropper : MonoBehaviour
     private GameObject HoldBlock;
     private Vector3 spawnLocation = new Vector3(0, 12, 0);
     private Vector2 _movementConstraints = new Vector2(-3,3);
-    private float _speed = -25.0f;
+    private float _speed = 25.0f;
     private float _horizontalMovement;
     private bool _hasBlock = true;
     private float _dropTimer;
@@ -20,6 +20,7 @@ public class BlockDropper : MonoBehaviour
         this.gameObject.transform.position = spawnLocation;
         RandomBlock();
     }
+
     void FixedUpdate()
     {
         float movement = _horizontalMovement * _speed * Time.fixedDeltaTime;
@@ -28,6 +29,7 @@ public class BlockDropper : MonoBehaviour
         transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
         DropDelay();
     }
+
     public void DropDelay()
     {
         if (!_hasBlock)
@@ -43,7 +45,7 @@ public class BlockDropper : MonoBehaviour
 
     private void RandomBlock()
     {
-        var key = UnityEngine.Random.Range(0, 3);
+        var key = UnityEngine.Random.Range(0, _blocks.Count);
         HoldBlock = _blocks[key];
     }
 
@@ -51,6 +53,7 @@ public class BlockDropper : MonoBehaviour
     {
         _horizontalMovement = context.ReadValue<float>();
     }
+
     public void OnDrop(InputAction.CallbackContext context)
     {
         if (context.ReadValueAsButton())
@@ -58,8 +61,8 @@ public class BlockDropper : MonoBehaviour
             if (_hasBlock)
             {
                 _hasBlock = false;
-                _dropTimer = 0;
                 Drop();
+                _dropTimer = 0;
                 return;
             }
         }

@@ -6,20 +6,16 @@ using Views;
 
 public class BlockScript : MonoBehaviour
 {
-    private float _speed = 100.0f;
+    private float _speed = 50.0f;
     private float _dropDownDelay = 0.5f;
     private GameObject _blockModel;
     private BlockView _blockView;
 
-    // Start is called before the first frame update
     void Start()
     {
         _blockView = gameObject.GetComponent<BlockView>();
         StartCoroutine(Drop());
     }
-
-    // Update is called once per frame
-    
 
     private IEnumerator Drop()
     {

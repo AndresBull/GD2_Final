@@ -11,11 +11,13 @@ public class Ladder : MonoBehaviour
 
     public GameObject Owner { get; set; } = null;           // the character that owns the ladder
 
+    public int Length { get; set; }
+
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
 
-        transform.rotation *= Quaternion.Euler(10.0f, 0.0f, 0.0f);
+        transform.rotation *= Quaternion.Euler(-10.0f, 0.0f, 0.0f);
         _target = Quaternion.Euler(15.0f + transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z);
         _timer = Time.time;
     }

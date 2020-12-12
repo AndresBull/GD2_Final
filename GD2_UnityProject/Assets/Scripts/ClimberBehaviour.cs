@@ -1,8 +1,10 @@
-﻿using System;
+﻿using BoardBase;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Views;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
@@ -36,8 +38,11 @@ public class ClimberBehaviour : MonoBehaviour
     private GameObject _ladderPrefab;
     [Tooltip("Interaction range between climber and ladder.")][SerializeField]
     private float _range = 1f;
+    [Tooltip("The max number of blocks a ladder can bridge vertically.")][SerializeField]
+    private int _maxLadderHeight = 3;
 
     // Components
+    private BlockArray _blockLayout;                        // reference to the array that represents the layout of the blocks
     private Collider _col;                                  // reference to the (base) collider component attached to this gameobject;
     private Rigidbody _rb;                                  // reference to the rigidbody component attached to this gameobject
     private Transform _cameraTransform;                     // holds the camera transform locally to preserve the original transform from changes
@@ -70,6 +75,8 @@ public class ClimberBehaviour : MonoBehaviour
             _camera = GameObject.FindGameObjectWithTag("MainCamera");
         }
         ConvertCameraToWorldTransform();
+
+        _blockLayout = GameLoop.Instance.Array;
     }
 
     void Start()
@@ -155,6 +162,94 @@ public class ClimberBehaviour : MonoBehaviour
         return hit.collider != null && _rb.velocity.y <= 0;
     }
 
+    private bool FindSuitablePlacementOnSide(int sideNormal, BlockPosition climberBlock, ref int ladderLength, ref bool isAtPreferredSide)
+    {
+        for (int i = 1; i <= _maxLadderHeight; i++)
+        {
+            BlockView blockNorth2 = _blockLayout.BlockAt(new BlockPosition(climberBlock.X, climberBlock.Y + i));
+            if (blockNorth2 != null)
+            {
+                ladderLength = i;
+                print(ladderLength);
+                break;
+            }
+        }
+        if (ladderLength < 2)
+        {
+            print("Can't place ladder here. Placement blocked.");
+            return false;
+        }
+
+        // check west side
+        for (int i = 2; i <= ladderLength; i++)
+        {
+            BlockView blockNorthWest = _blockLayout.BlockAt(new BlockPosition(climberBlock.X - (1 * sideNormal), climberBlock.Y + i));
+            BlockView blockUnderNorthWest = _blockLayout.BlockAt(new BlockPosition(climberBlock.X - (1 * sideNormal), climberBlock.Y + i - 1));
+
+            if (blockNorthWest == null && blockUnderNorthWest != null)
+            {
+                ladderLength = i;
+                isAtPreferredSide = true;
+                print("Placed at preferred side.");
+                return true;
+            }
+        }
+
+        // check east side
+        for (int i = 2; i <= ladderLength; i++)
+        {
+            BlockView blockNorthEast = _blockLayout.BlockAt(new BlockPosition(climberBlock.X + (1 * sideNormal), climberBlock.Y + i));
+            BlockView blockUnderNorthEast = _blockLayout.BlockAt(new BlockPosition(climberBlock.X + (1 * sideNormal), climberBlock.Y + i - 1));
+
+            if (blockNorthEast == null && blockUnderNorthEast != null)
+            {
+                ladderLength = i;
+                isAtPreferredSide = false;
+                print("Placed at opposite side.");
+                return true;
+            }
+        }
+
+        print("No suitable placement found for ladder.");
+        return false;
+    }
+
+    private void PlaceLadder(bool placeLadderLeft, bool isAtPreferredSide, int ladderLength)
+    {
+        Vector3 position = transform.position;
+        position.y -= _colExtents.y;
+        Quaternion rotation;
+
+        if (placeLadderLeft || !isAtPreferredSide)
+        {
+            print("Place Ladder West/Left");
+            position.x -= _placementDistance;
+            rotation = Quaternion.LookRotation(-_cameraTransform.right, _cameraTransform.up);
+        }
+        else
+        {
+            print("Place Ladder East/Right");
+            position.x += _placementDistance;
+            rotation = Quaternion.LookRotation(_cameraTransform.right, _cameraTransform.up);
+        }
+        
+        GameObject ladder = Instantiate(_ladderPrefab, position, rotation);
+        ladder.GetComponent<Ladder>().Owner = this.gameObject;
+        ladder.GetComponent<Ladder>().Length = ladderLength;
+        IsCarryingLadder = false;
+    }
+
+    private float GetXLocationOnBlock()
+    {
+        return transform.position.x - Mathf.Floor(transform.position.x);
+    }
+
+    // can possibly be stored in another class / might be set to public so others can access this too
+    private BlockPosition GetClimberBlockPosition()
+    {
+        return GameLoop.Instance.PositionConverter.ToBlockPosition(_blockLayout, transform.position);
+    }
+
     #region Input
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -195,16 +290,71 @@ public class ClimberBehaviour : MonoBehaviour
 
     public void OnPlaceLadder(InputAction.CallbackContext context)
     {
-        if (!context.ReadValueAsButton()) // ! is used to make sure the method gets called only once (need to read up on this bool to understand why)
+        if (!context.ReadValueAsButton()) // ! is used to make sure the method gets called only once instead of twice (pressed: 1 -> 0; released: 0 -> 1)
         {
             if (IsCarryingLadder)
             {
-                bool placeLadderLeft = false;
+                BlockPosition climberBlock = GetClimberBlockPosition();
+                BlockView blockNorth = _blockLayout.BlockAt(new BlockPosition(climberBlock.X, climberBlock.Y + 1));
+
+                if (blockNorth != null)
+                {
+                    print("Can't place ladder here. Placement blocked.");
+                    return;
+                }
+
+                bool placeLadderWest;
+                bool isPlacedOnPreferredSide = true;
+                bool hasFoundPlacement;
+                int ladderLength = _maxLadderHeight;
+
                 if (GetXLocationOnBlock() >= 0.5f)
                 {
-                    placeLadderLeft = true;
+                    print("Placing Ladder West/Left...");
+                    placeLadderWest = true;
+                    hasFoundPlacement = FindSuitablePlacementOnSide(1, climberBlock, ref ladderLength, ref isPlacedOnPreferredSide);
                 }
-                PlaceLadder(placeLadderLeft);
+                else
+                {
+                    print("Placing Ladder East/Right...");
+                    placeLadderWest = false;
+                    hasFoundPlacement = FindSuitablePlacementOnSide(-1, climberBlock, ref ladderLength, ref isPlacedOnPreferredSide);
+                }
+
+                if (hasFoundPlacement)
+                {
+                    PlaceLadder(placeLadderWest, isPlacedOnPreferredSide, ladderLength);
+                }
+
+                //for (int i = 1; i <= _maxLadderHeight; i++)
+                //{
+                //    BlockView blockNorthWest = _blockLayout.BlockAt(new BlockPosition(climberBlock.X - 1, climberBlock.Y + i));
+                //    BlockView blockNorthWest2 = _blockLayout.BlockAt(new BlockPosition(climberBlock.X - 1, climberBlock.Y + (i+1)));
+                //    BlockView blockNorth2 = _blockLayout.BlockAt(new BlockPosition(climberBlock.X, climberBlock.Y + (i+1)));
+
+                //    if(blockNorthWest != null && blockNorthWest2 == null && blockNorth2 == null)
+                //    {
+                //        placeLadderWest = true;
+                //        isLadderPlacedAtPreferredSide = true;
+                //        ladderLength = i;
+                //        PlaceLadder(placeLadderWest, isLadderPlacedAtPreferredSide, ladderLength);
+                //        return;
+                //    }
+                //}
+                //for (int i = 1; i <= _maxLadderHeight; i++)
+                //{
+                //    BlockView blockNorthEast = _blockLayout.BlockAt(new BlockPosition(climberBlock.X + 1, climberBlock.Y + i));
+                //    BlockView blockNorthEast2 = _blockLayout.BlockAt(new BlockPosition(climberBlock.X + 1, climberBlock.Y + (i + 1)));
+                //    BlockView blockNorth2 = _blockLayout.BlockAt(new BlockPosition(climberBlock.X, climberBlock.Y + (i + 1)));
+
+                //    if (blockNorthEast != null && blockNorthEast2 == null && blockNorth2 == null)
+                //    {
+                //        placeLadderWest = true;
+                //        isLadderPlacedAtPreferredSide = true;
+                //        ladderLength = i;
+                //        break;
+                //    }
+                //}
             }
             else
             {
@@ -213,37 +363,9 @@ public class ClimberBehaviour : MonoBehaviour
         }
     }
 
-    private void PlaceLadder(bool placeLadderLeft)
-    {
-        Vector3 position = transform.position;
-        position.y -= _colExtents.y;
-        Quaternion rotation;
-
-        if (placeLadderLeft)
-        {
-            print("Place Ladder Left");
-            position.x -= _placementDistance;
-            rotation = Quaternion.LookRotation(-_cameraTransform.right, _cameraTransform.up);
-        }
-        else
-        {
-            print("Place Ladder Right");
-            position.x += _placementDistance;
-            rotation = Quaternion.LookRotation(_cameraTransform.right, _cameraTransform.up);
-        }
-        GameObject ladder = Instantiate(_ladderPrefab, position, rotation);
-        ladder.GetComponent<Ladder>().Owner = this.gameObject;
-        IsCarryingLadder = false;
-    }
-
-    private float GetXLocationOnBlock()
-    {
-        return transform.position.x - Mathf.Floor(transform.position.x);
-    }
-
     public void OnPickupLadder(InputAction.CallbackContext context)
     {
-        if (!context.ReadValueAsButton()) // ! is used to make sure the method gets called only once (need to read up on this bool to understand why)
+        if (!context.ReadValueAsButton()) // ! is used to make sure the method gets called only once instead of twice (pressed: 1 -> 0; released: 0 -> 1)
         {
             if (!IsCarryingLadder)
             {

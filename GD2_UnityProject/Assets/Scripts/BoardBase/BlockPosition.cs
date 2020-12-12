@@ -10,5 +10,11 @@ namespace BoardBase
     {
         public int X;
         public int Y;
+
+        public BlockPosition(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
     }
 }

@@ -12,7 +12,7 @@ public class GameLoop : SingletonMonoBehaviour<GameLoop>
 
     public BlockArray Array { get; } = new BlockArray(8,8);
 
-
+    public PositionConverter PositionConverter => _positionConverter;
 
     private void Awake()
     {

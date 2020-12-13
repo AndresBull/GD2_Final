@@ -107,12 +107,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a72b8aece1653e44ebc804149b5a1e87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementConstraint: 5
   _blocks:
-  - {fileID: 2555856837095821599, guid: 3224f4b218bf4ff49932e0885410d8da, type: 3}
-  - {fileID: 35838054269749350, guid: 1391c9cfd0a8c0743b3d947cfaf95cc3, type: 3}
-  - {fileID: 5949117134160473016, guid: 5980f5be4555a2140a1cc01066686bb7, type: 3}
-  - {fileID: 6914265267509646862, guid: 452a3fe289b893c478309d6679746fa6, type: 3}
-  - {fileID: 8530594304020537261, guid: 0164fa8979955a047a2490ce80fbeef6, type: 3}
+  - {fileID: 6295494523243553474, guid: ae64dc29b073f574b96fe9ee829d074c, type: 3}
+  - {fileID: 997574660486172692, guid: 5fedff5ed7333e64cbe659bd0f23f39f, type: 3}
+  - {fileID: 4584612816049259791, guid: 07a9304b48f7f514e892460ed4bf24a2, type: 3}
+  - {fileID: 3571620279532924152, guid: 3a2ce2d103aedf74084bd26373075f1c, type: 3}
+  - {fileID: 9045539140680862328, guid: 2155bdc632520a7459677ad07dc59764, type: 3}
 --- !u!114 &8807962732372760293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,6 +226,14 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: e41371db-698a-4911-a4d1-34e904dff476
     m_ActionName: Overlord/Drop Block[/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e9ebf3e5-f05f-42ea-8dbf-964748abde8b
+    m_ActionName: Climber/Join
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 84258864-6613-4ab1-9ee9-2c0a21ad9b61
+    m_ActionName: Overlord/Join
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Gamepad
   m_DefaultActionMap: Overlord

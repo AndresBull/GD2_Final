@@ -6,18 +6,18 @@ using UnityEngine.InputSystem;
 public class InputSwapper : MonoBehaviour
 {
     private PlayerInputManager manager;
-    public GameObject OverlordPrefab;
-    public InputActionReference OverlordReference;
+    public GameObject ClimberPrefab;
+    public InputActionReference ClimberReference;
     private void Start()
     {
         manager = gameObject.GetComponent<PlayerInputManager>();
     }
     private void Update()
     {
-        if (manager.playerCount == 3)
+        if (manager.playerCount == 1)
         {
-            manager.playerPrefab = OverlordPrefab;
-            manager.joinAction.reference.Set(OverlordReference);
+            manager.playerPrefab = ClimberPrefab;
+            manager.joinAction.reference.Set(ClimberReference);
         }
     }
 }

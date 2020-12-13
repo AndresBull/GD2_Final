@@ -8,7 +8,9 @@ public class BlockDropper : MonoBehaviour
 {
     private GameObject HoldBlock;
     private Vector3 spawnLocation = new Vector3(0, 12, 0);
-    private Vector2 _movementConstraints = new Vector2(-3,3);
+    [Range(0,10)]
+    public int movementConstraint;
+    private Vector2 _movementConstraints;
     private float _speed = 25.0f;
     private float _horizontalMovement;
     private bool _hasBlock = true;
@@ -18,6 +20,7 @@ public class BlockDropper : MonoBehaviour
     private void Awake()
     {
         this.gameObject.transform.position = spawnLocation;
+        _movementConstraints = new Vector2(-movementConstraint, movementConstraint);
         RandomBlock();
     }
 

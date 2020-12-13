@@ -206,7 +206,7 @@ PrefabInstance:
     - target: {fileID: 7561675630733967073, guid: 97c203e6ed843d14d92b3c0eae465372,
         type: 3}
       propertyPath: m_MaxPlayerCount
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7561675630733967073, guid: 97c203e6ed843d14d92b3c0eae465372,
         type: 3}

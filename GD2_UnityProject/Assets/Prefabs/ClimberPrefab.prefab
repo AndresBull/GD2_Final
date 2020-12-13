@@ -439,7 +439,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   _rayLength: 0.5
-  _ladderPrefab: {fileID: 3727280932546348166, guid: 7f827f7fc94c7c44592eaac55c621276,
+  _ladderPrefab: {fileID: 1920797143079988020, guid: 3c9c4135af3d1a24aac34f0b422627ef,
     type: 3}
   _range: 1
   _maxLadderHeight: 3
@@ -456,4 +456,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d70471d03d2b0047986d8a6f95e2ace, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _climbSpeed: 5
+  _climbSpeed: 4

@@ -48,17 +48,6 @@ public class LadderClimb : MonoBehaviour
         // TODO: rotate climber to face ladder
     }
 
-    public void OnStartClimb(InputAction.CallbackContext context)
-    {
-        float direction = context.ReadValue<float>();
-        
-        if (direction < 0.5f && direction > -0.5f)
-            return;
-
-        // normalize direction
-        _direction = (int)(direction / Mathf.Abs(direction));
-    }
-
     private void ToggleClimb()
     {
         if (!_isOnBottomTrigger && !_isOnTopTrigger && !IsClimbing)
@@ -125,6 +114,17 @@ public class LadderClimb : MonoBehaviour
         {
             _isOnTopTrigger = false;
         }
+    }
+
+    public void OnStartClimb(InputAction.CallbackContext context)
+    {
+        float direction = context.ReadValue<float>();
+        
+        if (direction < 0.5f && direction > -0.5f)
+            return;
+
+        // normalize direction
+        _direction = (int)(direction / Mathf.Abs(direction));
     }
 }
 

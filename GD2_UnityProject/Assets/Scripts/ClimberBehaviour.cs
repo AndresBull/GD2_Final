@@ -42,6 +42,7 @@ public class ClimberBehaviour : MonoBehaviour
     private float _range = 1f;
     [Tooltip("The max number of blocks a ladder can bridge vertically. I.e. the maximum length of the ladder.")][SerializeField]
     private int _maxLadderHeight = 3;
+    [HideInInspector]
     public bool IsClimbing = false;
 
     // Components
@@ -103,7 +104,6 @@ public class ClimberBehaviour : MonoBehaviour
         float movement = _horizontalMovement * _maxSpeed * Time.fixedDeltaTime;
         transform.position += new Vector3(movement, 0.0f, 0.0f);
 
-        //ClimbLadder();
         ClimbBlocks();
         UseGravity();
     }
@@ -190,7 +190,7 @@ public class ClimberBehaviour : MonoBehaviour
 
     private bool IsAtTopOfJump()
     {
-        return !IsGrounded() && _rb.velocity.y > 0 && _rb.velocity.y <= 0.1f;
+        return !IsGrounded() && _rb.velocity.y >= 0 && _rb.velocity.y <= 0.1f;
     }
 
     private bool IsGrounded()
@@ -416,7 +416,7 @@ public class ClimberBehaviour : MonoBehaviour
                 
                 foreach (var collider in colliders)
                 {
-                    if (collider.gameObject.TryGetComponent(out Ladder ladderScript))
+                    if (collider.transform.root.TryGetComponent(out Ladder ladderScript))
                     {
                         if (ladderScript.Owner == this.gameObject)
                         {

@@ -218,6 +218,17 @@ PrefabInstance:
       propertyPath: m_PlayerJoinedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 7561675630733967073, guid: 97c203e6ed843d14d92b3c0eae465372,
+        type: 3}
+      propertyPath: m_JoinAction.m_UseReference
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7561675630733967073, guid: 97c203e6ed843d14d92b3c0eae465372,
+        type: 3}
+      propertyPath: m_JoinAction.m_Reference
+      value: 
+      objectReference: {fileID: -6723381824576029185, guid: 53ee1df19da6f954badc96f8a86d6b6f,
+        type: 3}
     - target: {fileID: 7561675630733967074, guid: 97c203e6ed843d14d92b3c0eae465372,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -717,7 +728,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _positionConverter: {fileID: 11400000, guid: 38f5ff808782cb64299879d17477313e, type: 2}
-  BlockType: 
 --- !u!114 &1689470834
 MonoBehaviour:
   m_ObjectHideFlags: 0

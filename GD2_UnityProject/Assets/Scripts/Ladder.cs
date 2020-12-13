@@ -5,6 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Ladder : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject _enter;
+    [SerializeField]
+    private GameObject _exit;
     private Rigidbody _rb;
     private Quaternion _target;
     private float _timer;
@@ -34,5 +38,10 @@ public class Ladder : MonoBehaviour
         {
             _rb.isKinematic = true;
         }
+    }
+
+    void SwitchPoints()
+    {
+        // switch enter and exit points when on ladder
     }
 }

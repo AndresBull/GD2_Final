@@ -781,3 +781,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _positionConverter: {fileID: 11400000, guid: 38f5ff808782cb64299879d17477313e, type: 2}
+--- !u!1 &2007232335 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7561675630733967072, guid: 97c203e6ed843d14d92b3c0eae465372,
+    type: 3}
+  m_PrefabInstance: {fileID: 195451978}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2007232336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007232335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68221bb06180aa74ca7b6072ac04ab48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OverlordPrefab: {fileID: 3912653369593397870, guid: 4a8c6fb58250f5e4ebf7c3884213a9cb,
+    type: 3}
+  OverlordReference: {fileID: -6723381824576029185, guid: 53ee1df19da6f954badc96f8a86d6b6f,
+    type: 3}

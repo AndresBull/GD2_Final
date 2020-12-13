@@ -28,9 +28,11 @@ public class ClimberBehaviour : MonoBehaviour
     private float _jumpMultiplier = 1f;
 
     [Header("Physics")]
-    [Tooltip("The layers to test collision against. Default tests against everything.")][SerializeField]
+    [Tooltip("The layers to test collision against. Default tests against everything.")]
+    [SerializeField]
     private LayerMask _collisionMask = ~0;
-    [Tooltip("How far in front of the Climber must be tested for collision.")][SerializeField]
+    [Tooltip("How far in front of the Climber must be tested for collision.")]
+    [SerializeField]
     private float _rayLength = 0.5f;
 
     [Header("Ladders")]
@@ -40,13 +42,17 @@ public class ClimberBehaviour : MonoBehaviour
     private float _range = 1f;
     [Tooltip("The max number of blocks a ladder can bridge vertically. I.e. the maximum length of the ladder.")][SerializeField]
     private int _maxLadderHeight = 3;
+    [Tooltip("The speed of the climber when mounting a ladder.")][SerializeField]
+    private float _climbSpeed;
 
     // Components
     private BlockArray _blockLayout;                        // reference to the array that represents the layout of the blocks
     private Collider _col;                                  // reference to the (base) collider component attached to this gameobject;
     private Rigidbody _rb;                                  // reference to the rigidbody component attached to this gameobject
     private Transform _cameraTransform;                     // holds the camera transform locally to preserve the original transform from changes
-    
+    private Transform _ladderClimbed;                       // the current ladder being climbed
+    private Transform _target;
+
     // Structs
     private Vector3 _colExtents;                            // the extents of the collider
     private float _horizontalMovement;                      // float that stores the value of the movement on the x-axis
@@ -54,9 +60,13 @@ public class ClimberBehaviour : MonoBehaviour
     private float _placementDistance = 0.5f;                // how far from the climber the ladder will be placed
     private readonly float _jumpForce = 3.0f;               // the force applied to the rigidbody at the start of a jump
 
+    private bool _isClimbing = false;
     private bool _isHanging = false;                        // bool that keeps track of whether or not the Climber is hanging on a ledge or not
     private bool _isJumping = false;                        // bool to determine if the character is jumping or not
     private bool _hasLadder = true;                         // backup field that determines if the climber has his ladder or not
+
+    private ClimbState _climbState = ClimbState.None;
+    private ClimbState _previousState = ClimbState.None;
 
     public bool IsCarryingLadder
     {
@@ -98,9 +108,11 @@ public class ClimberBehaviour : MonoBehaviour
         float movement = _horizontalMovement * _maxSpeed * Time.fixedDeltaTime;
         transform.position += new Vector3(movement, 0.0f, 0.0f);
 
-        Climb();
+        ClimbLadder();
+        ClimbBlocks();
         UseGravity();
     }
+
     #endregion
 
     // can possibly be stored in another class / might be set to public so others can access this too
@@ -209,7 +221,7 @@ public class ClimberBehaviour : MonoBehaviour
     }
 
     
-    private void Climb()
+    private void ClimbBlocks()
     {
         if (_horizontalMovement == 0)
             return;
@@ -228,6 +240,57 @@ public class ClimberBehaviour : MonoBehaviour
                 block = _blockLayout.BlockAt(new BlockPosition(climberBlock.X - 1, climberBlock.Y));
             }
             ScaleBlock(block);
+        }
+    }
+
+    private void ClimbLadder()
+    {
+        if (_climbState == ClimbState.None)
+            return;
+
+        MoveTo(_climbState);
+    }
+
+    private void MoveTo(ClimbState climbState)
+    {
+        if (climbState != _previousState)
+        {
+            switch (climbState)
+            {
+                case ClimbState.ToPoint1:
+                    _target = _ladderClimbed.GetComponent<Ladder>().Point1;
+                    break;
+                case ClimbState.ToPoint2:
+                    _target = _ladderClimbed.GetComponent<Ladder>().Point2;
+                    break;
+                case ClimbState.ToExit:
+                    _target = _ladderClimbed.GetComponent<Ladder>().Exit;
+                    break;
+                default:
+                    _target = _ladderClimbed;
+                    break;
+            }
+        }
+        transform.position = Vector3.Lerp(transform.position, _target.position, Time.fixedDeltaTime * _climbSpeed);
+        _previousState = climbState;
+        ChangeState();
+    }
+
+    private void ChangeState()
+    {
+        float distance = Vector3.Distance(transform.position, _target.position);
+
+        if (distance <= 0.1f)
+        {
+            if (_climbState != ClimbState.ToExit)
+            {
+                _climbState++;
+                return;
+            }
+            else
+            {
+                _climbState = 0;
+            }
         }
     }
 
@@ -318,7 +381,7 @@ public class ClimberBehaviour : MonoBehaviour
 
     private void UseGravity()
     {
-        if (IsGrounded() || _isHanging)
+        if (IsGrounded() || _isHanging || _isClimbing)
         {
             _rb.useGravity = false;
             _rb.velocity = new Vector3(_rb.velocity.x, 0.0f, 0.0f);
@@ -330,6 +393,66 @@ public class ClimberBehaviour : MonoBehaviour
             return;
         }
         _rb.useGravity = true;
+    }
+
+    private void OnTriggerEnter(Collider lTrigger)
+    {
+        if (lTrigger.tag == "LEnterTrigger")
+        {
+            if (!_isClimbing)
+            {
+                _isClimbing = true;
+                _ladderClimbed = lTrigger.transform.root;
+                _climbState = ClimbState.ToPoint1;
+                return;
+            }
+            else
+            {
+                _climbState = ClimbState.None;
+                _ladderClimbed = null;
+                _isClimbing = false;
+                return;
+            }
+        }
+        if (lTrigger.tag == "LExitTrigger")
+        {
+            if (!_isClimbing)
+            {
+                _isClimbing = true;
+                _ladderClimbed = lTrigger.transform.root;
+                _climbState = ClimbState.ToPoint2;
+                return;
+            }
+            else
+            {
+                _climbState = ClimbState.None;
+                _ladderClimbed = null;
+                _isClimbing = false;
+                return;
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider lTrigger)
+    {
+        if (lTrigger.tag == "LEnterTrigger")
+        {
+            if (!_isClimbing)
+            {
+                _ladderClimbed = null;
+                _climbState = ClimbState.None;
+                return;
+            }
+        }
+        if (lTrigger.tag == "LExitTrigger")
+        {
+            if (!_isClimbing)
+            {
+                _ladderClimbed = null;
+                _climbState = ClimbState.None;
+                return;
+            }
+        }
     }
 
     #region Input
@@ -425,4 +548,11 @@ public class ClimberBehaviour : MonoBehaviour
         }
     }
     #endregion
+}
+enum ClimbState
+{
+    None,
+    ToPoint1,
+    ToPoint2,
+    ToExit
 }

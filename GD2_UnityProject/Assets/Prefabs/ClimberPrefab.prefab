@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5447244746411454678}
   - component: {fileID: 572090459630158078}
   - component: {fileID: 9129825135275891094}
-  - component: {fileID: 3868846116200637427}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -26,11 +25,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2655493276944216631}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.48, z: 0.352}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.48000002, z: 0.352}
   m_LocalScale: {x: 0.7, y: 0.28, z: 0.53}
   m_Children: []
-  m_Father: {fileID: 8811266625348397410}
+  m_Father: {fileID: 6258449929642058068}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &572090459630158078
@@ -80,19 +79,38 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &3868846116200637427
-BoxCollider:
+--- !u!1 &3296859526599151399
+GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2655493276944216631}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6258449929642058068}
+  m_Layer: 0
+  m_Name: =REPLACE CHILD MODEL (pick mesh for root collider)=
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6258449929642058068
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3296859526599151399}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8811266624796323661}
+  - {fileID: 5447244746411454678}
+  m_Father: {fileID: 8811266625348397410}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8811266624796323660
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,11 +136,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8811266624796323660}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 8811266625348397410}
+  m_Father: {fileID: 6258449929642058068}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8811266624796323656
@@ -182,8 +200,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8811266625348397410}
   - component: {fileID: 8811266625348397408}
-  - component: {fileID: 1203760552699014424}
   - component: {fileID: 5723486765647584272}
+  - component: {fileID: 5652280809923709207}
   - component: {fileID: 659076897191180436}
   m_Layer: 0
   m_Name: ClimberPrefab
@@ -203,8 +221,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_Children:
-  - {fileID: 8811266624796323661}
-  - {fileID: 5447244746411454678}
+  - {fileID: 6258449929642058068}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -342,25 +359,19 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: e41371db-698a-4911-a4d1-34e904dff476
     m_ActionName: Overlord/Drop Block
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e9ebf3e5-f05f-42ea-8dbf-964748abde8b
+    m_ActionName: Climber/Join[/DualShock4GamepadHID/buttonNorth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 84258864-6613-4ab1-9ee9-2c0a21ad9b61
+    m_ActionName: Overlord/Join[/DualShock4GamepadHID/buttonWest]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Gamepad
   m_DefaultActionMap: Climber
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!136 &1203760552699014424
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8811266625348397413}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.65
-  m_Height: 2.11
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5723486765647584272
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -377,6 +388,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!64 &5652280809923709207
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8811266625348397413}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &659076897191180436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -401,3 +426,5 @@ MonoBehaviour:
   _ladderPrefab: {fileID: 3727280932546348166, guid: 7f827f7fc94c7c44592eaac55c621276,
     type: 3}
   _range: 1
+  _maxLadderHeight: 3
+  _climbSpeed: 5

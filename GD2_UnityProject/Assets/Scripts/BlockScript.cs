@@ -35,7 +35,7 @@ public class BlockScript : MonoBehaviour
         if (!collision.gameObject.CompareTag("Player"))
         {
             this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            this.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+            this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
             _speed = 0;
         }
     }

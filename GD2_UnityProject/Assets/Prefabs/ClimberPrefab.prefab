@@ -203,6 +203,7 @@ GameObject:
   - component: {fileID: 5723486765647584272}
   - component: {fileID: 5652280809923709207}
   - component: {fileID: 659076897191180436}
+  - component: {fileID: -2655535800688079255}
   m_Layer: 0
   m_Name: ClimberPrefab
   m_TagString: Untagged
@@ -367,6 +368,21 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 84258864-6613-4ab1-9ee9-2c0a21ad9b61
     m_ActionName: Overlord/Join[/DualShock4GamepadHID/buttonWest]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -2655535800688079255}
+        m_MethodName: OnStartClimb
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 57ce97f3-f235-4baa-8ab7-8d66edec87f6
+    m_ActionName: Climber/ClimbLadder[/DualShock4GamepadHID/leftStick/y]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Gamepad
   m_DefaultActionMap: Climber
@@ -427,4 +443,17 @@ MonoBehaviour:
     type: 3}
   _range: 1
   _maxLadderHeight: 3
+  IsClimbing: 0
+--- !u!114 &-2655535800688079255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8811266625348397413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d70471d03d2b0047986d8a6f95e2ace, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _climbSpeed: 5

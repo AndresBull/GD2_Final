@@ -10,11 +10,8 @@ public class BlockScript : MonoBehaviour
 {
     private float _speed = 1f;
     private float _dropDownDelay = 1f;
-    private GameObject _blockModel;
-    private BlockView _blockView;
     void Start()
     {
-        _blockView = gameObject.GetComponent<BlockView>();
         StartCoroutine(Drop());
     }
 
@@ -24,7 +21,7 @@ public class BlockScript : MonoBehaviour
         {
             for (int i = 0; i < gameObject.transform.childCount; i++)
             {
-                GameLoop.Instance.ConnectBlockView(GameLoop.Instance.Array, gameObject.transform.GetChild(i).GetComponent<BlockView>());
+                GameLoop.Instance.ConnectBlockViews(GameLoop.Instance.Array, gameObject.transform.GetComponent<CombinedBlockView>());
                 gameObject.transform.GetChild(i).transform.position -= Vector3.up * _speed;
             }
             yield return new WaitForSeconds(_dropDownDelay);

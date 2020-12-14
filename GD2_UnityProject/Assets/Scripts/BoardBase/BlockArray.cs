@@ -20,7 +20,7 @@ namespace BoardBase
 
         public int Rows => _rows;
         public int Columns => _columns;
-        public List<BlockView> Blocks => _blocks.Values.ToList();
+        //public List<BlockView> Blocks => _blocks.Values.ToList();
 
         public BlockArray(int rows, int columns)
         {
@@ -44,11 +44,15 @@ namespace BoardBase
         }
 
         //Connect blockviews to their blockpositions
-        internal void AddToDictionary(BlockView blockView)
+        internal void AddToDictionary(CombinedBlockView combinedBlockView)
         {
             //Needs way to get all different parts of multi-block building blocks
             //Blockview has a list of blockpositions that need to be run over (need their positions first though)
-            _blocks[blockView.BottomLeftBlockPosition] = blockView;
+
+            foreach(var blockView in combinedBlockView.BlockViews)
+            {
+                _blocks[blockView.BottomLeftBlockPosition] = blockView;
+            }
         }
 
         //Returns either the blockview at a specified blockposition or null when there is none

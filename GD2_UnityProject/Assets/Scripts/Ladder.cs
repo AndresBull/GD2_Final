@@ -29,11 +29,14 @@ public class Ladder : MonoBehaviour
         _model.rotation *= Quaternion.Euler(-15.0f, 0.0f, 0.0f);
         _targetRot = Quaternion.Euler(15.0f + _model.eulerAngles.x, _model.eulerAngles.y, _model.eulerAngles.z);
 
+        _timer = Time.time;
+    }
+
+    private void Start()
+    {
         Vector3 scale = _model.localScale;
         scale.y = Length;
         _model.localScale = scale;
-
-        _timer = Time.time;
     }
 
     void FixedUpdate()

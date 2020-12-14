@@ -300,10 +300,10 @@ public class ClimberBehaviour : MonoBehaviour
             position.x -= _placementDistance;
             if (!isAtPreferredSide)
             {
-                rotation = Quaternion.LookRotation(_cameraTransform.right, _cameraTransform.up);
+                rotation = Quaternion.LookRotation(-_cameraTransform.right, _cameraTransform.up);
                 return;
             }
-            rotation = Quaternion.LookRotation(-_cameraTransform.right, _cameraTransform.up);
+            rotation = Quaternion.LookRotation(_cameraTransform.right, _cameraTransform.up);
         }
         else
         {
@@ -311,10 +311,10 @@ public class ClimberBehaviour : MonoBehaviour
             position.x += _placementDistance;
             if (!isAtPreferredSide)
             {
-                rotation = Quaternion.LookRotation(-_cameraTransform.right, _cameraTransform.up);
+                rotation = Quaternion.LookRotation(_cameraTransform.right, _cameraTransform.up);
                 return;
             }
-            rotation = Quaternion.LookRotation(_cameraTransform.right, _cameraTransform.up);
+            rotation = Quaternion.LookRotation(-_cameraTransform.right, _cameraTransform.up);
         }
         
         GameObject ladder = Instantiate(_ladderPrefab, position, rotation);

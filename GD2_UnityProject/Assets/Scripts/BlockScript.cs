@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BoardBase;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,8 @@ using Views;
 [SelectionBase]
 public class BlockScript : MonoBehaviour
 {
-    private float _speed = 50.0f;
-    private float _dropDownDelay = 0.5f;
+    private float _speed = 1f;
+    private float _dropDownDelay = 1f;
     private GameObject _blockModel;
     private BlockView _blockView;
     void Start()
@@ -24,7 +25,7 @@ public class BlockScript : MonoBehaviour
             for (int i = 0; i < gameObject.transform.childCount; i++)
             {
                 GameLoop.Instance.ConnectBlockView(GameLoop.Instance.Array, gameObject.transform.GetChild(i).GetComponent<BlockView>());
-                gameObject.transform.GetChild(i).transform.position -= Vector3.up * _speed * Time.deltaTime;
+                gameObject.transform.GetChild(i).transform.position -= Vector3.up * _speed;
             }
             yield return new WaitForSeconds(_dropDownDelay);
         }

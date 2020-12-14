@@ -38,18 +38,18 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Join",
-                    "type": "Button",
-                    "id": "e9ebf3e5-f05f-42ea-8dbf-964748abde8b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
                     "name": "ClimbLadder",
                     "type": "Value",
                     "id": "57ce97f3-f235-4baa-8ab7-8d66edec87f6",
                     "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Join",
+                    "type": "Button",
+                    "id": "e9ebf3e5-f05f-42ea-8dbf-964748abde8b",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }

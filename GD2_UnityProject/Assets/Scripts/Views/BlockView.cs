@@ -9,7 +9,6 @@ using UnityEngine.EventSystems;
 
 namespace Views
 {
-    [SelectionBase]
     public class BlockView : MonoBehaviour, IPointerClickHandler
     {
         public BlockPosition BottomLeftBlockPosition;

@@ -13,9 +13,10 @@ namespace Views
     public class BlockView : MonoBehaviour, IPointerClickHandler
     {
         public BlockPosition BottomLeftBlockPosition;
-        
 
-        //Temp function to check stuffz (test block positions)
+        /// <summary>
+        /// Temp function to check stuffz (test block positions)
+        /// </summary>
         public void OnPointerClick(PointerEventData eventData)
         {
             Debug.Log($"Block {gameObject.name} is located at {BottomLeftBlockPosition.X}, {BottomLeftBlockPosition.Y} in the blockarray");

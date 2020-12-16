@@ -20,7 +20,10 @@ public class GameLoop : SingletonMonoBehaviour<GameLoop>
         AllignBlockViews();
     }
 
-    //Temp function that alligns blocks to the worldposition that their blockposition would be
+
+    /// <summary>
+    /// Temp function that alligns blocks to the worldposition that their blockposition would be.
+    /// </summary>
     private void AllignBlockViews()
     {
         var combinedBlockViews = FindObjectsOfType<CombinedBlockView>();
@@ -32,19 +35,21 @@ public class GameLoop : SingletonMonoBehaviour<GameLoop>
             {
                 var boardPosition = _positionConverter.ToBlockPosition(Array, blockView.transform.position);
                 blockView.transform.position = _positionConverter.ToWorldPosition(Array, boardPosition);
+                blockView.BottomLeftBlockPosition = boardPosition;
             }
-
-            ConnectBlockViews(Array, combinedBlockView);
         }
     }
 
-    //Needs to be called when a block lands
-    //Gives said block a blockposition (and extra depending on the size of the block)
-    //Adds the block to a dictionary where it can be called again by the "ToWorldPosition" function
+
+    /// <summary>
+    /// <br>Needs to be called when a CombinedBlock lands.</br>
+    /// <br>Runs over all BlockViews in the children.</br>
+    /// <br>Adds the blocks to a dictionary where it can be called again by the "ToWorldPosition".</br>
+    /// </summary>
+    /// function<param name="array"></param>
+    /// <param name="combinedBlockView"></param>
     public void ConnectBlockViews(BlockArray array, CombinedBlockView combinedBlockView)
     {
-        combinedBlockView.GetAllBlockViews();
-
         foreach (var blockView in combinedBlockView.BlockViews)
         {
             var boardPosition = _positionConverter.ToBlockPosition(Array, blockView.transform.position);

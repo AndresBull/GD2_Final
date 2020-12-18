@@ -48,7 +48,7 @@
                 {
                     "name": "Join",
                     "type": "Button",
-                    "id": "e9ebf3e5-f05f-42ea-8dbf-964748abde8b",
+                    "id": "2c56a5c6-e6fd-4e0b-8a85-31d1a45f9803",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -79,11 +79,33 @@
                 },
                 {
                     "name": "",
+                    "id": "5e9832ad-1ee8-45a2-812a-1f4fb6425319",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "af7be050-996a-4652-b7c7-d701e3ea4dc3",
                     "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
+                    "action": "Place Ladder",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0f67b721-c294-418d-8e89-16a37fe9473c",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "Place Ladder",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -101,12 +123,12 @@
                 },
                 {
                     "name": "",
-                    "id": "86ab530f-d6ba-49e6-8063-da6d0b52a450",
-                    "path": "<Gamepad>/buttonNorth",
+                    "id": "b0003055-c215-4216-bce0-751f7bfe15d7",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Join",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Pick-up Ladder",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -118,6 +140,94 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "ClimbLadder",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "A/D",
+                    "id": "c984946f-efb2-4fbd-9c1c-e69bf9a370b9",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "ddb54390-b3d9-411c-b53f-415c0d271d67",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "42332cbd-6c4a-44ee-b6b3-c8c223fcbf0e",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "W/S",
+                    "id": "9313b485-a667-4b2b-b0bb-c4e89c629a36",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ClimbLadder",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "adadd2fb-e689-4fea-9e06-6ce4cd412546",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ClimbLadder",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "0fff01bf-3e4e-4179-b7c3-faaf2f2bd90f",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ClimbLadder",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "169309da-fbc2-42e6-b7b5-1bd6d7861cb4",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Join",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ef8d6d24-f63b-4279-af50-98722dc47661",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Join",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -652,7 +762,7 @@
                 {
                     "name": "Join",
                     "type": "Button",
-                    "id": "84258864-6613-4ab1-9ee9-2c0a21ad9b61",
+                    "id": "6b0afc68-0c6a-4133-8951-cf76bdcbffe7",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -727,8 +837,19 @@
                 },
                 {
                     "name": "",
-                    "id": "9dee7bf1-b438-46cd-824b-ce67cccaf2ee",
-                    "path": "<Gamepad>/buttonWest",
+                    "id": "77251e9a-76d4-457c-b537-493dea372147",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Join",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "95760aaf-ac9d-46a3-af6f-4ca53eb7d278",
+                    "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",

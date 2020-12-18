@@ -1171,26 +1171,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: InputManager
       objectReference: {fileID: 0}
-    - target: {fileID: 7561675630733967073, guid: 97c203e6ed843d14d92b3c0eae465372,
-        type: 3}
-      propertyPath: m_JoinAction.m_Action.m_SingletonActionBindings.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7561675630733967073, guid: 97c203e6ed843d14d92b3c0eae465372,
-        type: 3}
-      propertyPath: m_JoinAction.m_Action.m_SingletonActionBindings.Array.data[1].m_Id
-      value: f3916e4d-64eb-401b-afd0-f09a52b2e3be
-      objectReference: {fileID: 0}
-    - target: {fileID: 7561675630733967073, guid: 97c203e6ed843d14d92b3c0eae465372,
-        type: 3}
-      propertyPath: m_JoinAction.m_Action.m_SingletonActionBindings.Array.data[1].m_Action
-      value: Join
-      objectReference: {fileID: 0}
-    - target: {fileID: 7561675630733967073, guid: 97c203e6ed843d14d92b3c0eae465372,
-        type: 3}
-      propertyPath: m_JoinAction.m_Action.m_SingletonActionBindings.Array.data[1].m_Path
-      value: <Mouse>/leftButton
-      objectReference: {fileID: 0}
     - target: {fileID: 7561675630733967074, guid: 97c203e6ed843d14d92b3c0eae465372,
         type: 3}
       propertyPath: m_LocalPosition.x

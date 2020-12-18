@@ -93,6 +93,14 @@ MonoBehaviour:
         m_Groups: 
         m_Action: Join
         m_Flags: 0
+      - m_Name: 
+        m_Id: af39390f-1690-42b5-99d7-20aa4cdd3122
+        m_Path: <Keyboard>/tab
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Join
+        m_Flags: 0
     m_Reference: {fileID: 0}
   m_PlayerPrefab: {fileID: 8811266625348397413, guid: fb4893de3c4066d4998c2e2ddcca5988,
     type: 3}

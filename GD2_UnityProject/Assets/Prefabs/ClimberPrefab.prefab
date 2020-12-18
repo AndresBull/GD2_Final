@@ -361,14 +361,6 @@ MonoBehaviour:
     m_ActionId: e41371db-698a-4911-a4d1-34e904dff476
     m_ActionName: Overlord/Drop Block
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: e9ebf3e5-f05f-42ea-8dbf-964748abde8b
-    m_ActionName: Climber/Join[/DualShock4GamepadHID/buttonNorth]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 84258864-6613-4ab1-9ee9-2c0a21ad9b61
-    m_ActionName: Overlord/Join[/DualShock4GamepadHID/buttonWest]
-  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: -2655535800688079255}
         m_MethodName: OnStartClimb
@@ -383,7 +375,15 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 57ce97f3-f235-4baa-8ab7-8d66edec87f6
     m_ActionName: Climber/ClimbLadder[/DualShock4GamepadHID/leftStick/y]
-  m_NeverAutoSwitchControlSchemes: 1
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2c56a5c6-e6fd-4e0b-8a85-31d1a45f9803
+    m_ActionName: Climber/Join[/Keyboard/tab,/DualShock4GamepadHID/buttonNorth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6b0afc68-0c6a-4133-8951-cf76bdcbffe7
+    m_ActionName: Overlord/Join[/Keyboard/tab,/DualShock4GamepadHID/buttonNorth]
+  m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Gamepad
   m_DefaultActionMap: Climber
   m_SplitScreenIndex: -1

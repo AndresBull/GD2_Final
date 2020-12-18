@@ -21,7 +21,7 @@ public class BlockScript : MonoBehaviour
         {
             for (int i = 0; i < gameObject.transform.childCount; i++)
             {
-                GameLoop.Instance.ConnectBlockViews(GameLoop.Instance.Array, gameObject.transform.GetComponent<CombinedBlockView>());
+                GameLoop.Instance.ConnectBlockViews(gameObject.transform.GetComponent<CombinedBlockView>());
                 gameObject.transform.GetChild(i).transform.position -= Vector3.up * _speed;
             }
             yield return new WaitForSeconds(_dropDownDelay);

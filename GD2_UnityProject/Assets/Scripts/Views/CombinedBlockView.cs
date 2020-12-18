@@ -20,12 +20,13 @@ namespace Views
         private GameLoop gameLoop;
         private BlockPosition _boardPosition;
         private float _dropDownDelay = 1f;
-        void Start()
+
+        void Awake()
         {
             gameLoop = GameLoop.Instance;
             _boardPosition = gameLoop.PositionConverter.ToBlockPosition(gameLoop.Array, transform.position);
 
-            GetAllBlockViews();
+            gameLoop.AllignBlockViews(this);
             StartCoroutine(Drop());
         }
 
@@ -47,7 +48,7 @@ namespace Views
 
                             Debug.Log("Landed");
 
-                            gameLoop.ConnectBlockViews(gameLoop.Array, this);
+                            gameLoop.ConnectBlockViews(this);
                             yield break;
                         }
                     }

@@ -17,26 +17,26 @@ public class GameLoop : SingletonMonoBehaviour<GameLoop>
 
     private void Awake()
     {
-        AllignBlockViews();
+        var combinedBlockViews = FindObjectsOfType<CombinedBlockView>();
+        foreach (var combinedBlockView in combinedBlockViews)
+        {
+            AllignBlockViews(combinedBlockView);
+        }
     }
 
 
     /// <summary>
     /// Temp function that alligns blocks to the worldposition that their blockposition would be.
     /// </summary>
-    private void AllignBlockViews()
+    public void AllignBlockViews(CombinedBlockView combinedBlockView)
     {
-        var combinedBlockViews = FindObjectsOfType<CombinedBlockView>();
-        foreach (var combinedBlockView in combinedBlockViews)
-        {
-            combinedBlockView.GetAllBlockViews();
+        combinedBlockView.GetAllBlockViews();
 
-            foreach (var blockView in combinedBlockView.BlockViews)
-            {
-                var boardPosition = _positionConverter.ToBlockPosition(Array, blockView.transform.position);
-                blockView.transform.position = _positionConverter.ToWorldPosition(Array, boardPosition);
-                blockView.BottomLeftBlockPosition = boardPosition;
-            }
+        foreach (var blockView in combinedBlockView.BlockViews)
+        {
+            var boardPosition = _positionConverter.ToBlockPosition(Array, blockView.transform.position);
+            blockView.transform.position = _positionConverter.ToWorldPosition(Array, boardPosition);
+            blockView.BottomLeftBlockPosition = boardPosition;
         }
     }
 
@@ -48,7 +48,7 @@ public class GameLoop : SingletonMonoBehaviour<GameLoop>
     /// </summary>
     /// function<param name="array"></param>
     /// <param name="combinedBlockView"></param>
-    public void ConnectBlockViews(BlockArray array, CombinedBlockView combinedBlockView)
+    public void ConnectBlockViews(CombinedBlockView combinedBlockView)
     {
         foreach (var blockView in combinedBlockView.BlockViews)
         {
@@ -56,6 +56,6 @@ public class GameLoop : SingletonMonoBehaviour<GameLoop>
             blockView.BottomLeftBlockPosition = boardPosition;
         }
 
-        array.AddToDictionary(combinedBlockView);
+        Array.AddToDictionary(combinedBlockView);
     }
 }

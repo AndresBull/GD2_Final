@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class BlockDropper : MonoBehaviour
 {
     private GameObject HoldBlock;
-    private Vector3 spawnLocation = new Vector3(0, 12, 0);
+    private Vector3 spawnLocation = new Vector3(0, 4, 0);
     [Range(0,10)]
     public int movementConstraint;
     private Vector2 _movementConstraints;
@@ -17,6 +17,10 @@ public class BlockDropper : MonoBehaviour
     private float _dropTimer;
     private float _dropDelay = 5.0f;
     public List<GameObject> _blocks = new List<GameObject>();
+
+
+
+
     private void Awake()
     {
         this.gameObject.transform.position = spawnLocation;

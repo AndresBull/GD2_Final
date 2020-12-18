@@ -109,11 +109,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementConstraint: 5
   _blocks:
-  - {fileID: 6295494523243553474, guid: ae64dc29b073f574b96fe9ee829d074c, type: 3}
-  - {fileID: 997574660486172692, guid: 5fedff5ed7333e64cbe659bd0f23f39f, type: 3}
-  - {fileID: 4584612816049259791, guid: 07a9304b48f7f514e892460ed4bf24a2, type: 3}
-  - {fileID: 3571620279532924152, guid: 3a2ce2d103aedf74084bd26373075f1c, type: 3}
-  - {fileID: 9045539140680862328, guid: 2155bdc632520a7459677ad07dc59764, type: 3}
+  - {fileID: 921796882053848782, guid: 1e238b0f2926abd4c9b4e865400da2aa, type: 3}
+  - {fileID: 285410900236504125, guid: 9b3b93fae4eb90346b65a848c7571d85, type: 3}
+  - {fileID: 7374774696315374807, guid: dde0d951fb4f35e4aa7362117915b751, type: 3}
+  - {fileID: 5982943936489661073, guid: c314766b5cb285448a54aa75247c96b7, type: 3}
+  - {fileID: 231314832585442664, guid: 532bfd74e97bcf8409dbda0f63f31f06, type: 3}
 --- !u!114 &8807962732372760293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,6 +234,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 84258864-6613-4ab1-9ee9-2c0a21ad9b61
     m_ActionName: Overlord/Join
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 57ce97f3-f235-4baa-8ab7-8d66edec87f6
+    m_ActionName: Climber/ClimbLadder[/XInputControllerWindows/leftStick/y]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Gamepad
   m_DefaultActionMap: Overlord

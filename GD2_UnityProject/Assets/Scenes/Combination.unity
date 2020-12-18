@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -247,14 +247,13 @@ PrefabInstance:
         type: 3}
       propertyPath: m_JoinAction.m_Reference
       value: 
-      objectReference: {fileID: -6723381824576029185, guid: 53ee1df19da6f954badc96f8a86d6b6f,
+      objectReference: {fileID: 5361421210448776124, guid: 53ee1df19da6f954badc96f8a86d6b6f,
         type: 3}
     - target: {fileID: 7561675630733967073, guid: 97c203e6ed843d14d92b3c0eae465372,
         type: 3}
       propertyPath: m_PlayerPrefab
       value: 
-      objectReference: {fileID: 3912653369593397870, guid: 4a8c6fb58250f5e4ebf7c3884213a9cb,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 7561675630733967074, guid: 97c203e6ed843d14d92b3c0eae465372,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -807,5 +806,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ClimberPrefab: {fileID: 8811266625348397413, guid: fb4893de3c4066d4998c2e2ddcca5988,
     type: 3}
-  ClimberReference: {fileID: 5361421210448776124, guid: 53ee1df19da6f954badc96f8a86d6b6f,
+  OverlordPrefab: {fileID: 3912653369593397870, guid: 4a8c6fb58250f5e4ebf7c3884213a9cb,
     type: 3}

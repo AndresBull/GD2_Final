@@ -7,17 +7,20 @@ public class InputSwapper : MonoBehaviour
 {
     private PlayerInputManager manager;
     public GameObject ClimberPrefab;
-    public InputActionReference ClimberReference;
+    public GameObject OverlordPrefab;
     private void Start()
     {
         manager = gameObject.GetComponent<PlayerInputManager>();
     }
     private void Update()
     {
-        if (manager.playerCount == 1)
+        if (manager.playerCount == 0)
+        {
+            manager.playerPrefab = OverlordPrefab;
+        }
+        else
         {
             manager.playerPrefab = ClimberPrefab;
-            manager.joinAction.reference.Set(ClimberReference);
         }
     }
 }

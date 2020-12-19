@@ -90,13 +90,13 @@ public class LadderClimb : MonoBehaviour
 
     private void OnTriggerEnter(Collider lTrigger)
     {
-        if (lTrigger.tag == "LEnterTrigger")
+        if (lTrigger.tag.Equals("LEnterTrigger"))
         {
             _isOnBottomTrigger = true;
             _ladderClimbed = lTrigger.transform.root;
         }
 
-        if (lTrigger.tag == "LExitTrigger")
+        if (lTrigger.tag.Equals("LExitTrigger"))
         {
             _isOnTopTrigger = true;
             _ladderClimbed = lTrigger.transform.root;
@@ -105,12 +105,12 @@ public class LadderClimb : MonoBehaviour
 
     private void OnTriggerExit(Collider lTrigger)
     {
-        if (lTrigger.tag == "LEnterTrigger")
+        if (lTrigger.tag.Equals("LEnterTrigger"))
         {
             _isOnBottomTrigger = false;
         }
 
-        if (lTrigger.tag == "LExitTrigger")
+        if (lTrigger.tag.Equals("LExitTrigger"))
         {
             _isOnTopTrigger = false;
         }

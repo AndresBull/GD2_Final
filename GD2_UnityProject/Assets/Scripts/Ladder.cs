@@ -51,4 +51,10 @@ public class Ladder : MonoBehaviour
             _rb.isKinematic = true;
         }
     }
+
+    public void Break()
+    {
+        // change to broken ladder
+        Destroy(gameObject);
+    }
 }

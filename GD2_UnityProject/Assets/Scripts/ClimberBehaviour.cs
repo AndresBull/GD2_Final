@@ -11,20 +11,20 @@ using Views;
 public class ClimberBehaviour : MonoBehaviour
 {
     #region Fields
-    [Header("Camera")][SerializeField]
+    [Header("Camera")] [SerializeField]
     [Tooltip("The camera that renders the scene to the viewport. If no camera is assigned the object tagged \"MainCamera\" will be used.")]
     private GameObject _camera = null;
 
     [Header("Horizontal Movement")]
-    [Tooltip("The maximum speed at which the climber moves around.")][SerializeField]
+    [Tooltip("The maximum speed at which the climber moves around.")] [SerializeField]
     private float _maxSpeed = 10f;
 
     [Header("Jumping")]
-    [Tooltip("The time interval in which a jump can be called before the player touches the ground (in seconds).")][SerializeField]
+    [Tooltip("The time interval in which a jump can be called before the player touches the ground (in seconds).")] [SerializeField]
     private float _jumpDelay = 0.25f;
-    [Tooltip("The height of the jump (in units).")][SerializeField]
+    [Tooltip("The height of the jump (in units).")] [SerializeField]
     private float _jumpHeight = 0.5f;
-    [Tooltip("WARNING: PROTOTYPING ONLY\nThis multiplier can be used during prototyping to increase the jump to reach heights quickly. It will be ignored in the build. Set to 1 (one) to disable.")][SerializeField]
+    [Tooltip("WARNING: PROTOTYPING ONLY\nThis multiplier can be used during prototyping to increase the jump to reach heights quickly. It will be ignored in the build. Set to 1 (one) to disable.")] [SerializeField]
     private float _jumpMultiplier = 1f;
 
     [Header("Physics")]
@@ -36,11 +36,11 @@ public class ClimberBehaviour : MonoBehaviour
     private float _rayLength = 0.5f;
 
     [Header("Ladders")]
-    [Tooltip("The ladder prefab for this character.")][SerializeField]
+    [Tooltip("The ladder prefab for this character.")] [SerializeField]
     private GameObject _ladderPrefab;
-    [Tooltip("Interaction range between climber and ladder.")][SerializeField]
+    [Tooltip("Interaction range between climber and ladder.")] [SerializeField]
     private float _range = 1f;
-    [Tooltip("The max number of blocks a ladder can bridge vertically. I.e. the maximum length of the ladder.")][SerializeField]
+    [Tooltip("The max number of blocks a ladder can bridge vertically. I.e. the maximum length of the ladder.")] [SerializeField]
     private int _maxLadderHeight = 3;
     [HideInInspector]
     public bool IsClimbing = false;
@@ -63,11 +63,18 @@ public class ClimberBehaviour : MonoBehaviour
     private bool _isHanging = false;                        // bool that keeps track of whether or not the Climber is hanging on a ledge or not
     private bool _isJumping = false;                        // bool to determine if the character is jumping or not
     private bool _hasLadder = true;                         // backup field that determines if the climber has his ladder or not
+    private bool _isDead = false;
 
     public bool IsCarryingLadder
     {
         get => _hasLadder;
         private set => _hasLadder = value;
+    }
+
+    public bool IsDead
+    { 
+        get => _isDead;
+        private set => _isDead = value;
     }
 
     #endregion
@@ -113,7 +120,7 @@ public class ClimberBehaviour : MonoBehaviour
     // can possibly be stored in another class / might be set to public so others can access this too
     private BlockPosition GetClimberBlockPosition()
     {
-        return GameLoop.Instance.PositionConverter.ToBlockPosition(_blockLayout, transform.position);
+        return GameLoop.Instance.Array.PositionConverter.ToBlockPosition(_blockLayout, transform.position);
     }
 
 
@@ -222,7 +229,7 @@ public class ClimberBehaviour : MonoBehaviour
             return;
 
         BlockPosition climberBlock = GetClimberBlockPosition();
-
+        print(climberBlock.X + ", " + climberBlock.Y);
         if (IsAtTopOfJump() && IsNearLedge(climberBlock))
         {
             BlockView block;
@@ -249,6 +256,22 @@ public class ClimberBehaviour : MonoBehaviour
         _rb.AddForce(Vector3.up * _jumpForce * _jumpMultiplier * _jumpHeight, ForceMode.Impulse);
         _jumpTimer = 0.0f;
         _isHanging = false;
+    }
+
+    private void Move()
+    {
+        float direction = Mathf.Clamp(_horizontalMovement, -1, 1);
+
+        if (direction <= 0.01f && direction >= -0.01f)
+        {
+            transform.rotation = Quaternion.LookRotation(-_cameraTransform.forward, _cameraTransform.up);
+            return;
+        }
+
+        if (transform.rotation != Quaternion.LookRotation(direction * _cameraTransform.right, _cameraTransform.up))
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction * _cameraTransform.right, _cameraTransform.up), 0.5f);
+        }
     }
 
     private void ScaleBlock(BlockView block)
@@ -348,20 +371,9 @@ public class ClimberBehaviour : MonoBehaviour
         }
 
         _horizontalMovement = context.ReadValue<float>();
-
-        float direction = Mathf.Clamp(_horizontalMovement, -1, 1);
-
-        if (direction <= 0.01f && direction >= -0.01f)
-        {
-            transform.rotation = Quaternion.LookRotation(-_cameraTransform.forward, _cameraTransform.up);
-            return;
-        }
-
-        if (transform.rotation != Quaternion.LookRotation(direction * _cameraTransform.right, _cameraTransform.up))
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction * _cameraTransform.right, _cameraTransform.up), 0.5f);
-        }
+        Move();
     }
+
 
     public void OnJump(InputAction.CallbackContext context)
     {

@@ -38,9 +38,11 @@ namespace Assets.Scripts
                 var neighbours = _neighbours(currentBlock);
                 foreach (var neighbour in neighbours)
                 {
-
+                    return null;
                 }
+                return null;
             }
+            return null;
         }
     }
 }

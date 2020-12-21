@@ -120,7 +120,7 @@ public class ClimberBehaviour : MonoBehaviour
     // can possibly be stored in another class / might be set to public so others can access this too
     private BlockPosition GetClimberBlockPosition()
     {
-        return GameLoop.Instance.Array.PositionConverter.ToBlockPosition(_blockLayout, transform.position);
+        return GameLoop.Instance.PositionConverter.ToBlockPosition(_blockLayout, transform.position);
     }
 
 

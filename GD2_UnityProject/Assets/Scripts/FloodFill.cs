@@ -9,24 +9,23 @@ using Views;
 namespace Assets.Scripts
 {
     public class FloodFill
-    { 
-    /// <summary>
-    /// Recreating chess part 27, around 14 minutes
-    /// in the process of making the list of all connected blocks via neighbourstrategy
-    /// if player is not in connectedblock, they are trapped.
-    /// </summary>
-    /// <param name="from"></param>
-    /// <returns></returns>
-        
+    {
         public delegate List<BlockPosition> NeighbourStrategy(BlockPosition from);
         private readonly NeighbourStrategy _neighbours;
         public FloodFill(NeighbourStrategy neighbours)
         {
             _neighbours = neighbours;
         }
+        /// <summary>
+        /// Gets all open positions into a list.
+        /// open meaning from a startposition, everything until a block is hit
+        /// </summary>
+        /// <param name="startingPosition"></param>
+        /// <returns></returns>
         public List<BlockPosition> Flood(BlockPosition startingPosition)
         {
-            var nearbyPosition = new List<BlockPosition>();
+            var nearbyPositions = new List<BlockPosition>();
+            nearbyPositions.Add(startingPosition);
 
             var blocksToVisit = new Queue<BlockPosition>();
             blocksToVisit.Enqueue(startingPosition);
@@ -38,11 +37,20 @@ namespace Assets.Scripts
                 var neighbours = _neighbours(currentBlock);
                 foreach (var neighbour in neighbours)
                 {
-                    return null;
+                    if (HasBlock(neighbour))
+                    {
+                        nearbyPositions.Add(neighbour);
+                        blocksToVisit.Enqueue(neighbour);
+                    }
                 }
-                return null;
             }
-            return null;
+            return nearbyPositions;
+        }
+        public bool HasBlock(BlockPosition neighbourPosition)
+        {
+            if (GameLoop.Instance.Array.BlockAt(neighbourPosition) != null)
+                return true;
+            return false;
         }
     }
 }

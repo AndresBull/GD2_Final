@@ -1,4 +1,5 @@
-﻿using BoardBase;
+﻿using Assets.Scripts;
+using BoardBase;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Views
         public List<BlockView> BlockViews => _blockViews;
 
         public event EventHandler Landed;
+        public FloodFill floodFiller;
 
         private GameLoop gameLoop;
         private BlockPosition _boardPosition;
@@ -26,8 +28,49 @@ namespace Views
             gameLoop = GameLoop.Instance;
             _boardPosition = gameLoop.PositionConverter.ToBlockPosition(gameLoop.Array, transform.position);
 
+            var startBlock = new BlockPosition(8, 8);
+            floodFiller = new FloodFill(Neighbours);
+
             gameLoop.AllignBlockViews(this);
             StartCoroutine(Drop());
+        }
+        /// <summary>
+        /// Gets all neighbours of the startingblock.
+        /// These neighbours should get filtered in floodfill, but it might be better to filter here
+        /// </summary>
+        /// <param name="startBlock"></param>
+        /// <returns></returns>
+        private List<BlockPosition> Neighbours(BlockPosition startBlock)
+        {
+            var neighbours = new List<BlockPosition>();
+
+            var position = startBlock;
+
+            var upPosition = position;
+            upPosition.Y += 1;
+            var upTile = GameLoop.Instance.Array.BlockAt(upPosition);
+            if (upTile == null && !floodFiller.HasBlock(upPosition) && upPosition.X <= 8 && upPosition.Y <= 8)
+                neighbours.Add(upPosition);
+            
+            var downPosition = position;
+            downPosition.Y -= 1;
+            var downTile = GameLoop.Instance.Array.BlockAt(downPosition);
+            if (downTile == null && !floodFiller.HasBlock(downPosition) && downPosition.X <= 8 && downPosition.Y <= 8)                      
+                neighbours.Add(downPosition);
+                              
+            var rightPosition = position;
+            rightPosition.X += 1;
+            var rightTile = GameLoop.Instance.Array.BlockAt(rightPosition);
+            if (rightTile == null && !floodFiller.HasBlock(rightPosition) && rightPosition.X <= 8 && rightPosition.Y <= 8)
+                neighbours.Add(rightPosition);
+
+            var leftPosition = position;
+            leftPosition.X -= 1;
+            var leftTile = GameLoop.Instance.Array.BlockAt(leftPosition);
+            if (leftTile == null && !floodFiller.HasBlock(leftPosition) && leftPosition.X <= 8 && leftPosition.Y <= 8)
+                neighbours.Add(leftPosition);
+
+            return neighbours;
         }
 
         private IEnumerator Drop()
@@ -49,6 +92,7 @@ namespace Views
                             Debug.Log("Landed");
 
                             gameLoop.ConnectBlockViews(this);
+                            var _floodedPositions = floodFiller.Flood(new BlockPosition(8,8));
                             yield break;
                         }
                     }

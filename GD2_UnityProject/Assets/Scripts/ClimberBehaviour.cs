@@ -11,6 +11,12 @@ using Views;
 public class ClimberBehaviour : MonoBehaviour
 {
     #region Fields
+
+    [SerializeField]
+    private MeshRenderer _meshRenderer;
+    [SerializeField]
+    private MeshFilter _meshFilter;
+
     [Header("Camera")] [SerializeField]
     [Tooltip("The camera that renders the scene to the viewport. If no camera is assigned the object tagged \"MainCamera\" will be used.")]
     private GameObject _camera = null;
@@ -48,6 +54,7 @@ public class ClimberBehaviour : MonoBehaviour
     // Components
     private BlockArray _blockLayout;                        // reference to the array that represents the layout of the blocks
     private Collider _col;                                  // reference to the (base) collider component attached to this gameobject;
+    private PlayerConfiguration _playerConfig;
     private Rigidbody _rb;                                  // reference to the rigidbody component attached to this gameobject
     private Transform _cameraTransform;                     // holds the camera transform locally to preserve the original transform from changes
     private Transform _ladderClimbed;                       // the current ladder being climbed
@@ -360,6 +367,13 @@ public class ClimberBehaviour : MonoBehaviour
             return;
         }
         _rb.useGravity = true;
+    }
+
+    public void InitializePlayer(PlayerConfiguration config)
+    {
+        _playerConfig = config;
+        _meshFilter.mesh = config.Character;
+        _meshRenderer.material = config.PlayerMaterial;
     }
 
     #region Input

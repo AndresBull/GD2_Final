@@ -15,8 +15,13 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
     [SerializeField]
     private int MaxPlayers = 4;
 
-    [SerializeField]
-    private int PlayersReadyBeforeStarting = 3;
+    [Tooltip("The amount of players that needs to be 'Ready' before the round can start")][SerializeField]
+    private int PlayersNeededReadyBeforeStarting = 3;
+
+    public List<PlayerConfiguration> GetPlayerConfigs()
+    {
+        return _playerConfigs;
+    }
 
     private void Awake()
     {
@@ -60,7 +65,7 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
         }
     }
 
-    public void SetPlayerCharacter(int playerIndex, GameObject character)
+    public void SetPlayerCharacter(int playerIndex, Mesh character)
     {
         _playerConfigs[playerIndex].Character = character;
     }
@@ -70,11 +75,21 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
         _playerConfigs[playerIndex].PlayerMaterial = color;
     }
 
-    public void ReadyPlayer(int playerIndex)
+    public void ToggleReadyPlayer(int playerIndex)
+    {
+        if (!_playerConfigs[playerIndex].IsReady)
+        {
+            ReadyPlayer(playerIndex);
+            return;
+        }
+        UnreadyPlayer(playerIndex);
+    }
+
+    private void ReadyPlayer(int playerIndex)
     {
         _playerConfigs[playerIndex].IsReady = true;
 
-        if (_playerConfigs.Count == PlayersReadyBeforeStarting && _playerConfigs.All(p => p.IsReady == true))
+        if (_playerConfigs.Count == PlayersNeededReadyBeforeStarting && _playerConfigs.All(p => p.IsReady == true))
         {
             SetTimer(15.0f);
         }
@@ -84,11 +99,11 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
         }
     }
 
-    public void UnreadyPlayer(int playerIndex)
+    private void UnreadyPlayer(int playerIndex)
     {
         _playerConfigs[playerIndex].IsReady = false;
 
-        if (_playerConfigs.Count(p => p.IsReady == true) < PlayersReadyBeforeStarting)
+        if (_playerConfigs.Count(p => p.IsReady == true) < PlayersNeededReadyBeforeStarting)
         {
             StopTimer();
         }
@@ -122,7 +137,7 @@ public class PlayerConfiguration
 
     public PlayerInput Input { get; internal set; }
     public Material PlayerMaterial { get; set; }
-    public GameObject Character { get; set; }
+    public Mesh Character { get; set; }
     public int PlayerIndex { get; internal set; }
-    public bool IsReady { get; set; }
+    public bool IsReady { get; internal set; }
 }

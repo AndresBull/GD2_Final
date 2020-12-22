@@ -69,24 +69,18 @@ MonoBehaviour:
   m_MoveRepeatRate: 0.1
   m_ActionsAsset: {fileID: -944628639613478452, guid: 53ee1df19da6f954badc96f8a86d6b6f,
     type: 3}
-  m_PointAction: {fileID: 409344422411473740, guid: 53ee1df19da6f954badc96f8a86d6b6f,
-    type: 3}
+  m_PointAction: {fileID: 0}
   m_MoveAction: {fileID: -2910585427302286073, guid: 53ee1df19da6f954badc96f8a86d6b6f,
     type: 3}
   m_SubmitAction: {fileID: -2441140384371743476, guid: 53ee1df19da6f954badc96f8a86d6b6f,
     type: 3}
   m_CancelAction: {fileID: 7409423873190276601, guid: 53ee1df19da6f954badc96f8a86d6b6f,
     type: 3}
-  m_LeftClickAction: {fileID: -3359945100013800734, guid: 53ee1df19da6f954badc96f8a86d6b6f,
-    type: 3}
-  m_MiddleClickAction: {fileID: 3603167641134179448, guid: 53ee1df19da6f954badc96f8a86d6b6f,
-    type: 3}
-  m_RightClickAction: {fileID: 8430601519009314175, guid: 53ee1df19da6f954badc96f8a86d6b6f,
-    type: 3}
-  m_ScrollWheelAction: {fileID: 7197911508147278494, guid: 53ee1df19da6f954badc96f8a86d6b6f,
-    type: 3}
-  m_TrackedDevicePositionAction: {fileID: -2360320482937044532, guid: 53ee1df19da6f954badc96f8a86d6b6f,
-    type: 3}
+  m_LeftClickAction: {fileID: 0}
+  m_MiddleClickAction: {fileID: 0}
+  m_RightClickAction: {fileID: 0}
+  m_ScrollWheelAction: {fileID: 0}
+  m_TrackedDevicePositionAction: {fileID: 0}
   m_TrackedDeviceOrientationAction: {fileID: -3036010082486882111, guid: 53ee1df19da6f954badc96f8a86d6b6f,
     type: 3}
   m_DeselectOnBackgroundClick: 1
@@ -727,9 +721,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37b1431b29c0a804ca612a45d499b785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerPrefabs:
+  - {fileID: 8811266625348397413, guid: fb4893de3c4066d4998c2e2ddcca5988, type: 3}
+  - {fileID: 1920797143079988020, guid: 3c9c4135af3d1a24aac34f0b422627ef, type: 3}
   _playerName: {fileID: 5358117118697932003}
   _readyButton: {fileID: 5358117118875823933}
-  _renderTexMaterial: {fileID: 0}
+  _colorPicker: {fileID: 5358117119545318435}
 --- !u!1 &5358117120115466653
 GameObject:
   m_ObjectHideFlags: 0
@@ -970,6 +967,7 @@ GameObject:
   - component: {fileID: 5358117120339502828}
   - component: {fileID: 5358117120339502829}
   - component: {fileID: 5358117120339502830}
+  - component: {fileID: 2578458919701299098}
   m_Layer: 5
   m_Name: CharacterPicker
   m_TagString: Untagged
@@ -1076,3 +1074,31 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2578458919701299098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5358117120339502831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 15
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5358117119938097392}
+          m_MethodName: SwitchCharacter
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2

@@ -103,34 +103,6 @@ MonoBehaviour:
     m_ActionId: 44dab2c9-2d1d-44e3-bbf3-c497a7541941
     m_ActionName: UI/Cancel[/Keyboard/escape]
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 41e1114e-9ee5-4cc8-a441-58b2d3b58549
-    m_ActionName: UI/Point[/Mouse/position]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 1e1e0aa2-450e-41d8-894e-65f928757654
-    m_ActionName: UI/Click[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: f0bbc0de-4bd5-492b-8655-9107b9fe5964
-    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: e5f85b0c-1904-40b3-bb67-59293a771e68
-    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: bf92955c-8783-4ca3-8af6-daea2a0c83f7
-    m_ActionName: UI/RightClick[/Mouse/rightButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 97af2a72-8b9b-41f8-ae95-a78016a26e3e
-    m_ActionName: UI/TrackedDevicePosition
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 9ccd1157-9606-40ac-a748-1b8fd37f0e50
-    m_ActionName: UI/TrackedDeviceOrientation
-  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 659076897191180436, guid: fb4893de3c4066d4998c2e2ddcca5988,
           type: 3}
@@ -163,11 +135,35 @@ MonoBehaviour:
     m_ActionId: fe2dfc8f-cb57-4c25-b0a3-26dc460af776
     m_ActionName: Climber/Pick-up Ladder
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3912653369593397864, guid: 4a8c6fb58250f5e4ebf7c3884213a9cb,
+          type: 3}
+        m_MethodName: OnMove
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 491360b6-e89f-434d-949b-4546812c345e
     m_ActionName: Overlord/Move Hand
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3912653369593397864, guid: 4a8c6fb58250f5e4ebf7c3884213a9cb,
+          type: 3}
+        m_MethodName: OnDrop
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: e41371db-698a-4911-a4d1-34e904dff476
     m_ActionName: Overlord/Drop Block
   - m_PersistentCalls:
@@ -214,4 +210,3 @@ MonoBehaviour:
   _playerPrefab: {fileID: 8811266625348397413, guid: fb4893de3c4066d4998c2e2ddcca5988,
     type: 3}
   _input: {fileID: 2501321263286298516}
-  _playerSpawn: {fileID: 0}

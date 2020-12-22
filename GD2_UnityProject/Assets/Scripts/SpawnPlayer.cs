@@ -10,18 +10,14 @@ public class SpawnPlayer : MonoBehaviour
     private GameObject _playerPrefab;
     [SerializeField]
     private PlayerInput _input;
-    [SerializeField]
-    private Transform _playerSpawn;
 
     private void Awake()
     {
-        var root = GameObject.Find("Menu");
-        if (root != null)
-        {
-            var menu = Instantiate(_playerPrefab, _playerSpawn);
-            _input.uiInputModule = menu.GetComponentInChildren<InputSystemUIInputModule>();
-            menu.GetComponent<SetupMenuController>().SetPlayerIndex(_input.playerIndex);
-        }
-
+        var menu = GameObject.Find("PlayerMenu");
+        var playerScreen = menu.transform.GetChild(_input.playerIndex);
+        playerScreen.GetComponent<SetupPlayerScreen>().SetPlayerIndex(_input.playerIndex);
+        
+        var spawns = GameObject.Find("PlayerSpawns");
+        Instantiate(_playerPrefab, spawns.transform.GetChild(_input.playerIndex));
     }
 }

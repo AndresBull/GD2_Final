@@ -12,7 +12,7 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
     private float _timer = 0.0f;
     private bool _isTimerActive = false;
 
-    [SerializeField]
+    [Tooltip("The maximum number of players that can join a game session.")][SerializeField]
     private int MaxPlayers = 4;
 
     [Tooltip("The amount of players that needs to be 'Ready' before the round can start")][SerializeField]
@@ -22,6 +22,8 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
     {
         return _playerConfigs;
     }
+
+    public float Timer => _timer;
 
     private void Awake()
     {
@@ -61,13 +63,25 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
         {
             print($"Player {input.playerIndex} Left.");
             input.transform.SetParent(null);
-            _playerConfigs.RemoveAt(input.playerIndex);
+            var config = _playerConfigs[input.playerIndex];
+            _playerConfigs.Remove(config);
+            Destroy(config.Input.gameObject);
         }
+    }
+
+    public void SetPlayerRole(int playerIndex, GameObject role)
+    {
+        _playerConfigs[playerIndex].Role = role;
     }
 
     public void SetPlayerCharacter(int playerIndex, Mesh character)
     {
         _playerConfigs[playerIndex].Character = character;
+    }
+
+    public void SetPlayerMeshes(int playerIndex, Mesh[] meshes)
+    {
+        _playerConfigs[playerIndex].CharacterMeshes = meshes;
     }
 
     public void SetPlayerColor(int playerIndex, Material color)
@@ -83,6 +97,17 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
             return;
         }
         UnreadyPlayer(playerIndex);
+    }
+
+    public void SetTimer(float timeInSeconds)
+    {
+        _timer = timeInSeconds;
+        _isTimerActive = true;
+    }
+
+    public void StopTimer()
+    {
+        _isTimerActive = false;
     }
 
     private void ReadyPlayer(int playerIndex)
@@ -113,18 +138,6 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
             SetTimer(15.0f);
         }
     }
-
-    public void SetTimer(float timeInSeconds)
-    {
-        _timer = timeInSeconds;
-        _isTimerActive = true;
-    }
-
-    public void StopTimer()
-    {
-        _isTimerActive = false;
-    }
-
 }
 
 public class PlayerConfiguration
@@ -137,7 +150,9 @@ public class PlayerConfiguration
 
     public PlayerInput Input { get; internal set; }
     public Material PlayerMaterial { get; set; }
+    public GameObject Role { get; internal set; }
     public Mesh Character { get; set; }
+    public Mesh[] CharacterMeshes { get; internal set; }
     public int PlayerIndex { get; internal set; }
     public bool IsReady { get; internal set; }
 }

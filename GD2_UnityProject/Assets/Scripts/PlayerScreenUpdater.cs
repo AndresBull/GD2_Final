@@ -4,11 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SetupPlayerScreen : MonoBehaviour
+public class PlayerScreenUpdater : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject[] _playerPrefabs;
-
     [SerializeField]
     private TextMeshProUGUI _playerName;
 
@@ -18,18 +15,8 @@ public class SetupPlayerScreen : MonoBehaviour
     [SerializeField]
     private Button _colorPicker;
 
-    private Mesh[] _playerMeshes;
     private int _playerIndex;
     private int _index;
-
-    private void Awake()
-    {
-        _playerMeshes = new Mesh[_playerPrefabs.Length];
-        for (int i = 0; i < _playerPrefabs.Length; i++)
-        {
-            _playerMeshes[i] = _playerPrefabs[i].GetComponentInChildren<MeshFilter>().sharedMesh;
-        }
-    }
 
     public void SetPlayerIndex(int index)
     {
@@ -40,7 +27,7 @@ public class SetupPlayerScreen : MonoBehaviour
     public void SwitchCharacter()
     {
         print(_index);
-        if (_index < _playerMeshes.Length - 1)
+        if (_index < PlayerConfigManager.Instance.GetPlayerConfigs()[_playerIndex].CharacterMeshes.Length - 1)
         {
             _index++;
         }
@@ -49,7 +36,7 @@ public class SetupPlayerScreen : MonoBehaviour
             _index = 0;
         }
 
-        SetCharacter(_playerMeshes[_index]);
+        SetCharacter(PlayerConfigManager.Instance.GetPlayerConfigs()[_playerIndex].CharacterMeshes[_index]);
     }
 
     public void ToggleReadyStatus()

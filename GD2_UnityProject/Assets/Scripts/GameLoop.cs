@@ -13,6 +13,8 @@ public class GameLoop : SingletonMonoBehaviour<GameLoop>
 
     public BlockArray Array { get; } = new BlockArray(8, 8);
 
+    public GameState GameState { get; set; } = GameState.Menu;
+
     public PositionConverter PositionConverter => _positionConverter;
 
     private void Awake()
@@ -60,4 +62,12 @@ public class GameLoop : SingletonMonoBehaviour<GameLoop>
     }
 
     
+}
+
+public enum GameState
+{
+    Menu,
+    CharacterSetup,
+    Play,
+    RoundOver
 }

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7561675630733967074}
   - component: {fileID: 7561675630733967073}
-  - component: {fileID: 9087991922434925049}
   m_Layer: 0
   m_Name: InputManager
   m_TagString: Untagged
@@ -115,19 +114,3 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &9087991922434925049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7561675630733967072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68221bb06180aa74ca7b6072ac04ab48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ClimberPrefab: {fileID: 8811266625348397413, guid: fb4893de3c4066d4998c2e2ddcca5988,
-    type: 3}
-  OverlordPrefab: {fileID: 3912653369593397870, guid: 4a8c6fb58250f5e4ebf7c3884213a9cb,
-    type: 3}

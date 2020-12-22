@@ -38,7 +38,10 @@ namespace Assets.Scripts
                 var neighbours = _neighbours(currentBlock);
                 foreach (var neighbour in neighbours)
                 {
-                    if (HasBlock(neighbour))
+                    if (nearbyPositions.Contains(neighbour))
+                        continue;
+
+                    if (!HasBlock(neighbour))
                     {
                         nearbyPositions.Add(neighbour);
                         blocksToVisit.Enqueue(neighbour);

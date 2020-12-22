@@ -49,25 +49,29 @@ namespace Views
             var upPosition = position;
             upPosition.Y += 1;
             var upTile = GameLoop.Instance.Array.BlockAt(upPosition);
-            if (upTile == null && !floodFiller.HasBlock(upPosition) && upPosition.X <= 8 && upPosition.Y <= 8)
+            if (upTile == null && !floodFiller.HasBlock(upPosition)
+                && upPosition.X <= 8 && upPosition.Y <= 8 && upPosition.X >= 0 && upPosition.Y >= 0)
                 neighbours.Add(upPosition);
             
             var downPosition = position;
             downPosition.Y -= 1;
             var downTile = GameLoop.Instance.Array.BlockAt(downPosition);
-            if (downTile == null && !floodFiller.HasBlock(downPosition) && downPosition.X <= 8 && downPosition.Y <= 8)                      
+            if (downTile == null && !floodFiller.HasBlock(downPosition)
+                && downPosition.X <= 8 && downPosition.Y <= 8 && downPosition.X >= 0 && downPosition.Y >= 0)
                 neighbours.Add(downPosition);
                               
             var rightPosition = position;
             rightPosition.X += 1;
             var rightTile = GameLoop.Instance.Array.BlockAt(rightPosition);
-            if (rightTile == null && !floodFiller.HasBlock(rightPosition) && rightPosition.X <= 8 && rightPosition.Y <= 8)
+            if (rightTile == null && !floodFiller.HasBlock(rightPosition)
+                && rightPosition.X <= 8 && rightPosition.Y <= 8 && rightPosition.X >= 0 && rightPosition.Y >= 0)
                 neighbours.Add(rightPosition);
 
             var leftPosition = position;
             leftPosition.X -= 1;
             var leftTile = GameLoop.Instance.Array.BlockAt(leftPosition);
-            if (leftTile == null && !floodFiller.HasBlock(leftPosition) && leftPosition.X <= 8 && leftPosition.Y <= 8)
+            if (leftTile == null && !floodFiller.HasBlock(leftPosition)
+                && leftPosition.X <= 8 && leftPosition.Y <= 8 && leftPosition.X >= 0 && leftPosition.Y >= 0)
                 neighbours.Add(leftPosition);
 
             return neighbours;

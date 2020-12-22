@@ -28,7 +28,7 @@ namespace Views
             gameLoop = GameLoop.Instance;
             _boardPosition = gameLoop.PositionConverter.ToBlockPosition(gameLoop.Array, transform.position);
 
-            var startBlock = new BlockPosition(8, 8);
+            var startBlock = new BlockPosition(GameLoop.Instance.Array.Rows+1, GameLoop.Instance.Array.Columns);
             floodFiller = new FloodFill(Neighbours);
 
             gameLoop.AllignBlockViews(this);
@@ -49,29 +49,25 @@ namespace Views
             var upPosition = position;
             upPosition.Y += 1;
             var upTile = GameLoop.Instance.Array.BlockAt(upPosition);
-            if (upTile == null && !floodFiller.HasBlock(upPosition)
-                && upPosition.X <= 8 && upPosition.Y <= 8 && upPosition.X >= 0 && upPosition.Y >= 0)
+            if (IsNeighbour(upTile, upPosition))
                 neighbours.Add(upPosition);
             
             var downPosition = position;
             downPosition.Y -= 1;
             var downTile = GameLoop.Instance.Array.BlockAt(downPosition);
-            if (downTile == null && !floodFiller.HasBlock(downPosition)
-                && downPosition.X <= 8 && downPosition.Y <= 8 && downPosition.X >= 0 && downPosition.Y >= 0)
+            if (IsNeighbour(downTile, downPosition))
                 neighbours.Add(downPosition);
                               
             var rightPosition = position;
             rightPosition.X += 1;
             var rightTile = GameLoop.Instance.Array.BlockAt(rightPosition);
-            if (rightTile == null && !floodFiller.HasBlock(rightPosition)
-                && rightPosition.X <= 8 && rightPosition.Y <= 8 && rightPosition.X >= 0 && rightPosition.Y >= 0)
+            if (IsNeighbour(rightTile, rightPosition))
                 neighbours.Add(rightPosition);
 
             var leftPosition = position;
             leftPosition.X -= 1;
             var leftTile = GameLoop.Instance.Array.BlockAt(leftPosition);
-            if (leftTile == null && !floodFiller.HasBlock(leftPosition)
-                && leftPosition.X <= 8 && leftPosition.Y <= 8 && leftPosition.X >= 0 && leftPosition.Y >= 0)
+            if (IsNeighbour(leftTile, leftPosition))
                 neighbours.Add(leftPosition);
 
             return neighbours;
@@ -133,6 +129,16 @@ namespace Views
         {
             var handler = Landed;
             handler?.Invoke(this, args);
+        }
+
+        protected bool IsNeighbour(BlockView block, BlockPosition blockPosition)
+        {
+            if (block == null && !floodFiller.HasBlock(blockPosition)
+                && blockPosition.X <= GameLoop.Instance.Array.Rows && blockPosition.Y <= GameLoop.Instance.Array.Columns
+                && blockPosition.X >= 0 && blockPosition.Y >= 0)
+            return true;
+
+            return false;
         }
     }
 }

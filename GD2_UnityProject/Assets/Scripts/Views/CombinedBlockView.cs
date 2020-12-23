@@ -95,6 +95,10 @@ namespace Views
 
                             gameLoop.ConnectBlockViews(this);
                             floodFiller._floodedPositions = floodFiller.Flood(new BlockPosition(8,8));
+                            foreach (var climber in PlayerConfigManager.Instance.GetClimbers())
+                            {
+                                climber.GetComponent<ClimberBehaviour>().KillPlayer();
+                            }
                             
                             yield break;
                         }

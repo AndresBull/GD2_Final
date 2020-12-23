@@ -378,7 +378,7 @@ public class ClimberBehaviour : MonoBehaviour
         _meshFilter.mesh = config.Character;
         _meshRenderer.material = config.PlayerMaterial;
     }
-    private void KillPlayer()
+    public void KillPlayer()
     {
         var filledPositions = GameLoop.Instance.Array.GetAllArrayPositions();
         foreach (var floodedPosition in floodFiller._floodedPositions)

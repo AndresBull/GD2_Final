@@ -207,11 +207,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d248d78d034092f48aa6149d6cec2516, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _input: {fileID: 2501321263286298516}
   _characterView: {fileID: 7079344154635723013, guid: 2468895caebc7274e8b41d2f03af0ef1,
     type: 3}
   _characterMeshes:
   - {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-  _playerPrefab: {fileID: 8811266625348397413, guid: fb4893de3c4066d4998c2e2ddcca5988,
+  _climberPrefab: {fileID: 8811266625348397413, guid: fb4893de3c4066d4998c2e2ddcca5988,
     type: 3}
-  _input: {fileID: 2501321263286298516}
+  _overlordPrefab: {fileID: 3912653369593397870, guid: 4a8c6fb58250f5e4ebf7c3884213a9cb,
+    type: 3}

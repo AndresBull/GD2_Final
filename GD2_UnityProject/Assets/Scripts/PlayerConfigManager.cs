@@ -23,6 +23,19 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
         return _playerConfigs;
     }
 
+    public List<GameObject> GetClimbers()
+    {
+        var climbers = new List<GameObject>();
+        foreach (var playerConfig in _playerConfigs)
+        {
+            if (!playerConfig.IsOverlord)
+            {
+                climbers.Add(playerConfig.Input.gameObject.transform.GetChild(0).gameObject);
+            }
+        }
+        return climbers;
+    }
+
     public float Timer => _timer;
 
     private void Awake()
@@ -69,9 +82,15 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
         }
     }
 
-    public void SetPlayerRole(int playerIndex, GameObject role)
+    public void SetPlayerRole(int playerIndex, bool isOverlord)
     {
-        _playerConfigs[playerIndex].Role = role;
+        if (_playerConfigs.Any(pc => pc.IsOverlord))
+        {
+            _playerConfigs[playerIndex].IsOverlord = false;
+            return;
+        }
+
+        _playerConfigs[playerIndex].IsOverlord = isOverlord;
     }
 
     public void SetPlayerCharacter(int playerIndex, Mesh character)
@@ -150,9 +169,9 @@ public class PlayerConfiguration
 
     public PlayerInput Input { get; internal set; }
     public Material PlayerMaterial { get; set; }
-    public GameObject Role { get; internal set; }
     public Mesh Character { get; set; }
     public Mesh[] CharacterMeshes { get; internal set; }
     public int PlayerIndex { get; internal set; }
     public bool IsReady { get; internal set; }
+    public bool IsOverlord { get; internal set; }
 }

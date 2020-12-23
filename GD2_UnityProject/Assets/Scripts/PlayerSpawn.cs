@@ -4,38 +4,63 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerSpawn : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _characterView;
-    [Tooltip("The different player models to choose from.")][SerializeField]
-    private Mesh[] _characterMeshes;
-    [SerializeField]
-    private GameObject _playerPrefab;
-    [SerializeField]
     private PlayerInput _input;
-
+    [Header("Character Setup")]
+    [Tooltip("A preview of the character without functionality;\nused to update character customization in realtime.")][SerializeField]
+    private GameObject _characterView;
+    [Tooltip("The different player models to choose from for customization.")][SerializeField]
+    private Mesh[] _characterMeshes;
+    [Header("Player Runtime Spawn")]
+    [Tooltip("The general Climber object, with all its functionality; used during gameplay.")][SerializeField]
+    private GameObject _climberPrefab;
+    [Tooltip("The Overlord object, with all its functionality; used during gameplay.")][SerializeField]
+    private GameObject _overlordPrefab;
+    
     private GameObject _character;
     private Transform _playerScreen, _joinText, _colorPicker, _readyButton, _eventSystem;
 
-    private void Awake()
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         var spawns = GameObject.Find("PlayerSpawns");
 
         if (GameLoop.Instance.GameState == GameState.CharacterSetup && _character == null)
         {
-            SetupPlayerScreen();
-            _character = Instantiate(_characterView, spawns.transform.GetChild(_input.playerIndex));
+            SetupPlayerScreen(spawns.transform);
         }
         else if (GameLoop.Instance.GameState == GameState.Play)
         {
-            Instantiate(_playerPrefab, spawns.transform.GetChild(_input.playerIndex));
+            SpawnPlayerInLevel(spawns.transform);
         }
     }
 
-    private void SetupPlayerScreen()
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void SpawnPlayerInLevel(Transform spawns)
+    {
+        if (PlayerConfigManager.Instance.GetPlayerConfigs()[_input.playerIndex].IsOverlord)
+        {
+            var overlordSpawn = GameObject.Find("OverlordSpawn").transform;
+            Instantiate(_overlordPrefab, overlordSpawn.position, overlordSpawn.rotation, transform);
+            return;
+        }
+        Instantiate(_climberPrefab, spawns.GetChild(_input.playerIndex).position, spawns.GetChild(_input.playerIndex).rotation, transform);
+    }
+
+    private void SetupPlayerScreen(Transform spawns)
     {
         PlayerConfigManager.Instance.SetPlayerMeshes(_input.playerIndex, _characterMeshes);
         var menu = GameObject.Find("PlayerMenu");
@@ -56,6 +81,8 @@ public class PlayerSpawn : MonoBehaviour
         _eventSystem = _playerScreen.GetChild(_playerScreen.childCount - 1);
         _input.uiInputModule = _eventSystem.GetComponent<InputSystemUIInputModule>();
         _eventSystem.GetComponent<MultiplayerEventSystem>().sendNavigationEvents = true;
+
+        _character = Instantiate(_characterView, spawns.transform.GetChild(_input.playerIndex));
     }
 
     private void OnDestroy()
@@ -71,6 +98,6 @@ public class PlayerSpawn : MonoBehaviour
         _readyButton.GetComponent<Button>().interactable = false;
         _colorPicker.GetComponent<Button>().interactable = false;
         _joinText.gameObject.SetActive(true);
-
+        _character = null;
     }
 }

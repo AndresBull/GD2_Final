@@ -13,6 +13,7 @@ namespace Assets.Scripts
     {
         public delegate List<BlockPosition> NeighbourStrategy(BlockPosition from);
         private readonly NeighbourStrategy _neighbours;
+        public List<BlockPosition> _floodedPositions = new List<BlockPosition>();
         public FloodFill(NeighbourStrategy neighbours)
         {
             _neighbours = neighbours;

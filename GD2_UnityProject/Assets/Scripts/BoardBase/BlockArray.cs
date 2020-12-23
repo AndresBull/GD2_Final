@@ -69,5 +69,11 @@ namespace BoardBase
 
             return null;
         }
+
+        public List<BlockPosition> GetAllArrayPositions()
+        {
+            var arrayPositions = _blocks.Keys.ToList();
+            return arrayPositions;
+        }
     }
 }

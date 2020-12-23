@@ -1,4 +1,5 @@
-﻿using BoardBase;
+﻿using Assets.Scripts;
+using BoardBase;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -85,7 +86,9 @@ public class ClimberBehaviour : MonoBehaviour
     }
 
     #endregion
-
+    public static FloodFill floodFiller;
+    [SerializeField]
+    private PositionConverter _positionConverter = null;
     #region GameLoop
     private void Awake()
     {
@@ -374,6 +377,18 @@ public class ClimberBehaviour : MonoBehaviour
         _playerConfig = config;
         _meshFilter.mesh = config.Character;
         _meshRenderer.material = config.PlayerMaterial;
+    }
+    private void KillPlayer()
+    {
+        var filledPositions = GameLoop.Instance.Array.GetAllArrayPositions();
+        foreach (var floodedPosition in floodFiller._floodedPositions)
+        {
+            filledPositions.Remove(floodedPosition);
+        }
+        if (filledPositions.Contains(_positionConverter.ToBlockPosition(GameLoop.Instance.Array,this.gameObject.transform.position)))
+        {
+            this.gameObject.SetActive(false);
+        }
     }
 
     #region Input

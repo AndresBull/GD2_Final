@@ -19,6 +19,7 @@ namespace Views
         public event EventHandler Landed;
         public FloodFill floodFiller;
 
+
         private GameLoop gameLoop;
         private BlockPosition _boardPosition;
         private float _dropDownDelay = 1f;
@@ -30,6 +31,7 @@ namespace Views
 
             var startBlock = new BlockPosition(GameLoop.Instance.Array.Rows+1, GameLoop.Instance.Array.Columns);
             floodFiller = new FloodFill(Neighbours);
+            ClimberBehaviour.floodFiller = floodFiller;
 
             gameLoop.AllignBlockViews(this);
             StartCoroutine(Drop());
@@ -92,7 +94,8 @@ namespace Views
                             Debug.Log("Landed");
 
                             gameLoop.ConnectBlockViews(this);
-                            var _floodedPositions = floodFiller.Flood(new BlockPosition(8,8));
+                            floodFiller._floodedPositions = floodFiller.Flood(new BlockPosition(8,8));
+                            
                             yield break;
                         }
                     }

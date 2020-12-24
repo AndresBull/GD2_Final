@@ -39,18 +39,6 @@ namespace GameSystem.Management
             }
             return climbers;
         }
-        public GameObject GetOverlord()
-        {
-            GameObject overlord = null;
-            foreach (var playerConfig in _playerConfigs)
-            {
-                if (playerConfig.IsOverlord)
-                {
-                    overlord = playerConfig.Input.gameObject.transform.GetChild(0).gameObject;
-                }
-            }
-            return overlord;
-        }
 
         public float Timer => _timer;
 
@@ -78,7 +66,6 @@ namespace GameSystem.Management
                 SceneManager.LoadScene("Combination");
             }
         }
-
 
         public void OnPlayerJoined(PlayerInput input)
         {
@@ -113,15 +100,26 @@ namespace GameSystem.Management
             }
         }
 
-        internal void SetPlayerRole(int playerIndex, bool isOverlord)
+        internal void SetPlayerAsOverlord(int playerIndex)
         {
-            if (_playerConfigs.Any(pc => pc.IsOverlord))
+            var overlord = _playerConfigs.Where(pc => pc.IsOverlord).ToList();
+            
+            if (overlord.Count > 1)
             {
-                _playerConfigs[playerIndex].IsOverlord = false;
+                Debug.LogError("There is more than one Overlord active. Please ensure there is always maximum one Overlord active.");
                 return;
             }
-
-            _playerConfigs[playerIndex].IsOverlord = isOverlord;
+            if (overlord.Count > 0)
+            {
+                overlord[0].IsOverlord = false;
+                _playerConfigs[playerIndex].IsOverlord = true;
+                return;
+            }
+            if (overlord.Count <= 0)
+            {
+                _playerConfigs[playerIndex].IsOverlord = true;
+                return;
+            }
         }
 
         internal void SetPlayerCharacter(int playerIndex, Mesh character)
@@ -148,7 +146,6 @@ namespace GameSystem.Management
             }
             UnreadyPlayer(playerIndex);
         }
-
 
         private void SetTimer(float timeInSeconds)
         {

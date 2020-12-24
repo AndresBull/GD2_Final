@@ -235,6 +235,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: c297fb47-2b69-413b-ab22-f0b767633097
     m_ActionName: UI/Join[/Keyboard/tab,/DualShock4GamepadHID/buttonNorth]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 659076897191180436, guid: fb4893de3c4066d4998c2e2ddcca5988,
+          type: 3}
+        m_MethodName: OnTryKill
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 3514e7b0-3e25-4a8a-9607-9a0c2bb3ca59
+    m_ActionName: Climber/KillOverlord[/XInputControllerWindows/buttonNorth,/Keyboard/enter]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Gamepad
   m_DefaultActionMap: UI

@@ -39,6 +39,18 @@ namespace GameSystem.Management
             }
             return climbers;
         }
+        public GameObject GetOverlord()
+        {
+            GameObject overlord = null;
+            foreach (var playerConfig in _playerConfigs)
+            {
+                if (playerConfig.IsOverlord)
+                {
+                    overlord = playerConfig.Input.gameObject.transform.GetChild(0).gameObject;
+                }
+            }
+            return overlord;
+        }
 
         public float Timer => _timer;
 

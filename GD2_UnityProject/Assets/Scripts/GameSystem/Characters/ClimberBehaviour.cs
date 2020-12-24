@@ -96,7 +96,7 @@ namespace GameSystem.Characters
         }
 
         #endregion
-
+        private PositionConverter _positionConverter = null;
         #region GameLoop
         private void Awake()
         {
@@ -402,8 +402,23 @@ namespace GameSystem.Characters
                 this.gameObject.SetActive(false);
             }
         }
+        public void KillOverlord()
+        {
+            // Geen idee hoe ik dit moet doen, sorry
+            _playerConfig.IsOverlord = true;
+            PlayerConfigManager.Instance.SetPlayerRole(PlayerConfigManager.Instance.GetOverlord(), false);
+            PlayerConfigManager.Instance.SetPlayerRole(_playerConfig.PlayerIndex, true);
+            
+        }
+
 
         #region Input
+        public void OnTryKill(InputAction.CallbackContext context)
+        {
+            if (_positionConverter.ToBlockPosition(_blockLayout, this.gameObject.transform.position).Y > 8)
+                KillOverlord();
+        }
+
         public void OnMove(InputAction.CallbackContext context)
         {
             if (_isHanging)

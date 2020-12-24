@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5640268889954548451}
   - component: {fileID: 2501321263286298516}
-  - component: {fileID: 3710221394083601910}
+  - component: {fileID: 8585473955936301553}
   m_Layer: 0
   m_Name: PlayerConfig
   m_TagString: Untagged
@@ -92,7 +92,7 @@ MonoBehaviour:
     m_ActionName: Player/Fire[/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8965510062326222303, guid: 97c203e6ed843d14d92b3c0eae465372,
+      - m_Target: {fileID: 5946498236341180608, guid: 97c203e6ed843d14d92b3c0eae465372,
           type: 3}
         m_MethodName: OnNavigate
         m_Mode: 0
@@ -108,7 +108,7 @@ MonoBehaviour:
     m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8965510062326222303, guid: 97c203e6ed843d14d92b3c0eae465372,
+      - m_Target: {fileID: 5946498236341180608, guid: 97c203e6ed843d14d92b3c0eae465372,
           type: 3}
         m_MethodName: OnSubmit
         m_Mode: 0
@@ -124,7 +124,7 @@ MonoBehaviour:
     m_ActionName: UI/Submit[/Keyboard/enter]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8965510062326222303, guid: 97c203e6ed843d14d92b3c0eae465372,
+      - m_Target: {fileID: 5946498236341180608, guid: 97c203e6ed843d14d92b3c0eae465372,
           type: 3}
         m_MethodName: OnCancel
         m_Mode: 0
@@ -220,7 +220,7 @@ MonoBehaviour:
     m_ActionName: Climber/ClimbLadder[/DualShock4GamepadHID/leftStick/y]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4939125108973346381, guid: a7053f00062eac840a1086008baeab3b,
+      - m_Target: {fileID: 6383813727956527470, guid: a7053f00062eac840a1086008baeab3b,
           type: 3}
         m_MethodName: OnPlayerJoined
         m_Mode: 2
@@ -240,7 +240,7 @@ MonoBehaviour:
   m_DefaultActionMap: UI
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &3710221394083601910
+--- !u!114 &8585473955936301553
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -249,7 +249,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5858767633339409800}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d248d78d034092f48aa6149d6cec2516, type: 3}
+  m_Script: {fileID: 11500000, guid: 35511dff094e25545bac036dd442a075, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _input: {fileID: 2501321263286298516}
@@ -257,7 +257,7 @@ MonoBehaviour:
     type: 3}
   _characterMeshes:
   - {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
-  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   _climberPrefab: {fileID: 8811266625348397413, guid: fb4893de3c4066d4998c2e2ddcca5988,
     type: 3}
   _overlordPrefab: {fileID: 3912653369593397870, guid: 4a8c6fb58250f5e4ebf7c3884213a9cb,

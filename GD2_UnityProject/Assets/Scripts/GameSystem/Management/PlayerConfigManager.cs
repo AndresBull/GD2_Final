@@ -68,7 +68,7 @@ namespace GameSystem.Management
         }
 
 
-        internal void OnPlayerJoined(PlayerInput input)
+        public void OnPlayerJoined(PlayerInput input)
         {
             if (!_playerConfigs.Any(p => p.PlayerIndex == input.playerIndex))
             {

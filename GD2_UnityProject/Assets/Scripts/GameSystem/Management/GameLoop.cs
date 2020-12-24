@@ -10,7 +10,13 @@ namespace GameSystem.Management
 {
     public class GameLoop : SingletonMonoBehaviour<GameLoop>
     {
+        // TODO: remove this positoinconverter and use the one in blockfieldview
+        [SerializeField]
+        private PositionConverter _positionConverter = null;
+
         public BlockFieldView FieldView { get; } = new BlockFieldView(8, 8);
+
+        public PositionConverter PositionConverter => _positionConverter;
 
         public GameState GameState { get; internal set; }
     }

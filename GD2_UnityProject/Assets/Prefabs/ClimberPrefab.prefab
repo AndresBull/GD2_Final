@@ -264,13 +264,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8811266625348397413}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7ebaf86333bfcd41898e77913d501a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 7c9c2a0562951094a9ac19a645a9ecd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _meshRenderer: {fileID: 8811266624796323659}
   _meshFilter: {fileID: 8811266624796323656}
   _camera: {fileID: 0}
-  _maxSpeed: 4
+  _maxSpeed: 10
   _jumpDelay: 0.25
   _jumpHeight: 0.5
   _jumpMultiplier: 1

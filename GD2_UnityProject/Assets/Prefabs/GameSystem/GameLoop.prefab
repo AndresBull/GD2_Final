@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8791603205486523272}
-  - component: {fileID: 8791603205486523275}
+  - component: {fileID: 1666196264064274514}
   m_Layer: 0
   m_Name: GameLoop
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8791603205486523275
+--- !u!114 &1666196264064274514
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,7 +40,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8791603205486523273}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: baae5b2fa06032541ae362177a18ca2f, type: 3}
+  m_Script: {fileID: 11500000, guid: 6656e3c577facf9488da5bc65879dfac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _positionConverter: {fileID: 11400000, guid: 38f5ff808782cb64299879d17477313e, type: 2}
+  _positionConverter: {fileID: 11400000, guid: 7444699e7829424459a90dba95faf1d9, type: 2}

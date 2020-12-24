@@ -1,4 +1,5 @@
 ﻿using BoardSystem;
+using GameSystem.Management;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,9 @@ namespace GameSystem.Views
     {
         private Dictionary<BlockPosition, BlockView> _blocks = new Dictionary<BlockPosition, BlockView>();
 
-        [SerializeField]
-        private PositionConverter _positionConverter = null;
+        // TODO: use this positionconverter instead of the one in gameloop, temporarily done like this because fieldview and gameloop need to be rewritten
+        //[SerializeField]
+        //private PositionConverter _positionConverter = null;
 
         [SerializeField]
         private int _rows = 8;
@@ -23,7 +25,7 @@ namespace GameSystem.Views
 
         public int Rows => _rows;
         public int Columns => _columns;
-        public PositionConverter PositionConverter => _positionConverter;
+        public PositionConverter PositionConverter => GameLoop.Instance.PositionConverter;
 
         public BlockFieldView(int rows, int columns)
         {
@@ -82,8 +84,8 @@ namespace GameSystem.Views
 
             foreach (var blockView in combinedBlockView.BlockViews)
             {
-                var boardPosition = _positionConverter.ToBlockPosition(this, blockView.transform.position);
-                blockView.transform.position = _positionConverter.ToWorldPosition(this, boardPosition);
+                var boardPosition = PositionConverter.ToBlockPosition(this, blockView.transform.position);
+                blockView.transform.position = PositionConverter.ToWorldPosition(this, boardPosition);
                 blockView.Position = boardPosition;
             }
         }
@@ -99,7 +101,7 @@ namespace GameSystem.Views
         {
             foreach (var blockView in combinedBlockView.BlockViews)
             {
-                var boardPosition = _positionConverter.ToBlockPosition(this, blockView.transform.position);
+                var boardPosition = PositionConverter.ToBlockPosition(this, blockView.transform.position);
                 blockView.Position = boardPosition;
             }
 

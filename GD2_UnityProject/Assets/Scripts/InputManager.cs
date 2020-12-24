@@ -2,11 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using Utils;
 
-public class InputSwitcher : SingletonMonoBehaviour<InputSwitcher>
+public class InputManager : SingletonMonoBehaviour<InputManager>
 {
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -21,13 +27,11 @@ public class InputSwitcher : SingletonMonoBehaviour<InputSwitcher>
                 SwitchToActionMap("UI");
                 return;
             }
-           
-
-
+            SwitchToActionMap("Player");
         }
     }
 
-    private void SwitchToActionMap(string mapName = "Climber")
+    private void SwitchToActionMap(string mapName = "Player")
     {
         switch (mapName)
         {
@@ -37,7 +41,7 @@ public class InputSwitcher : SingletonMonoBehaviour<InputSwitcher>
                     PlayerConfigManager.Instance.GetPlayerConfigs()[i].Input.SwitchCurrentActionMap(mapName);
                 }
                 break;
-            case "Climber":
+            case "Player":
                 for (int i = 0; i < PlayerConfigManager.Instance.GetPlayerConfigs().Count - 1; i++)
                 {
                     var playerConfig = PlayerConfigManager.Instance.GetPlayerConfigs()[i];
@@ -54,4 +58,20 @@ public class InputSwitcher : SingletonMonoBehaviour<InputSwitcher>
                 break;
         }
     }
+
+    public void OnNavigate(InputAction.CallbackContext context)
+    {
+
+    }
+
+    public void OnSubmit(InputAction.CallbackContext context)
+    {
+
+    }
+
+    public void OnCancel(InputAction.CallbackContext context)
+    {
+
+    }
+
 }

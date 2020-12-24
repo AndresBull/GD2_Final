@@ -58,15 +58,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621567455fd1c4ceb811cc8a00b6a1a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NotificationBehavior: 2
-  m_MaxPlayerCount: 1
+  m_NotificationBehavior: 0
+  m_MaxPlayerCount: 4
   m_AllowJoining: 1
   m_JoinBehavior: 1
   m_PlayerJoinedEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4939125108973346381}
-        m_MethodName: OnPlayerJoin
+        m_MethodName: OnPlayerJoined
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -80,11 +80,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4939125108973346381}
-        m_MethodName: OnPlayerLeave
-        m_Mode: 0
+        m_MethodName: OnPlayerLeft
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 2501321263286298516, guid: 84ccfecf0b27df9408a7bc72f0598d6f,
+            type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.InputSystem.PlayerInput,
+            Unity.InputSystem
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -116,7 +118,7 @@ MonoBehaviour:
         m_Groups: 
         m_Action: Join
         m_Flags: 0
-    m_Reference: {fileID: -3525004955131474575, guid: 53ee1df19da6f954badc96f8a86d6b6f,
+    m_Reference: {fileID: -5664629247380133920, guid: 53ee1df19da6f954badc96f8a86d6b6f,
       type: 3}
   m_PlayerPrefab: {fileID: 5858767633339409800, guid: 84ccfecf0b27df9408a7bc72f0598d6f,
     type: 3}

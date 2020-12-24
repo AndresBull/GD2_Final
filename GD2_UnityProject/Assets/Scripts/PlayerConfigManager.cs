@@ -18,12 +18,12 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
     [Tooltip("The amount of players that needs to be 'Ready' before the round can start")][SerializeField]
     private int PlayersNeededReadyBeforeStarting = 3;
 
-    public List<PlayerConfiguration> GetPlayerConfigs()
+    internal List<PlayerConfiguration> GetPlayerConfigs()
     {
         return _playerConfigs;
     }
 
-    public List<GameObject> GetClimbers()
+    public List<GameObject> GetAllClimbers()
     {
         var climbers = new List<GameObject>();
         foreach (var playerConfig in _playerConfigs)
@@ -41,6 +41,7 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
     private void Awake()
     {
         _playerConfigs = new List<PlayerConfiguration>();
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Update()
@@ -56,33 +57,47 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
 
         if (_timer <= 0.0f)
         {
+            _isTimerActive = false; // prevent the scene from continuous loading
+            GameLoop.Instance.GameState = GameState.Play;
             SceneManager.LoadScene("Combination");
         }
     }
 
-    public void OnPlayerJoin(PlayerInput input)
+
+    internal void OnPlayerJoined(PlayerInput input)
     {
         if (!_playerConfigs.Any(p => p.PlayerIndex == input.playerIndex))
         {
             print($"Player {input.playerIndex} Joined.");
             input.transform.SetParent(transform);
-            _playerConfigs.Add(new PlayerConfiguration(input));
+            var config = new PlayerConfiguration(input);
+            _playerConfigs.Add(config);
+        }
+        else
+        {
+            OnPlayerLeft(input);
+        }
+
+        // TODO: move this part to a class that tracks the game status
+        if (GameLoop.Instance.GameState == GameState.Menu)
+        {
+            SceneManager.LoadScene("CharacterSetup");
+            GameLoop.Instance.GameState = GameState.CharacterSetup;
         }
     }
 
-    public void OnPlayerLeave(PlayerInput input)
+    internal void OnPlayerLeft(PlayerInput input)
     {
         if (_playerConfigs.Any(p => p.PlayerIndex == input.playerIndex))
         {
             print($"Player {input.playerIndex} Left.");
-            input.transform.SetParent(null);
             var config = _playerConfigs[input.playerIndex];
             _playerConfigs.Remove(config);
             Destroy(config.Input.gameObject);
         }
     }
 
-    public void SetPlayerRole(int playerIndex, bool isOverlord)
+    internal void SetPlayerRole(int playerIndex, bool isOverlord)
     {
         if (_playerConfigs.Any(pc => pc.IsOverlord))
         {
@@ -93,22 +108,22 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
         _playerConfigs[playerIndex].IsOverlord = isOverlord;
     }
 
-    public void SetPlayerCharacter(int playerIndex, Mesh character)
+    internal void SetPlayerCharacter(int playerIndex, Mesh character)
     {
         _playerConfigs[playerIndex].Character = character;
     }
 
-    public void SetPlayerMeshes(int playerIndex, Mesh[] meshes)
+    internal void SetPlayerMeshes(int playerIndex, Mesh[] meshes)
     {
         _playerConfigs[playerIndex].CharacterMeshes = meshes;
     }
 
-    public void SetPlayerColor(int playerIndex, Material color)
+    internal void SetPlayerColor(int playerIndex, Material color)
     {
         _playerConfigs[playerIndex].PlayerMaterial = color;
     }
 
-    public void ToggleReadyPlayer(int playerIndex)
+    internal void ToggleReadyPlayer(int playerIndex)
     {
         if (!_playerConfigs[playerIndex].IsReady)
         {
@@ -118,13 +133,14 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
         UnreadyPlayer(playerIndex);
     }
 
-    public void SetTimer(float timeInSeconds)
+
+    private void SetTimer(float timeInSeconds)
     {
         _timer = timeInSeconds;
         _isTimerActive = true;
     }
 
-    public void StopTimer()
+    private void StopTimer()
     {
         _isTimerActive = false;
     }
@@ -135,7 +151,8 @@ public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
 
         if (_playerConfigs.Count == PlayersNeededReadyBeforeStarting && _playerConfigs.All(p => p.IsReady == true))
         {
-            SetTimer(15.0f);
+            // TODO: set timer to 15 secs
+            SetTimer(5.0f);
         }
         else if (_playerConfigs.Count == MaxPlayers && _playerConfigs.All(p => p.IsReady == true))
         {
@@ -167,11 +184,11 @@ public class PlayerConfiguration
         PlayerIndex = input.playerIndex;
     }
 
-    public PlayerInput Input { get; internal set; }
-    public Material PlayerMaterial { get; set; }
-    public Mesh Character { get; set; }
-    public Mesh[] CharacterMeshes { get; internal set; }
-    public int PlayerIndex { get; internal set; }
-    public bool IsReady { get; internal set; }
-    public bool IsOverlord { get; internal set; }
+    internal PlayerInput Input { get; private set; }
+    internal Material PlayerMaterial { get; set; }
+    internal Mesh Character { get; set; }
+    internal Mesh[] CharacterMeshes { get; set; }
+    internal int PlayerIndex { get; private set; }
+    internal bool IsReady { get; set; }
+    internal bool IsOverlord { get; set; }
 }

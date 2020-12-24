@@ -43,12 +43,12 @@ public class PlayerScreenUpdater : MonoBehaviour
     {
         PlayerConfigManager.Instance.ToggleReadyPlayer(_playerIndex);
 
-        if (_readyButton.GetComponentInChildren<TextMeshProUGUI>().text.Equals("Ready!"))
+        if (_readyButton.GetComponentInChildren<TextMeshProUGUI>().text.Equals("Ready"))
         {
-            _readyButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Unready");
+            _readyButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Cancel");
             return;
         }
-        _readyButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Ready!");
+        _readyButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Ready");
     }
 
     public void SetColor(Material color)

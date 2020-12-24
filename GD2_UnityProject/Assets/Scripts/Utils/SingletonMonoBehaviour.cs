@@ -43,7 +43,7 @@ namespace Utils
                             singletonObject.name = typeof(T).ToString() + " (Singleton)";
 
                             // Make instance persistent.
-                            //DontDestroyOnLoad(singletonObject);
+                            DontDestroyOnLoad(singletonObject);
                         }
                         if (m_Instance.GetComponent<DontDestroyOnLoad>() == null)
                             m_Instance.gameObject.AddComponent<DontDestroyOnLoad>();

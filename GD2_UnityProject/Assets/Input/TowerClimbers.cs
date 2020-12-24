@@ -57,14 +57,6 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
-                },
-                {
-                    ""name"": ""Join"",
-                    ""type"": ""Button"",
-                    ""id"": ""2c56a5c6-e6fd-4e0b-8a85-31d1a45f9803"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -221,28 +213,6 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                     ""action"": ""ClimbLadder"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""169309da-fbc2-42e6-b7b5-1bd6d7861cb4"",
-                    ""path"": ""<Keyboard>/tab"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Join"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ef8d6d24-f63b-4279-af50-98722dc47661"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Join"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -273,6 +243,14 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Join"",
+                    ""type"": ""Button"",
+                    ""id"": ""c297fb47-2b69-413b-ab22-f0b767633097"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -466,11 +444,44 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""82627dcc-3b13-4ba9-841d-e4b746d6553e"",
-                    ""path"": ""*/{Cancel}"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e5db7598-fe73-4075-811b-50894fc8e47f"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f2bbd9b8-e144-479d-a349-028df7c81723"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Join"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""15d8e761-480b-43a5-99a1-a18e0cab46af"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Join"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -495,14 +506,6 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
-                },
-                {
-                    ""name"": ""Join"",
-                    ""type"": ""Button"",
-                    ""id"": ""6b0afc68-0c6a-4133-8951-cf76bdcbffe7"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -569,28 +572,6 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Drop Block"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""77251e9a-76d4-457c-b537-493dea372147"",
-                    ""path"": ""<Keyboard>/tab"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Join"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""95760aaf-ac9d-46a3-af6f-4ca53eb7d278"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Join"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -667,17 +648,16 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
         m_Climber_PlaceLadder = m_Climber.FindAction("Place Ladder", throwIfNotFound: true);
         m_Climber_PickupLadder = m_Climber.FindAction("Pick-up Ladder", throwIfNotFound: true);
         m_Climber_ClimbLadder = m_Climber.FindAction("ClimbLadder", throwIfNotFound: true);
-        m_Climber_Join = m_Climber.FindAction("Join", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
         m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
         m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
+        m_UI_Join = m_UI.FindAction("Join", throwIfNotFound: true);
         // Overlord
         m_Overlord = asset.FindActionMap("Overlord", throwIfNotFound: true);
         m_Overlord_MoveHand = m_Overlord.FindAction("Move Hand", throwIfNotFound: true);
         m_Overlord_DropBlock = m_Overlord.FindAction("Drop Block", throwIfNotFound: true);
-        m_Overlord_Join = m_Overlord.FindAction("Join", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -732,7 +712,6 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
     private readonly InputAction m_Climber_PlaceLadder;
     private readonly InputAction m_Climber_PickupLadder;
     private readonly InputAction m_Climber_ClimbLadder;
-    private readonly InputAction m_Climber_Join;
     public struct ClimberActions
     {
         private @TowerClimbers m_Wrapper;
@@ -742,7 +721,6 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
         public InputAction @PlaceLadder => m_Wrapper.m_Climber_PlaceLadder;
         public InputAction @PickupLadder => m_Wrapper.m_Climber_PickupLadder;
         public InputAction @ClimbLadder => m_Wrapper.m_Climber_ClimbLadder;
-        public InputAction @Join => m_Wrapper.m_Climber_Join;
         public InputActionMap Get() { return m_Wrapper.m_Climber; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -767,9 +745,6 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 @ClimbLadder.started -= m_Wrapper.m_ClimberActionsCallbackInterface.OnClimbLadder;
                 @ClimbLadder.performed -= m_Wrapper.m_ClimberActionsCallbackInterface.OnClimbLadder;
                 @ClimbLadder.canceled -= m_Wrapper.m_ClimberActionsCallbackInterface.OnClimbLadder;
-                @Join.started -= m_Wrapper.m_ClimberActionsCallbackInterface.OnJoin;
-                @Join.performed -= m_Wrapper.m_ClimberActionsCallbackInterface.OnJoin;
-                @Join.canceled -= m_Wrapper.m_ClimberActionsCallbackInterface.OnJoin;
             }
             m_Wrapper.m_ClimberActionsCallbackInterface = instance;
             if (instance != null)
@@ -789,9 +764,6 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 @ClimbLadder.started += instance.OnClimbLadder;
                 @ClimbLadder.performed += instance.OnClimbLadder;
                 @ClimbLadder.canceled += instance.OnClimbLadder;
-                @Join.started += instance.OnJoin;
-                @Join.performed += instance.OnJoin;
-                @Join.canceled += instance.OnJoin;
             }
         }
     }
@@ -803,6 +775,7 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
     private readonly InputAction m_UI_Navigate;
     private readonly InputAction m_UI_Submit;
     private readonly InputAction m_UI_Cancel;
+    private readonly InputAction m_UI_Join;
     public struct UIActions
     {
         private @TowerClimbers m_Wrapper;
@@ -810,6 +783,7 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
         public InputAction @Navigate => m_Wrapper.m_UI_Navigate;
         public InputAction @Submit => m_Wrapper.m_UI_Submit;
         public InputAction @Cancel => m_Wrapper.m_UI_Cancel;
+        public InputAction @Join => m_Wrapper.m_UI_Join;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -828,6 +802,9 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 @Cancel.started -= m_Wrapper.m_UIActionsCallbackInterface.OnCancel;
                 @Cancel.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnCancel;
                 @Cancel.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnCancel;
+                @Join.started -= m_Wrapper.m_UIActionsCallbackInterface.OnJoin;
+                @Join.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnJoin;
+                @Join.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnJoin;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -841,6 +818,9 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 @Cancel.started += instance.OnCancel;
                 @Cancel.performed += instance.OnCancel;
                 @Cancel.canceled += instance.OnCancel;
+                @Join.started += instance.OnJoin;
+                @Join.performed += instance.OnJoin;
+                @Join.canceled += instance.OnJoin;
             }
         }
     }
@@ -851,14 +831,12 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
     private IOverlordActions m_OverlordActionsCallbackInterface;
     private readonly InputAction m_Overlord_MoveHand;
     private readonly InputAction m_Overlord_DropBlock;
-    private readonly InputAction m_Overlord_Join;
     public struct OverlordActions
     {
         private @TowerClimbers m_Wrapper;
         public OverlordActions(@TowerClimbers wrapper) { m_Wrapper = wrapper; }
         public InputAction @MoveHand => m_Wrapper.m_Overlord_MoveHand;
         public InputAction @DropBlock => m_Wrapper.m_Overlord_DropBlock;
-        public InputAction @Join => m_Wrapper.m_Overlord_Join;
         public InputActionMap Get() { return m_Wrapper.m_Overlord; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -874,9 +852,6 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 @DropBlock.started -= m_Wrapper.m_OverlordActionsCallbackInterface.OnDropBlock;
                 @DropBlock.performed -= m_Wrapper.m_OverlordActionsCallbackInterface.OnDropBlock;
                 @DropBlock.canceled -= m_Wrapper.m_OverlordActionsCallbackInterface.OnDropBlock;
-                @Join.started -= m_Wrapper.m_OverlordActionsCallbackInterface.OnJoin;
-                @Join.performed -= m_Wrapper.m_OverlordActionsCallbackInterface.OnJoin;
-                @Join.canceled -= m_Wrapper.m_OverlordActionsCallbackInterface.OnJoin;
             }
             m_Wrapper.m_OverlordActionsCallbackInterface = instance;
             if (instance != null)
@@ -887,9 +862,6 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 @DropBlock.started += instance.OnDropBlock;
                 @DropBlock.performed += instance.OnDropBlock;
                 @DropBlock.canceled += instance.OnDropBlock;
-                @Join.started += instance.OnJoin;
-                @Join.performed += instance.OnJoin;
-                @Join.canceled += instance.OnJoin;
             }
         }
     }
@@ -946,18 +918,17 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
         void OnPlaceLadder(InputAction.CallbackContext context);
         void OnPickupLadder(InputAction.CallbackContext context);
         void OnClimbLadder(InputAction.CallbackContext context);
-        void OnJoin(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
         void OnNavigate(InputAction.CallbackContext context);
         void OnSubmit(InputAction.CallbackContext context);
         void OnCancel(InputAction.CallbackContext context);
+        void OnJoin(InputAction.CallbackContext context);
     }
     public interface IOverlordActions
     {
         void OnMoveHand(InputAction.CallbackContext context);
         void OnDropBlock(InputAction.CallbackContext context);
-        void OnJoin(InputAction.CallbackContext context);
     }
 }

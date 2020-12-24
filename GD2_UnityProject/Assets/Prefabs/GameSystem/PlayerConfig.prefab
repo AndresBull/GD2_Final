@@ -91,15 +91,51 @@ MonoBehaviour:
     m_ActionId: 93f8d1bf-ebff-4ea8-8018-737127390b4f
     m_ActionName: Player/Fire[/Mouse/leftButton]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8965510062326222303, guid: 97c203e6ed843d14d92b3c0eae465372,
+          type: 3}
+        m_MethodName: OnNavigate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: ce38e218-aee9-4e46-9e51-e2ebada731a6
     m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8965510062326222303, guid: 97c203e6ed843d14d92b3c0eae465372,
+          type: 3}
+        m_MethodName: OnSubmit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 25ccf795-c536-4068-a93f-44bd02b0baec
     m_ActionName: UI/Submit[/Keyboard/enter]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8965510062326222303, guid: 97c203e6ed843d14d92b3c0eae465372,
+          type: 3}
+        m_MethodName: OnCancel
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 44dab2c9-2d1d-44e3-bbf3-c497a7541941
     m_ActionName: UI/Cancel[/Keyboard/escape]
   - m_PersistentCalls:
@@ -183,16 +219,25 @@ MonoBehaviour:
     m_ActionId: 57ce97f3-f235-4baa-8ab7-8d66edec87f6
     m_ActionName: Climber/ClimbLadder[/DualShock4GamepadHID/leftStick/y]
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 2c56a5c6-e6fd-4e0b-8a85-31d1a45f9803
-    m_ActionName: Climber/Join[/Keyboard/tab,/DualShock4GamepadHID/buttonNorth]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 6b0afc68-0c6a-4133-8951-cf76bdcbffe7
-    m_ActionName: Overlord/Join[/Keyboard/tab,/DualShock4GamepadHID/buttonNorth]
+      m_Calls:
+      - m_Target: {fileID: 4939125108973346381, guid: a7053f00062eac840a1086008baeab3b,
+          type: 3}
+        m_MethodName: OnPlayerJoined
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2501321263286298516}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.InputSystem.PlayerInput,
+            Unity.InputSystem
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: c297fb47-2b69-413b-ab22-f0b767633097
+    m_ActionName: UI/Join[/Keyboard/tab,/DualShock4GamepadHID/buttonNorth]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Gamepad
-  m_DefaultActionMap: Climber
+  m_DefaultActionMap: UI
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &3710221394083601910

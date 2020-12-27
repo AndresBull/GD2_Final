@@ -158,15 +158,16 @@ namespace GameSystem.Management
         {
             _playerConfigs[playerIndex].IsReady = true;
 
-            if (_playerConfigs.Count == PlayersNeededReadyBeforeStarting && _playerConfigs.All(p => p.IsReady == true))
+            if (_playerConfigs.Count >= PlayersNeededReadyBeforeStarting && _playerConfigs.Count <= MaxPlayers && _playerConfigs.All(p => p.IsReady == true))
             {
                 // TODO: set timer to 15 secs
                 SetTimer(5.0f);
             }
-            else if (_playerConfigs.Count == MaxPlayers && _playerConfigs.All(p => p.IsReady == true))
-            {
-                SetTimer(5.0f);
-            }
+
+            //else if (_playerConfigs.Count == MaxPlayers && _playerConfigs.All(p => p.IsReady == true))
+            //{
+            //    SetTimer(5.0f);
+            //}
         }
 
         private void UnreadyPlayer(int playerIndex)

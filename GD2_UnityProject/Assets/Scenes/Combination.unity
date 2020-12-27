@@ -218,6 +218,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameLoop
       objectReference: {fileID: 0}
+    - target: {fileID: 8791603205486523273, guid: 2da1923d6d093da48aefb8b0161dfcbc,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2da1923d6d093da48aefb8b0161dfcbc, type: 3}
 --- !u!1 &421438437

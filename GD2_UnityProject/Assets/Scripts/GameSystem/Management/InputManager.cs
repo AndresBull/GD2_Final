@@ -19,13 +19,13 @@ namespace GameSystem.Management
             switch (mapName)
             {
                 case "UI":
-                    for (int i = 0; i < PlayerConfigManager.Instance.GetPlayerConfigs().Count - 1; i++)
+                    for (int i = 0; i < PlayerConfigManager.Instance.GetPlayerConfigs().Count; i++)
                     {
                         PlayerConfigManager.Instance.GetPlayerConfigs()[i].Input.SwitchCurrentActionMap(mapName);
                     }
                     break;
                 case "Player":
-                    for (int i = 0; i < PlayerConfigManager.Instance.GetPlayerConfigs().Count - 1; i++)
+                    for (int i = 0; i < PlayerConfigManager.Instance.GetPlayerConfigs().Count; i++)
                     {
                         var playerConfig = PlayerConfigManager.Instance.GetPlayerConfigs()[i];
                         if (playerConfig.IsOverlord)

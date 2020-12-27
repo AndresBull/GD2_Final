@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using Utils;
 
 namespace GameSystem.Management
@@ -62,8 +61,7 @@ namespace GameSystem.Management
             if (_timer <= 0.0f)
             {
                 _isTimerActive = false; // prevent the scene from continuous loading
-                GameLoop.Instance.GameState = GameState.Play;
-                SceneManager.LoadScene("Combination");
+                GameLoop.Instance.StateMachine.MoveTo(GameStates.Play);
             }
         }
 
@@ -81,11 +79,9 @@ namespace GameSystem.Management
                 OnPlayerLeft(input);
             }
 
-            // TODO: move this part to a class that tracks the game status
-            if (GameLoop.Instance.GameState == GameState.Menu)
+            if (GameLoop.Instance.StateMachine.CurrentState is MenuState)
             {
-                SceneManager.LoadScene("CharacterSetup");
-                GameLoop.Instance.GameState = GameState.CharacterSetup;
+                GameLoop.Instance.StateMachine.MoveTo(GameStates.Setup);
             }
         }
 

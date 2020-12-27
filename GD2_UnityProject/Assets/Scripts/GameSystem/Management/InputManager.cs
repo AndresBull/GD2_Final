@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using Utils;
 
 namespace GameSystem.Management
@@ -15,25 +14,7 @@ namespace GameSystem.Management
             DontDestroyOnLoad(gameObject);
         }
 
-        private void OnEnable()
-        {
-            SceneManager.sceneLoaded += OnSceneLoaded;
-        }
-
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            if (scene.IsValid() && scene.isLoaded)
-            {
-                if (GameLoop.Instance.GameState != GameState.Play)
-                {
-                    SwitchToActionMap("UI");
-                    return;
-                }
-                SwitchToActionMap("Player");
-            }
-        }
-
-        private void SwitchToActionMap(string mapName = "Player")
+        internal void SwitchToActionMap(string mapName = "Player")
         {
             switch (mapName)
             {

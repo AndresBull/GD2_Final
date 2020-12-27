@@ -35,7 +35,7 @@ namespace GameSystem.Management
 
         private void Awake()
         {
-            if (GameLoop.Instance.GameState != GameState.Menu)
+            if (!(GameLoop.Instance.StateMachine.CurrentState is MenuState))
             {
                 var spawns = GameObject.Find("PlayerSpawns");
 
@@ -67,7 +67,7 @@ namespace GameSystem.Management
 
         private void SetupPlayerScreen(Transform spawns)
         {
-            if (GameLoop.Instance.GameState == GameState.CharacterSetup && _character == null)
+            if (GameLoop.Instance.StateMachine.CurrentState is SetupState && _character == null)
             {
                 PlayerConfigManager.Instance.SetPlayerMeshes(_input.playerIndex, _characterMeshes);
                 var menu = GameObject.Find("PlayerMenu");
@@ -95,7 +95,7 @@ namespace GameSystem.Management
 
         private void SpawnPlayerInLevel(Transform spawns)
         {
-            if (GameLoop.Instance.GameState != GameState.Play)
+            if (!(GameLoop.Instance.StateMachine.CurrentState is PlayState))
                 return;
 
             if (PlayerConfigManager.Instance.GetPlayerConfigs()[_input.playerIndex].IsOverlord)
@@ -109,7 +109,7 @@ namespace GameSystem.Management
 
         private void ResetPlayerScreen()
         {
-            if (GameLoop.Instance.GameState == GameState.CharacterSetup)
+            if (GameLoop.Instance.StateMachine.CurrentState is SetupState)
             {
                 _eventSystem.GetComponent<MultiplayerEventSystem>().sendNavigationEvents = false;
                 _input.uiInputModule = null;

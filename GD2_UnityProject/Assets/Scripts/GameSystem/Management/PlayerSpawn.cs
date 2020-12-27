@@ -39,12 +39,11 @@ namespace GameSystem.Management
             {
                 var spawns = GameObject.Find("PlayerSpawns");
 
-                if (spawns == null)
+                if (spawns != null)
                 {
-                    SceneManager.sceneLoaded += OnSceneLoaded;
-                    return;
+                    SetupPlayerScreen(spawns.transform);
                 }
-                SetupPlayerScreen(spawns.transform);
+                SceneManager.sceneLoaded += OnSceneLoaded;   
             }
         }
 
@@ -54,8 +53,11 @@ namespace GameSystem.Management
             {
                 var spawns = GameObject.Find("PlayerSpawns");
 
-                SetupPlayerScreen(spawns.transform);
-                SpawnPlayerInLevel(spawns.transform);
+                if (spawns != null)
+                {
+                    SetupPlayerScreen(spawns.transform);
+                    SpawnPlayerInLevel(spawns.transform);
+                }
             }
         }
 

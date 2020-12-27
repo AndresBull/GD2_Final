@@ -12,7 +12,7 @@ namespace GameSystem.Characters
         [Range(0, 10)]
         private int _movementConstraint;
 
-        private GameObject HoldBlock;
+        private GameObject _holdBlock;
         private Vector3 spawnLocation = new Vector3(0, 4, 0);
         private Vector2 _movementConstraints;
         private float _speed = 25.0f;
@@ -55,17 +55,46 @@ namespace GameSystem.Characters
         private void RandomBlock()
         {
             var key = UnityEngine.Random.Range(0, _blocks.Count);
-            HoldBlock = _blocks[key];
+            _holdBlock = _blocks[key];
         }
 
-        public void OnMove(InputAction.CallbackContext context)
+        private void Drop()
         {
-            _horizontalMovement = context.ReadValue<float>();
+            var position = new Vector3(Mathf.Round(gameObject.transform.position.x), gameObject.transform.position.y - gameObject.transform.localScale.y, gameObject.transform.position.z);
+            Instantiate(_holdBlock, position, _holdBlock.transform.rotation);
         }
 
-        public void OnDrop(InputAction.CallbackContext context)
+        // TODO: Remove the following methods if PlayerInput uses BroadcastMessages()
+        //       Uncomment the follwing methods if PlayerInput uses Invoke Unity Events
+        //public void OnMoveHand(InputAction.CallbackContext context)
+        //{
+        //    _horizontalMovement = context.ReadValue<float>();
+        //}
+
+        //public void OnDropBlock(InputAction.CallbackContext context)
+        //{
+        //    if (context.ReadValueAsButton())
+        //    {
+        //        if (_hasBlock)
+        //        {
+        //            _hasBlock = false;
+        //            Drop();
+        //            _dropTimer = 0;
+        //            return;
+        //        }
+        //    }
+        //}
+
+        // TODO: USE the following methods if PlayerInput uses BroadcastMessages()
+        //       REMOVE the follwing methods if PlayerInput uses Invoke Unity Events
+        public void OnMoveHand(InputValue value)
         {
-            if (context.ReadValueAsButton())
+            _horizontalMovement = value.Get<float>();
+        }
+
+        public void OnDropBlock(InputValue value)
+        {
+            if (value.isPressed)
             {
                 if (_hasBlock)
                 {
@@ -75,12 +104,6 @@ namespace GameSystem.Characters
                     return;
                 }
             }
-        }
-
-        private void Drop()
-        {
-            var position = new Vector3(Mathf.Round(gameObject.transform.position.x), gameObject.transform.position.y - gameObject.transform.localScale.y, gameObject.transform.position.z);
-            Instantiate(HoldBlock, position, HoldBlock.transform.rotation);
         }
     }
 }

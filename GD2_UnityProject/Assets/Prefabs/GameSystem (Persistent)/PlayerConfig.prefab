@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: 53ee1df19da6f954badc96f8a86d6b6f,
     type: 3}
-  m_NotificationBehavior: 2
+  m_NotificationBehavior: 1
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -92,7 +92,7 @@ MonoBehaviour:
     m_ActionName: Player/Fire[/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5946498236341180608, guid: 97c203e6ed843d14d92b3c0eae465372,
+      - m_Target: {fileID: 5386945535500605601, guid: a7053f00062eac840a1086008baeab3b,
           type: 3}
         m_MethodName: OnNavigate
         m_Mode: 0
@@ -108,7 +108,7 @@ MonoBehaviour:
     m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5946498236341180608, guid: 97c203e6ed843d14d92b3c0eae465372,
+      - m_Target: {fileID: 5386945535500605601, guid: a7053f00062eac840a1086008baeab3b,
           type: 3}
         m_MethodName: OnSubmit
         m_Mode: 0
@@ -124,7 +124,7 @@ MonoBehaviour:
     m_ActionName: UI/Submit[/Keyboard/enter]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5946498236341180608, guid: 97c203e6ed843d14d92b3c0eae465372,
+      - m_Target: {fileID: 5386945535500605601, guid: a7053f00062eac840a1086008baeab3b,
           type: 3}
         m_MethodName: OnCancel
         m_Mode: 0

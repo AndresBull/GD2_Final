@@ -42,19 +42,21 @@ namespace GameSystem.Management
             }
         }
 
-        public void OnNavigate(InputAction.CallbackContext context)
-        {
+        // TODO: REMOVE the following methods if PlayerInput uses BroadcastMessages()
+        //       USE the follwing methods if PlayerInput uses Invoke Unity Events
+        //public void OnNavigate(InputAction.CallbackContext context)
+        //{
 
-        }
+        //}
 
-        public void OnSubmit(InputAction.CallbackContext context)
-        {
+        //public void OnSubmit(InputAction.CallbackContext context)
+        //{
 
-        }
+        //}
 
-        public void OnCancel(InputAction.CallbackContext context)
-        {
+        //public void OnCancel(InputAction.CallbackContext context)
+        //{
 
-        }
+        //}
     }
 }

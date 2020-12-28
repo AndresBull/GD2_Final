@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a72b8aece1653e44ebc804149b5a1e87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementConstraint: 10
+  _movementConstraint: 6
   _blocks:
   - {fileID: 921796882053848782, guid: 1e238b0f2926abd4c9b4e865400da2aa, type: 3}
   - {fileID: 285410900236504125, guid: 9b3b93fae4eb90346b65a848c7571d85, type: 3}

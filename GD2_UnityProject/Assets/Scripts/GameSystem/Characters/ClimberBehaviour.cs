@@ -404,20 +404,114 @@ namespace GameSystem.Characters
         }
 
         #region Input
-        public void OnMove(InputAction.CallbackContext context)
+        // TODO: REMOVE the following methods if PlayerInput uses BroadcastMessages()
+        //       UNCOMMENT the follwing methods if PlayerInput uses Invoke Unity Events
+
+        //public void OnMove(InputAction.CallbackContext context)
+        //{
+        //    if (_isHanging)
+        //    {
+        //        return;
+        //    }
+
+        //    _horizontalMovement = context.ReadValue<float>();
+        //    Move();
+        //}
+
+        //public void OnJump(InputAction.CallbackContext context)
+        //{
+        //    if (context.ReadValueAsButton())
+        //    {
+        //        if (!_isJumping && IsGrounded())
+        //        {
+        //            _isJumping = true;
+        //            Jump();
+        //            return;
+        //        }
+        //        _jumpTimer = Time.time + _jumpDelay;
+        //    }
+        //}
+
+        //public void OnPlaceLadder(InputAction.CallbackContext context)
+        //{
+        //    if (!context.ReadValueAsButton()) // ! is used to make sure the method gets called only once instead of twice (pressed: 1 -> 0; released: 0 -> 1)
+        //    {
+        //        if (IsCarryingLadder)
+        //        {
+        //            BlockPosition climberBlock = GetClimberBlockPosition();
+        //            BlockView blockNorth = _blockField.BlockAt(new BlockPosition(climberBlock.X, climberBlock.Y + 1));
+
+        //            if (blockNorth != null)
+        //            {
+        //                print("Can't place ladder here. Placement blocked.");
+        //                return;
+        //            }
+
+        //            PlaceLadderAt(climberBlock);
+        //        }
+        //        else
+        //        {
+        //            print("No ladder available");
+        //        }
+        //    }
+        //}
+
+        //public void OnPickupLadder(InputAction.CallbackContext context)
+        //{
+        //    if (!context.ReadValueAsButton()) // ! is used to make sure the method gets called only once instead of twice (pressed: 1 -> 0; released: 0 -> 1)
+        //    {
+        //        if (!IsCarryingLadder)
+        //        {
+        //            BlockPosition climberBlock = GetClimberBlockPosition();
+
+        //            // TODO: change this method to use the blocks assigend in teh PlaceLadder method instead of recalculating everything
+
+        //            // get all objects inside the range and filter for ladders
+        //            var colliders = Physics.OverlapSphere(transform.position, _range);
+
+        //            foreach (var collider in colliders)
+        //            {
+        //                if (collider.transform.root.TryGetComponent(out Ladder ladderScript))
+        //                {
+        //                    if (ladderScript.Owner == this.gameObject)
+        //                    {
+        //                        Destroy(ladderScript.gameObject);
+        //                        print("Picked up Ladder");
+        //                        IsCarryingLadder = true;
+        //                        break;
+        //                    }
+        //                    continue;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        //public void OnTryKill(InputAction.CallbackContext context)
+        //{
+        //    if (_blockField.PositionConverter.ToBlockPosition(_blockField, this.gameObject.transform.position).Y > _blockField.Rows)
+        //    {
+        //        PlayerConfigManager.Instance.SetPlayerAsOverlord(_playerConfig.PlayerIndex);
+        //    }
+        //}
+
+
+        // TODO: USE the following methods if PlayerInput uses BroadcastMessages()
+        //       REMOVE the follwing methods if PlayerInput uses Invoke Unity Events
+        public void OnMove(InputValue value)
         {
             if (_isHanging)
             {
                 return;
             }
 
-            _horizontalMovement = context.ReadValue<float>();
+            _horizontalMovement = value.Get<float>();
             Move();
         }
 
-        public void OnJump(InputAction.CallbackContext context)
+        public void OnJump(InputValue value)
         {
-            if (context.ReadValueAsButton())
+            if (value.isPressed)
             {
                 if (!_isJumping && IsGrounded())
                 {
@@ -429,9 +523,9 @@ namespace GameSystem.Characters
             }
         }
 
-        public void OnPlaceLadder(InputAction.CallbackContext context)
+        public void OnPlaceLadder(InputValue value)
         {
-            if (!context.ReadValueAsButton()) // ! is used to make sure the method gets called only once instead of twice (pressed: 1 -> 0; released: 0 -> 1)
+            if (value.isPressed)
             {
                 if (IsCarryingLadder)
                 {
@@ -453,9 +547,9 @@ namespace GameSystem.Characters
             }
         }
 
-        public void OnPickupLadder(InputAction.CallbackContext context)
+        public void OnPickupLadder(InputValue value)
         {
-            if (!context.ReadValueAsButton()) // ! is used to make sure the method gets called only once instead of twice (pressed: 1 -> 0; released: 0 -> 1)
+            if (value.isPressed)
             {
                 if (!IsCarryingLadder)
                 {
@@ -484,7 +578,7 @@ namespace GameSystem.Characters
             }
         }
 
-        public void OnTryKill(InputAction.CallbackContext context)
+        public void OnTryKill(InputValue value)
         {
             if (_blockField.PositionConverter.ToBlockPosition(_blockField, this.gameObject.transform.position).Y > _blockField.Rows)
             {

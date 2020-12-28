@@ -252,7 +252,7 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
             ""actions"": [
                 {
                     ""name"": ""Navigate"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""ce38e218-aee9-4e46-9e51-e2ebada731a6"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
@@ -260,7 +260,7 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Submit"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""25ccf795-c536-4068-a93f-44bd02b0baec"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -268,7 +268,7 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Cancel"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""44dab2c9-2d1d-44e3-bbf3-c497a7541941"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -276,7 +276,7 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Join"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""c297fb47-2b69-413b-ab22-f0b767633097"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",

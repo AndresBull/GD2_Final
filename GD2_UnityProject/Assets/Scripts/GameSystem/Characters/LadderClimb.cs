@@ -117,9 +117,25 @@ namespace GameSystem.Characters
             }
         }
 
-        public void OnStartClimb(InputAction.CallbackContext context)
+        // TODO: REMOVE the following methods if PlayerInput uses BroadcastMessages()
+        //       USE the following methods if PlayerInput uses Invoke Unity Events
+
+        //public void OnStartClimb(InputAction.CallbackContext context)
+        //{
+        //    float direction = context.ReadValue<float>();
+
+        //    if (direction < 0.5f && direction > -0.5f)
+        //        return;
+
+        //    normalize direction
+        //    _direction = (int)(direction / Mathf.Abs(direction));
+        //}
+
+        // TODO: USE the following methods if PlayerInput uses BroadcastMessages()
+        //       REMOVE the follwing methods if PlayerInput uses Invoke Unity Events
+        public void OnStartClimb(InputValue value)
         {
-            float direction = context.ReadValue<float>();
+            float direction = value.Get<float>();
 
             if (direction < 0.5f && direction > -0.5f)
                 return;
@@ -127,5 +143,6 @@ namespace GameSystem.Characters
             // normalize direction
             _direction = (int)(direction / Mathf.Abs(direction));
         }
+
     }
 }

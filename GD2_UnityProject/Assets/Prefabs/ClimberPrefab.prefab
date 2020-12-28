@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5447244746411454678}
   - component: {fileID: 572090459630158078}
   - component: {fileID: 9129825135275891094}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,7 +88,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6258449929642058068}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: =REPLACE CHILD MODEL (pick mesh for root collider)=
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 8811266624796323661}
   - component: {fileID: 8811266624796323656}
   - component: {fileID: 8811266624796323659}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ModelPlaceHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 5652280809923709207}
   - component: {fileID: 659076897191180436}
   - component: {fileID: -2655535800688079255}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ClimberPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

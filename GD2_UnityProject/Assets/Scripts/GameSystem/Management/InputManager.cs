@@ -19,13 +19,13 @@ namespace GameSystem.Management
             switch (mapName)
             {
                 case "UI":
-                    for (int i = 0; i < PlayerConfigManager.Instance.GetPlayerConfigs().Count - 1; i++)
+                    for (int i = 0; i < PlayerConfigManager.Instance.GetPlayerConfigs().Count; i++)
                     {
                         PlayerConfigManager.Instance.GetPlayerConfigs()[i].Input.SwitchCurrentActionMap(mapName);
                     }
                     break;
                 case "Player":
-                    for (int i = 0; i < PlayerConfigManager.Instance.GetPlayerConfigs().Count - 1; i++)
+                    for (int i = 0; i < PlayerConfigManager.Instance.GetPlayerConfigs().Count; i++)
                     {
                         var playerConfig = PlayerConfigManager.Instance.GetPlayerConfigs()[i];
                         if (playerConfig.IsOverlord)
@@ -42,19 +42,21 @@ namespace GameSystem.Management
             }
         }
 
-        public void OnNavigate(InputAction.CallbackContext context)
-        {
+        // TODO: REMOVE the following methods if PlayerInput uses BroadcastMessages()
+        //       USE the follwing methods if PlayerInput uses Invoke Unity Events
+        //public void OnNavigate(InputAction.CallbackContext context)
+        //{
 
-        }
+        //}
 
-        public void OnSubmit(InputAction.CallbackContext context)
-        {
+        //public void OnSubmit(InputAction.CallbackContext context)
+        //{
 
-        }
+        //}
 
-        public void OnCancel(InputAction.CallbackContext context)
-        {
+        //public void OnCancel(InputAction.CallbackContext context)
+        //{
 
-        }
+        //}
     }
 }

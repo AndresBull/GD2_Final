@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6319370558400843118}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: =DO NOT DELETE=
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 1920797143079988021}
   - component: {fileID: 4111969480853924674}
   - component: {fileID: 4779700542389077829}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ladder (New)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 1920797143884034736}
   - component: {fileID: 1920797143884034739}
   - component: {fileID: 1920797143884034738}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,7 +198,7 @@ GameObject:
   m_Component:
   - component: {fileID: 719920020828061447}
   - component: {fileID: 3284632001094393968}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: =REPLACE CUBE WITH MODEL=
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,7 +244,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5522500444698623329}
   - component: {fileID: 2910388103023361782}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ExitPoint
   m_TagString: LExitTrigger
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
@@ -288,7 +288,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8180776440339901480}
   - component: {fileID: 5522585775684793781}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: EnterPoint
   m_TagString: LEnterTrigger
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}

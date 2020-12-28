@@ -39,12 +39,11 @@ namespace GameSystem.Management
             {
                 var spawns = GameObject.Find("PlayerSpawns");
 
-                if (spawns == null)
+                if (spawns != null)
                 {
-                    SceneManager.sceneLoaded += OnSceneLoaded;
-                    return;
+                    SetupPlayerScreen(spawns.transform);
                 }
-                SetupPlayerScreen(spawns.transform);
+                SceneManager.sceneLoaded += OnSceneLoaded;   
             }
         }
 
@@ -54,8 +53,11 @@ namespace GameSystem.Management
             {
                 var spawns = GameObject.Find("PlayerSpawns");
 
-                SetupPlayerScreen(spawns.transform);
-                SpawnPlayerInLevel(spawns.transform);
+                if (spawns != null)
+                {
+                    SetupPlayerScreen(spawns.transform);
+                    SpawnPlayerInLevel(spawns.transform);
+                }
             }
         }
 
@@ -101,10 +103,12 @@ namespace GameSystem.Management
             if (PlayerConfigManager.Instance.GetPlayerConfigs()[_input.playerIndex].IsOverlord)
             {
                 var overlordSpawn = GameObject.Find("OverlordSpawn").transform;
-                Instantiate(_overlordPrefab, overlordSpawn.position, overlordSpawn.rotation, transform);
+                GameObject overlord = Instantiate(_overlordPrefab, overlordSpawn.position, overlordSpawn.rotation);
+                overlord.transform.SetParent(transform);
                 return;
             }
-            Instantiate(_climberPrefab, spawns.GetChild(_input.playerIndex).position, spawns.GetChild(_input.playerIndex).rotation, transform);
+            GameObject climber = Instantiate(_climberPrefab, spawns.GetChild(_input.playerIndex).position, spawns.GetChild(_input.playerIndex).rotation, transform);
+            climber.transform.SetParent(transform);
         }
 
         private void ResetPlayerScreen()

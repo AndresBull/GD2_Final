@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameSystem.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,12 +14,14 @@ namespace BoardSystem
         public readonly int Rows, Columns;
         private List<BlockPosition> BlockPositions => _blocks.Keys.ToList();
         private List<Block> Blocks => _blocks.Values.ToList();
+        private PositionConverter _positionConverter;
+        public PositionConverter PositionConverter => _positionConverter;
 
-        public BlockField(int rows, int columns)
+        public BlockField(int rows, int columns, PositionConverter positionConverter)
         {
             Rows = rows;
             Columns = columns;
-
+            _positionConverter = positionConverter;
             CreateDictionary();
         }
 

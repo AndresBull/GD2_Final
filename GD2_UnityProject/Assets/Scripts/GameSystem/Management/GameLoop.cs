@@ -10,21 +10,23 @@ namespace GameSystem.Management
 {
     public class GameLoop : SingletonMonoBehaviour<GameLoop>
     {
+        [SerializeField]
+        private PositionConverter _positionConverter = null;
+
         private StateMachine<BaseState> _stateMachine;
 
         public BlockField Field { get; private set; }
-        public BlockFieldView FieldView { get; internal set; }
         public StateMachine<BaseState> StateMachine => _stateMachine;
 
         private void Awake()
         {
             SetupStateMachine();
-            CreateNewField(8, 8);
+            CreateNewField(8, 8, _positionConverter);
         }
 
-        public void CreateNewField(int rows, int columns)
+        public void CreateNewField(int rows, int columns, PositionConverter positionConverter)
         {
-            Field = new BlockField(rows, columns);
+            Field = new BlockField(rows, columns, positionConverter);
         }
 
         private void SetupStateMachine()

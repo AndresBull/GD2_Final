@@ -62,6 +62,7 @@ namespace GameSystem.Characters
 
         // Components
         private BlockField _blockField;                         // reference to the array that represents the layout of the blocks
+        private BlockFieldView _blockFieldView;                 // reference to the visual representation of the layout of the blocks
         private Collider _col;                                  // reference to the (base) collider component attached to this gameobject;
         private PlayerConfiguration _playerConfig;
         private Rigidbody _rb;                                  // reference to the rigidbody component attached to this gameobject
@@ -138,7 +139,7 @@ namespace GameSystem.Characters
         // can possibly be stored in another class / might be set to public so others can access this too
         private BlockPosition GetClimberBlockPosition()
         {
-            return _blockField.PositionConverter.ToBlockPosition(_blockField, transform.position);
+            return _blockFieldView.PositionConverter.ToBlockPosition(_blockField, transform.position);
         }
 
         private bool CheckLedgeAdjacentTo(BlockPosition sourceBlock, float direction)
@@ -296,7 +297,7 @@ namespace GameSystem.Characters
             _isHanging = true;
 
             BlockPosition targetCell = new BlockPosition(block.Position.X, block.Position.Y + 1);
-            Vector3 targetPosition = _blockField.PositionConverter.ToWorldPosition(_blockField, targetCell);
+            Vector3 targetPosition = _blockFieldView.PositionConverter.ToWorldPosition(_blockField, targetCell);
             transform.position = targetPosition;
             _isHanging = false;
         }
@@ -396,7 +397,7 @@ namespace GameSystem.Characters
             {
                 filledPositions.Remove(floodedPosition);
             }
-            if (filledPositions.Contains(_blockField.PositionConverter.ToBlockPosition(_blockField, transform.position)))
+            if (filledPositions.Contains(_blockFieldView.PositionConverter.ToBlockPosition(_blockField, transform.position)))
             {
                 this.gameObject.SetActive(false);
             }
@@ -579,7 +580,7 @@ namespace GameSystem.Characters
 
         public void OnTryKill(InputValue value)
         {
-            if (_blockField.PositionConverter.ToBlockPosition(_blockField, this.gameObject.transform.position).Y > _blockField.Rows)
+            if (_blockFieldView.PositionConverter.ToBlockPosition(_blockField, this.gameObject.transform.position).Y > _blockField.Rows)
             {
                 PlayerConfigManager.Instance.SetPlayerAsOverlord(_playerConfig.PlayerIndex);
             }

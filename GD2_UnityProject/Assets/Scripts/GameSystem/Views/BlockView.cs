@@ -13,6 +13,7 @@ namespace GameSystem.Views
     {
         private List<Block> _shapeBlocks = new List<Block>();
         private BlockField _field;
+        private BlockFieldView _fieldView;
         private BlockPosition _position;
         private float _dropDownDelay = 1f;
 
@@ -82,11 +83,13 @@ namespace GameSystem.Views
             }
         }
 
+        public event EventHandler Landed;
         public FloodFill floodFiller;
 
         private void Start()
         {
             _field = GameLoop.Instance.Field;
+            _fieldView = GameLoop.Instance.FieldView;
 
             //SetSize();
             SetShape();
@@ -104,7 +107,7 @@ namespace GameSystem.Views
             for (int i = 0; i < transform.childCount; i++)
             {
                 Transform anchor = transform.GetChild(i);
-                BlockPosition blockPosition = _field.PositionConverter.ToBlockPosition(_field, anchor.position);
+                BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, anchor.position);
                 Block block = new Block(blockPosition.X, blockPosition.Y);
                 _field.AddToDictionary(block);
                 _shapeBlocks.Add(block);
@@ -118,20 +121,20 @@ namespace GameSystem.Views
 
         private void SetSize()
         {
-            Size = _field.PositionConverter.BlockScale;
+            Size = _fieldView.PositionConverter.BlockScale;
         }
 
         public void AllignBlockToGrid()
         {
             Transform anchor = transform.GetChild(0);
-            BlockPosition blockPosition = _field.PositionConverter.ToBlockPosition(_field, anchor.position);
-            Vector3 worldPosition = _field.PositionConverter.ToWorldPosition(_field, blockPosition);
+            BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, anchor.position);
+            Vector3 worldPosition = _fieldView.PositionConverter.ToWorldPosition(_field, blockPosition);
 
             Vector3 offset = anchor.position - worldPosition;
             transform.position += offset;
             Destroy(anchor.gameObject);
 
-            _position = _field.PositionConverter.ToBlockPosition(_field, transform.position);
+            _position = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
         }
 
         private IEnumerator Drop()
@@ -174,9 +177,9 @@ namespace GameSystem.Views
         {
             UpdateBlocks(offset);
 
-            BlockPosition blockPosition = _field.PositionConverter.ToBlockPosition(_field, transform.position);
+            BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
             blockPosition.Y += offset;
-            transform.position = _field.PositionConverter.ToWorldPosition(_field, blockPosition);
+            transform.position = _fieldView.PositionConverter.ToWorldPosition(_field, blockPosition);
         }
 
         private void UpdateBlocks(int offset)
@@ -188,6 +191,12 @@ namespace GameSystem.Views
                 _field.AddToDictionary(newBlock);
                 _shapeBlocks[i] = newBlock;
             }
+        }
+
+        protected virtual void OnLanded(EventArgs args)
+        {
+            var handler = Landed;
+            handler?.Invoke(this, args);
         }
     }
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3912653369593397865}
   - component: {fileID: 3912653369593397864}
   m_Layer: 0
-  m_Name: Overlord
+  m_Name: Test
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

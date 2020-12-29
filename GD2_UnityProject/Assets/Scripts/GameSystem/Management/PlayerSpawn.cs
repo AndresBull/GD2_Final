@@ -37,7 +37,7 @@ namespace GameSystem.Management
         {
             if (!(GameLoop.Instance.StateMachine.CurrentState is MenuState))
             {
-                var spawns = GameObject.Find("PlayerSpawns");
+                var spawns = GameObject.Find("PlayerSpawns"); 
 
                 if (spawns != null)
                 {

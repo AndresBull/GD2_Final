@@ -14,9 +14,9 @@ namespace GameSystem.Characters
         #region Fields
 
         [SerializeField]
-        private MeshRenderer _meshRenderer;
+        private MeshRenderer _meshRenderer = null;
         [SerializeField]
-        private MeshFilter _meshFilter;
+        private MeshFilter _meshFilter = null;
 
         [Header("Camera")]
         [SerializeField]
@@ -50,7 +50,7 @@ namespace GameSystem.Characters
         [Header("Ladders")]
         [Tooltip("The ladder prefab for this character.")]
         [SerializeField]
-        private GameObject _ladderPrefab;
+        private GameObject _ladderPrefab = null;
         [Tooltip("Interaction range between climber and ladder.")]
         [SerializeField]
         private float _range = 1f;

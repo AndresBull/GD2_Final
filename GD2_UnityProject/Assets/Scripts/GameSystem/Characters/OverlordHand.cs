@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameSystem.Management;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,12 +9,7 @@ namespace GameSystem.Characters
 {
     public class OverlordHand : MonoBehaviour
     {
-        [SerializeField]
-        [Range(0, 10)]
-        private int _movementConstraint;
-
         private GameObject _holdBlock;
-        private Vector3 spawnLocation = new Vector3(0, 4, 0);
         private Vector2 _movementConstraints;
         private float _speed = 25.0f;
         private float _horizontalMovement;
@@ -25,8 +21,10 @@ namespace GameSystem.Characters
 
         private void Awake()
         {
-            this.gameObject.transform.position = spawnLocation;
-            _movementConstraints = new Vector2(-_movementConstraint, _movementConstraint);
+            var spawnPos = new Vector3(0, GameLoop.Instance.Field.Rows / 2 * GameLoop.Instance.Field.PositionConverter.BlockScale.y, 0);
+            transform.position = spawnPos;
+            var fieldWidth = GameLoop.Instance.Field.Columns * GameLoop.Instance.Field.PositionConverter.BlockScale.x;
+            _movementConstraints = new Vector2(-fieldWidth/2, fieldWidth/2);
             RandomBlock();
         }
 

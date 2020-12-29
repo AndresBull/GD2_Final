@@ -8,9 +8,9 @@ namespace GameSystem.Props
     public class Ladder : MonoBehaviour
     {
         [SerializeField]
-        private GameObject _exit;
+        private GameObject _exit = null;
         [SerializeField]
-        private GameObject _enter;
+        private GameObject _enter = null;
         private Rigidbody _rb;
         private Quaternion _targetRot;
         private float _timer;

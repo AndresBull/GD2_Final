@@ -9,13 +9,13 @@ namespace GameSystem.Management
     public class PlayerScreenUpdater : MonoBehaviour
     {
         [SerializeField]
-        private TextMeshProUGUI _playerName;
+        private TextMeshProUGUI _playerName = null;
 
         [SerializeField]
-        private Button _readyButton;
+        private Button _readyButton = null;
 
         [SerializeField]
-        private Button _colorPicker;
+        private Button _colorPicker = null;
 
         private int _playerIndex;
         private int _index;

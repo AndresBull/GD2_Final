@@ -12,23 +12,23 @@ namespace GameSystem.Management
     public class PlayerSpawn : MonoBehaviour
     {
         [SerializeField]
-        private PlayerInput _input;
+        private PlayerInput _input = null;
 
         [Header("Character Setup")]
         [Tooltip("A preview of the character without functionality;\nused to update character customization in realtime.")]
         [SerializeField]
-        private GameObject _characterView;
+        private GameObject _characterView = null;
         [Tooltip("The different player models to choose from for customization.")]
         [SerializeField]
-        private Mesh[] _characterMeshes;
+        private Mesh[] _characterMeshes = null;
 
         [Header("Player Runtime Spawn")]
         [Tooltip("The general Climber object, with all its functionality; used during gameplay.")]
         [SerializeField]
-        private GameObject _climberPrefab;
+        private GameObject _climberPrefab = null;
         [Tooltip("The Overlord object, with all its functionality; used during gameplay.")]
         [SerializeField]
-        private GameObject _overlordPrefab;
+        private GameObject _overlordPrefab = null;
 
         private GameObject _character;
         private Transform _playerScreen, _joinText, _colorPicker, _readyButton, _eventSystem;

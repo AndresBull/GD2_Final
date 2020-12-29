@@ -7,7 +7,7 @@ namespace GameSystem.Characters
     public class LadderClimb : MonoBehaviour
     {
         [Tooltip("The speed of the climber when mounting a ladder.")][SerializeField]
-        private float _climbSpeed;
+        private float _climbSpeed = 0;
 
         private ClimberBehaviour _climberScript;
         private Transform _ladderClimbed;

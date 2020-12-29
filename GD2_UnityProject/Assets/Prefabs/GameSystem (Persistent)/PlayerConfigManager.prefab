@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxPlayers: 4
-  PlayersNeededReadyBeforeStarting: 2
+  PlayersNeededReadyBeforeStarting: 1
 --- !u!114 &5386945535500605601
 MonoBehaviour:
   m_ObjectHideFlags: 0

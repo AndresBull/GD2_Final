@@ -61,7 +61,8 @@ namespace GameSystem.Characters
         public bool IsClimbing = false;
 
         // Components
-        private BlockFieldView _blockField;                        // reference to the array that represents the layout of the blocks
+        private BlockField _blockField;                         // reference to the array that represents the layout of the blocks
+        private BlockFieldView _blockFieldView;                 // reference to the visual representation of the layout of the blocks
         private Collider _col;                                  // reference to the (base) collider component attached to this gameobject;
         private PlayerConfiguration _playerConfig;
         private Rigidbody _rb;                                  // reference to the rigidbody component attached to this gameobject
@@ -108,7 +109,7 @@ namespace GameSystem.Characters
             ConvertCameraToWorldTransform();
 
             // store the BlockArray in a field for easy access
-            _blockField = GameLoop.Instance.FieldView;
+            _blockField = GameLoop.Instance.Field;
         }
 
         private void Start()
@@ -138,7 +139,7 @@ namespace GameSystem.Characters
         // can possibly be stored in another class / might be set to public so others can access this too
         private BlockPosition GetClimberBlockPosition()
         {
-            return _blockField.PositionConverter.ToBlockPosition(_blockField, transform.position);
+            return _blockFieldView.PositionConverter.ToBlockPosition(_blockField, transform.position);
         }
 
         private bool CheckLedgeAdjacentTo(BlockPosition sourceBlock, float direction)
@@ -146,12 +147,12 @@ namespace GameSystem.Characters
             // normalize direction
             int dirNormal = (int)(direction / Mathf.Abs(direction));
 
-            BlockView adjacentBlock = _blockField.BlockAt(new BlockPosition(sourceBlock.X + (1 * dirNormal), sourceBlock.Y));
+            Block adjacentBlock = _blockField.BlockAt(new BlockPosition(sourceBlock.X + (1 * dirNormal), sourceBlock.Y));
 
             if (adjacentBlock == null)
                 return false;
 
-            BlockView adjacentBlockNorth = _blockField.BlockAt(new BlockPosition(sourceBlock.X + (1 * dirNormal), sourceBlock.Y + 1));
+            Block adjacentBlockNorth = _blockField.BlockAt(new BlockPosition(sourceBlock.X + (1 * dirNormal), sourceBlock.Y + 1));
 
             if (adjacentBlockNorth != null)
                 return false;
@@ -163,7 +164,7 @@ namespace GameSystem.Characters
         {
             for (int i = 1; i <= _maxLadderHeight; i++)
             {
-                BlockView blockNorth2 = _blockField.BlockAt(new BlockPosition(climberBlock.X, climberBlock.Y + i));
+                Block blockNorth2 = _blockField.BlockAt(new BlockPosition(climberBlock.X, climberBlock.Y + i));
                 if (blockNorth2 != null)
                 {
                     ladderLength = i;
@@ -181,8 +182,8 @@ namespace GameSystem.Characters
             // check west side
             for (int i = 2; i <= ladderLength; i++)
             {
-                BlockView blockNorthWest = _blockField.BlockAt(new BlockPosition(climberBlock.X - (1 * dirNormal), climberBlock.Y + i));
-                BlockView blockUnderNorthWest = _blockField.BlockAt(new BlockPosition(climberBlock.X - (1 * dirNormal), climberBlock.Y + i - 1));
+                Block blockNorthWest = _blockField.BlockAt(new BlockPosition(climberBlock.X - (1 * dirNormal), climberBlock.Y + i));
+                Block blockUnderNorthWest = _blockField.BlockAt(new BlockPosition(climberBlock.X - (1 * dirNormal), climberBlock.Y + i - 1));
 
                 if (blockNorthWest == null && blockUnderNorthWest != null)
                 {
@@ -196,8 +197,8 @@ namespace GameSystem.Characters
             // check east side
             for (int i = 2; i <= ladderLength; i++)
             {
-                BlockView blockNorthEast = _blockField.BlockAt(new BlockPosition(climberBlock.X + (1 * dirNormal), climberBlock.Y + i));
-                BlockView blockUnderNorthEast = _blockField.BlockAt(new BlockPosition(climberBlock.X + (1 * dirNormal), climberBlock.Y + i - 1));
+                Block blockNorthEast = _blockField.BlockAt(new BlockPosition(climberBlock.X + (1 * dirNormal), climberBlock.Y + i));
+                Block blockUnderNorthEast = _blockField.BlockAt(new BlockPosition(climberBlock.X + (1 * dirNormal), climberBlock.Y + i - 1));
 
                 if (blockNorthEast == null && blockUnderNorthEast != null)
                 {
@@ -249,7 +250,7 @@ namespace GameSystem.Characters
             print(climberBlock.X + ", " + climberBlock.Y);
             if (IsAtTopOfJump() && IsNearLedge(climberBlock))
             {
-                BlockView block;
+                Block block;
                 if (_horizontalMovement > 0)
                 {
                     block = _blockField.BlockAt(new BlockPosition(climberBlock.X + 1, climberBlock.Y));
@@ -291,13 +292,12 @@ namespace GameSystem.Characters
             }
         }
 
-        private void ScaleBlock(BlockView block)
+        private void ScaleBlock(Block block)
         {
             _isHanging = true;
 
-            BlockPosition blockPosition = _blockField.PositionConverter.ToBlockPosition(_blockField, block.transform.position);
-            BlockPosition targetCell = new BlockPosition(blockPosition.X, blockPosition.Y + 1);
-            Vector3 targetPosition = _blockField.PositionConverter.ToWorldPosition(_blockField, targetCell);
+            BlockPosition targetCell = new BlockPosition(block.Position.X, block.Position.Y + 1);
+            Vector3 targetPosition = _blockFieldView.PositionConverter.ToWorldPosition(_blockField, targetCell);
             transform.position = targetPosition;
             _isHanging = false;
         }
@@ -392,12 +392,12 @@ namespace GameSystem.Characters
 
         public void KillPlayer()
         {
-            var filledPositions = GameLoop.Instance.FieldView.GetAllArrayPositions();
-            foreach (var floodedPosition in floodFiller._floodedPositions)
+            var filledPositions = _blockField.GetAllFieldPositions();
+            foreach (var floodedPosition in floodFiller.FloodedPositions)
             {
                 filledPositions.Remove(floodedPosition);
             }
-            if (filledPositions.Contains(_blockField.PositionConverter.ToBlockPosition(_blockField, transform.position)))
+            if (filledPositions.Contains(_blockFieldView.PositionConverter.ToBlockPosition(_blockField, transform.position)))
             {
                 this.gameObject.SetActive(false);
             }
@@ -530,7 +530,7 @@ namespace GameSystem.Characters
                 if (IsCarryingLadder)
                 {
                     BlockPosition climberBlock = GetClimberBlockPosition();
-                    BlockView blockNorth = _blockField.BlockAt(new BlockPosition(climberBlock.X, climberBlock.Y + 1));
+                    Block blockNorth = _blockField.BlockAt(new BlockPosition(climberBlock.X, climberBlock.Y + 1));
 
                     if (blockNorth != null)
                     {
@@ -580,7 +580,7 @@ namespace GameSystem.Characters
 
         public void OnTryKill(InputValue value)
         {
-            if (_blockField.PositionConverter.ToBlockPosition(_blockField, this.gameObject.transform.position).Y > _blockField.Rows)
+            if (_blockFieldView.PositionConverter.ToBlockPosition(_blockField, this.gameObject.transform.position).Y > _blockField.Rows)
             {
                 PlayerConfigManager.Instance.SetPlayerAsOverlord(_playerConfig.PlayerIndex);
             }

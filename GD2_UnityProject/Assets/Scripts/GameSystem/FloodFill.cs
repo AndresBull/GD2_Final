@@ -6,7 +6,7 @@ namespace GameSystem
 {
     public class FloodFill
     {
-        public List<BlockPosition> _floodedPositions = new List<BlockPosition>();
+        public List<BlockPosition> FloodedPositions = new List<BlockPosition>();
         
         public delegate List<BlockPosition> NeighbourStrategy(BlockPosition from);
         
@@ -52,7 +52,7 @@ namespace GameSystem
 
         public bool HasBlock(BlockPosition neighbourPosition)
         {
-            if (GameLoop.Instance.FieldView.BlockAt(neighbourPosition) != null)
+            if (GameLoop.Instance.Field.BlockAt(neighbourPosition) != null)
                 return true;
             return false;
         }

@@ -21,16 +21,16 @@ namespace GameSystem.Views
         //Get the blockposition of a worldposition
         //Rounds positions down to the nearest blockposition
         //Can be used for blocks ans other objects to determine the blockposition they are on
-        public BlockPosition ToBlockPosition(BlockFieldView array, Vector3 worldPosition)
+        public BlockPosition ToBlockPosition(BlockField field, Vector3 worldPosition)
         {
-            var boardSize = Vector3.Scale(new Vector3(array.Columns, array.Rows, 1), BlockScale);
+            var boardSize = Vector3.Scale(new Vector3(field.Columns, field.Rows, 1), BlockScale);
 
             var boardOffset = boardSize / 2;
             boardOffset.z = 0;
 
             worldPosition = new Vector3(Mathf.Floor(worldPosition.x), Mathf.Floor(worldPosition.y), 0);
 
-            var unevenRowColOffset = new Vector3(array.Columns % 2, array.Rows % 2, 0);
+            var unevenRowColOffset = new Vector3(field.Columns % 2, field.Rows % 2, 0);
             worldPosition -= unevenRowColOffset / 2;
 
             var offset = worldPosition + boardOffset;
@@ -45,9 +45,9 @@ namespace GameSystem.Views
         }
 
         //Get the worldposition by giving the array an blockposition (has notting to do with a potential block)
-        public Vector3 ToWorldPosition(BlockFieldView array, BlockPosition blockPosition)
+        public Vector3 ToWorldPosition(BlockField field, BlockPosition blockPosition)
         {
-            var boardSize = Vector3.Scale(new Vector3(array.Columns, array.Rows, 1), BlockScale);
+            var boardSize = Vector3.Scale(new Vector3(field.Columns, field.Rows, 1), BlockScale);
 
             var boardOffset = boardSize / 2;
             boardOffset.z = 0;

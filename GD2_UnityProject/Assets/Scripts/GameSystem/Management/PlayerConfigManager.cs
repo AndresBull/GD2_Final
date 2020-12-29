@@ -55,7 +55,7 @@ namespace GameSystem.Management
             if (_timer > 0.0f)
             {
                 _timer -= Time.deltaTime;
-                print(_timer);
+                print((int)_timer);
                 return;
             }
 

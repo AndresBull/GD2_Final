@@ -10,19 +10,21 @@ namespace GameSystem.Management
 {
     public class GameLoop : SingletonMonoBehaviour<GameLoop>
     {
-        // TODO: remove this positoinconverter and use the one in blockfieldview
-        [SerializeField]
-        private PositionConverter _positionConverter = null;
-
         private StateMachine<BaseState> _stateMachine;
 
-        public BlockFieldView FieldView { get; } = new BlockFieldView(8, 8);
-        public PositionConverter PositionConverter => _positionConverter;
+        public BlockField Field { get; private set; }
+        public BlockFieldView FieldView { get; internal set; }
         public StateMachine<BaseState> StateMachine => _stateMachine;
 
         private void Awake()
         {
             SetupStateMachine();
+            CreateNewField(8, 8);
+        }
+
+        public void CreateNewField(int rows, int columns)
+        {
+            Field = new BlockField(rows, columns);
         }
 
         private void SetupStateMachine()

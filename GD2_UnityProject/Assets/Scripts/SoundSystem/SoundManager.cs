@@ -7,7 +7,7 @@ public class SoundManager : SingletonMonoBehaviour<SoundManager>
 {
     /* 
      * Tutorial on this SoundManager;
-     * Drop in a mp3 file in the Sounds folder
+     * Drop a mp3,wav, or other compatible type file in the Sounds folder
      * Add in the AudioSources a name for your soundeffect
      * Create a child in the SoundManager prefab with a SoundSource component (Turn of PlayOnAwake in editor)
      * Put the mp3 in a the AudioClip on that component

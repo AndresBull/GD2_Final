@@ -1,4 +1,5 @@
 ﻿using GameSystem.Management;
+using GameSystem.Views;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace GameSystem.Characters
     public class OverlordHand : MonoBehaviour
     {
         private GameObject _holdBlock;
+        private BlockView _holdBlockView;
         private Vector2 _movementConstraints;
         private float _speed = 25.0f;
         private float _horizontalMovement;
@@ -21,11 +23,19 @@ namespace GameSystem.Characters
 
         private void Awake()
         {
-            var spawnPos = new Vector3(0, GameLoop.Instance.Field.Rows / 2 * GameLoop.Instance.Field.PositionConverter.BlockScale.y, 0);
+            var spawnPos = new Vector3(0, GameLoop.Instance.Field.Rows / 2 * GameLoop.Instance.FieldView.PositionConverter.BlockScale.y, 0);
             transform.position = spawnPos;
-            var fieldWidth = GameLoop.Instance.Field.Columns * GameLoop.Instance.Field.PositionConverter.BlockScale.x;
+
+            var fieldWidth = GameLoop.Instance.Field.Columns * GameLoop.Instance.FieldView.PositionConverter.BlockScale.x;
             _movementConstraints = new Vector2(-fieldWidth/2, fieldWidth/2);
+
             RandomBlock();
+        }
+
+        private void Update()
+        {
+            DropDelay();
+
         }
 
         void FixedUpdate()
@@ -34,7 +44,6 @@ namespace GameSystem.Characters
             transform.position = transform.position + new Vector3(movement, 0.0f, 0.0f);
             float clampedX = Mathf.Clamp(transform.position.x, _movementConstraints.x, _movementConstraints.y);
             transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
-            DropDelay();
         }
 
         public void DropDelay()
@@ -54,6 +63,7 @@ namespace GameSystem.Characters
         {
             var key = UnityEngine.Random.Range(0, _blocks.Count);
             _holdBlock = _blocks[key];
+            _holdBlockView = _holdBlock.GetComponent<BlockView>();
         }
 
         private void Drop()

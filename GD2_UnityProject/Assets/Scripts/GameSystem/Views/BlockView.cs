@@ -158,7 +158,7 @@ namespace GameSystem.Views
                 if (offsetPosition == 0)
                 {
                     Debug.Log("Landed");
-
+                    SoundManager.Instance.PlayBlockLanded();
                     floodFiller.FloodedPositions = floodFiller.Flood(new BlockPosition(8, 8));
 
                     foreach (var climber in PlayerConfigManager.Instance.GetAllClimbers())

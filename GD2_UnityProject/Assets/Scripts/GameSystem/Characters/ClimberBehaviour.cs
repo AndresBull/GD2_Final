@@ -274,6 +274,7 @@ namespace GameSystem.Characters
             _rb.AddForce(Vector3.up * _jumpForce * _jumpMultiplier * _jumpHeight, ForceMode.Impulse);
             _jumpTimer = 0.0f;
             _isHanging = false;
+            SoundManager.Instance.PlayJump();
         }
 
         private void Move()

@@ -19,11 +19,16 @@ namespace GameSystem.Views
         private void Awake()
         {
             GameLoop.Instance.FieldView = this;
+            GenerateTempWalls();
+        }
+
+        private void GenerateTempWalls()
+        {
             var leftWall = GameObject.CreatePrimitive(PrimitiveType.Cube);
             var rightWall = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
             var wallScale = new Vector3(1, GameLoop.Instance.Field.Rows * PositionConverter.BlockScale.y, 1);
-            var wallWidthOffset = new Vector3(wallScale.x * 3f/2f, 0, 0);
+            var wallWidthOffset = new Vector3(wallScale.x / 2f, 0, 0);
 
             var leftWallPos = new Vector3(-GameLoop.Instance.Field.Columns * PositionConverter.BlockScale.x / 2, 0, 0) - wallWidthOffset;
             var rightWallPos = new Vector3(GameLoop.Instance.Field.Columns * PositionConverter.BlockScale.x / 2, 0, 0) + wallWidthOffset;

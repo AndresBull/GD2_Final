@@ -18,6 +18,7 @@ namespace GameSystem.Characters
         private float _dropTimer;
         private float _dropDelay = 5.0f;
         private bool _hasBlock = true;
+        private bool _evenNmbrBlock;
 
         public List<GameObject> _blocks = new List<GameObject>();
 
@@ -25,9 +26,29 @@ namespace GameSystem.Characters
         {
             var spawnPos = new Vector3(0, GameLoop.Instance.Field.Rows / 2 * GameLoop.Instance.FieldView.PositionConverter.BlockScale.y, 0);
             transform.position = spawnPos;
-            var fieldWidth = GameLoop.Instance.Field.Columns * GameLoop.Instance.FieldView.PositionConverter.BlockScale.x;
-            _movementConstraints = new Vector2(-fieldWidth/2, fieldWidth/2);
+
+            SetMovementConstraints(0);
+
             RandomBlock();
+        }
+
+        private void SetMovementConstraints(int blockWidthAmount)
+        {
+            var fieldWidth = GameLoop.Instance.Field.Columns * GameLoop.Instance.FieldView.PositionConverter.BlockScale.x;
+
+            var overlordWidth = 1f; //set to ~model width
+            var blockWidth = blockWidthAmount * GameLoop.Instance.FieldView.PositionConverter.BlockScale.x;
+
+            var maxWidth = Mathf.Max(overlordWidth, blockWidth);
+
+            var range = (fieldWidth - maxWidth) / 2;
+            _movementConstraints = new Vector2(-range, range);
+
+
+            if (blockWidth % 2 == 0)
+                _evenNmbrBlock = true;
+            else
+                _evenNmbrBlock = false;
         }
 
         private void Update()

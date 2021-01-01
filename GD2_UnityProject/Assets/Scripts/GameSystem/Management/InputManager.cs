@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine;
+using UnityEngine.UI;
 using Utils;
 
 namespace GameSystem.Management
@@ -42,21 +39,25 @@ namespace GameSystem.Management
             }
         }
 
-        // TODO: REMOVE the following methods if PlayerInput uses BroadcastMessages()
-        //       USE the follwing methods if PlayerInput uses Invoke Unity Events
-        //public void OnNavigate(InputAction.CallbackContext context)
-        //{
+        public void OnNavigate()
+        {
+            
+        }
 
-        //}
+        public void OnSubmit(Button button)
+        {
+            if (button == null)
+                return;
 
-        //public void OnSubmit(InputAction.CallbackContext context)
-        //{
+            if (button.name.Equals("PlayButton"))
+            {
+                GameLoop.Instance.StateMachine.MoveTo(GameStates.Setup);
+            }
+        }
 
-        //}
+        public void OnCancel()
+        {
 
-        //public void OnCancel(InputAction.CallbackContext context)
-        //{
-
-        //}
+        }
     }
 }

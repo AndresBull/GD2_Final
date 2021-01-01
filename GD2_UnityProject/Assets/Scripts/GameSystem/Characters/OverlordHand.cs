@@ -25,10 +25,8 @@ namespace GameSystem.Characters
         {
             var spawnPos = new Vector3(0, GameLoop.Instance.Field.Rows / 2 * GameLoop.Instance.FieldView.PositionConverter.BlockScale.y, 0);
             transform.position = spawnPos;
-
             var fieldWidth = GameLoop.Instance.Field.Columns * GameLoop.Instance.FieldView.PositionConverter.BlockScale.x;
             _movementConstraints = new Vector2(-fieldWidth/2, fieldWidth/2);
-
             RandomBlock();
         }
 

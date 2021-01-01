@@ -21,6 +21,8 @@ namespace GameSystem.Management
         private void Awake()
         {
             SetupStateMachine();
+            CreateNewField(8, 8);
+
         }
 
         private void OnDestroy()
@@ -56,7 +58,7 @@ namespace GameSystem.Management
 
         private void OnPlayStateEntered(object sender, EventArgs e)
         {
-            CreateNewField(8, 8);
+            // TODO: move CreateNewField here
         }
     }
 }

@@ -57,6 +57,7 @@ namespace GameSystem.Characters
         [Tooltip("The max number of blocks a ladder can bridge vertically. I.e. the maximum length of the ladder.")]
         [SerializeField]
         private int _maxLadderHeight = 3;
+
         [HideInInspector]
         public bool IsClimbing = false;
 
@@ -80,7 +81,6 @@ namespace GameSystem.Characters
         private bool _isHanging = false;                        // bool that keeps track of whether or not the Climber is hanging on a ledge or not
         private bool _isJumping = false;                        // bool to determine if the character is jumping or not
         private bool _hasLadder = true;                         // backup field that determines if the climber has his ladder or not
-        private bool _isDead = false;
 
         public static FloodFill floodFiller;
         #endregion
@@ -91,14 +91,7 @@ namespace GameSystem.Characters
             private set => _hasLadder = value;
         }
 
-        public bool IsDead
-        {
-            get => _isDead;
-            private set => _isDead = value;
-        }
-
-
-        #region GameLoop
+        #region Unity Lifecycle
         private void Awake()
         {
             // set the camera object if it's not assigned in the inspector
@@ -108,8 +101,9 @@ namespace GameSystem.Characters
             }
             ConvertCameraToWorldTransform();
 
-            // store the BlockArray in a field for easy access
+            // store the BlockField in a field for easy access
             _blockField = GameLoop.Instance.Field;
+            _blockFieldView = GameLoop.Instance.FieldView;
         }
 
         private void Start()
@@ -136,7 +130,7 @@ namespace GameSystem.Characters
 
         #endregion
 
-        // can possibly be stored in another class / might be set to public so others can access this too
+        // TODO: can possibly be stored in another class / might be set to public so others can access this too
         private BlockPosition GetClimberBlockPosition()
         {
             return _blockFieldView.PositionConverter.ToBlockPosition(_blockField, transform.position);
@@ -391,7 +385,7 @@ namespace GameSystem.Characters
             _meshRenderer.material = config.PlayerMaterial;
         }
 
-        public void KillPlayer()
+        public void CheckIfTrapped()
         {
             var filledPositions = _blockField.GetAllFieldPositions();
             foreach (var floodedPosition in floodFiller.FloodedPositions)
@@ -400,8 +394,13 @@ namespace GameSystem.Characters
             }
             if (filledPositions.Contains(_blockFieldView.PositionConverter.ToBlockPosition(_blockField, transform.position)))
             {
-                this.gameObject.SetActive(false);
+                GetKilled();
             }
+        }
+
+        public void GetKilled()
+        {
+            this.gameObject.SetActive(false);
         }
 
         #region Input

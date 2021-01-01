@@ -67,26 +67,17 @@ namespace GameSystem.Management
 
         public void OnPlayerJoined(PlayerInput input)
         {
-            if (GameLoop.Instance.StateMachine.CurrentState is StartState)
+            if (!(GameLoop.Instance.StateMachine.CurrentState is SetupState))
             {
-                GameLoop.Instance.StateMachine.MoveTo(GameStates.Menu);
                 if (_playerConfigs.Count >= 1)
                 {
                     return;
                 }
+                JoinPlayer(input);
+                GameLoop.Instance.StateMachine.MoveTo(GameStates.Menu);
+                return;
             }
-
-            if (!_playerConfigs.Any(p => p.PlayerIndex == input.playerIndex))
-            {
-                print($"Player {input.playerIndex} Joined.");
-                input.transform.SetParent(transform);
-                var config = new PlayerConfiguration(input);
-                _playerConfigs.Add(config);
-            }
-            else
-            {
-                OnPlayerLeft(input);
-            }
+            JoinPlayer(input);
         }
 
         internal void OnPlayerLeft(PlayerInput input)
@@ -147,6 +138,21 @@ namespace GameSystem.Management
             UnreadyPlayer(playerIndex);
         }
 
+        private void JoinPlayer(PlayerInput input)
+        {
+            if (!_playerConfigs.Any(p => p.PlayerIndex == input.playerIndex))
+            {
+                print($"Player {input.playerIndex} Joined.");
+                input.transform.SetParent(transform);
+                var config = new PlayerConfiguration(input);
+                _playerConfigs.Add(config);
+            }
+            else
+            {
+                OnPlayerLeft(input);
+            }
+        }
+
         private void SetTimer(float timeInSeconds)
         {
             _timer = timeInSeconds;
@@ -162,7 +168,8 @@ namespace GameSystem.Management
         {
             _playerConfigs[playerIndex].IsReady = true;
 
-            if (_playerConfigs.Count == PlayersNeededReadyBeforeStarting && _playerConfigs.All(p => p.IsReady == true))
+            if (_playerConfigs.Count >= PlayersNeededReadyBeforeStarting 
+                && _playerConfigs.Count < MaxPlayers && _playerConfigs.All(p => p.IsReady == true))
             {
                 SetTimer(15.0f);
             }

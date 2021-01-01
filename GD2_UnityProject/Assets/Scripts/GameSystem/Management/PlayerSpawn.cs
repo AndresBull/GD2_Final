@@ -35,7 +35,7 @@ namespace GameSystem.Management
 
         private void Awake()
         {
-            if (!(GameLoop.Instance.StateMachine.CurrentState is MenuState))
+            if (GameLoop.Instance.StateMachine.CurrentState is SetupState)
             {
                 var spawns = GameObject.Find("PlayerSpawns"); 
 
@@ -43,8 +43,8 @@ namespace GameSystem.Management
                 {
                     SetupPlayerScreen(spawns.transform);
                 }
-                SceneManager.sceneLoaded += OnSceneLoaded;   
             }
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

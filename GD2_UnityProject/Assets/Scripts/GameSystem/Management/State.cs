@@ -8,62 +8,61 @@ using UnityEngine.SceneManagement;
 
 namespace GameSystem.Management
 {
+    public class StartState : BaseState
+    {
+        protected sealed override void CleanUpScene()
+        {
+        }
+
+        protected sealed override void SetupScene()
+        {
+            // prevent loading the scene on startup and creating an infinite loop
+            if (Time.time >= Time.deltaTime)
+            {
+                SceneManager.LoadScene("Start");
+            }
+            InputManager.Instance.SwitchToActionMap("UI");
+        }
+    }
+
     public class MenuState : BaseState
     {
-        public override void OnEnter()
+        protected sealed override void CleanUpScene()
         {
-            if (Time.time >= Time.deltaTime) // prevent loading the scene on startup and creating an infinite loop
-            {
-                SceneManager.LoadScene("MainMenu");
-            }
-            base.OnEnter();
         }
 
-        public override void OnExit()
+        protected sealed override void SetupScene()
         {
-            base.OnExit();
-        }
-
-        protected override void SetupScene()
-        {
+            SceneManager.LoadScene("MainMenu");
             InputManager.Instance.SwitchToActionMap("UI");
         }
     }
 
     public class SetupState : BaseState
     {
-        public override void OnEnter()
+        protected sealed override void CleanUpScene()
+        {
+        }
+
+        protected sealed override void SetupScene()
         {
             SceneManager.LoadScene("CharacterSetup");
-            base.OnEnter();
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-        }
-
-        protected override void SetupScene()
-        {
             InputManager.Instance.SwitchToActionMap("UI");
         }
     }
 
     public class PlayState : BaseState
     {
-        public override void OnEnter()
+        public event EventHandler OnPlayStateEntered;
+
+        protected sealed override void CleanUpScene()
         {
+        }
+
+        protected sealed override void SetupScene()
+        {
+            OnPlayStateEntered?.Invoke(this, EventArgs.Empty);
             SceneManager.LoadScene("Combination");
-            base.OnEnter();
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-        }
-
-        protected override void SetupScene()
-        {
             PlayerConfigManager.Instance.SetPlayerAsOverlord(UnityEngine.Random.Range(0, PlayerConfigManager.Instance.GetPlayerConfigs().Count));
             InputManager.Instance.SwitchToActionMap("Player");
         }
@@ -71,19 +70,24 @@ namespace GameSystem.Management
 
     public class RoundOverState : BaseState
     {
-        public override void OnEnter()
+        protected sealed override void CleanUpScene()
         {
-            base.OnEnter();
         }
 
-        public override void OnExit()
-        {
-            base.OnExit();
-        }
-
-        protected override void SetupScene()
+        protected sealed override void SetupScene()
         {
             InputManager.Instance.SwitchToActionMap("UI");
+        }
+    }
+
+    public class EndState : BaseState
+    {
+        protected sealed override void CleanUpScene()
+        {
+        }
+
+        protected sealed override void SetupScene()
+        {
         }
     }
 

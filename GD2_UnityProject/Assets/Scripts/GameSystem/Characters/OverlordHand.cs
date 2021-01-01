@@ -72,8 +72,8 @@ namespace GameSystem.Characters
             Instantiate(_holdBlock, position, _holdBlock.transform.rotation);
         }
 
-        // TODO: Remove the following methods if PlayerInput uses BroadcastMessages()
-        //       Uncomment the follwing methods if PlayerInput uses Invoke Unity Events
+        // TODO: REMOVE the following methods if PlayerInput uses BroadcastMessages()
+        //       UNCOMMMENT the following methods if PlayerInput uses Invoke Unity Events
         //public void OnMoveHand(InputAction.CallbackContext context)
         //{
         //    _horizontalMovement = context.ReadValue<float>();
@@ -94,7 +94,7 @@ namespace GameSystem.Characters
         //}
 
         // TODO: USE the following methods if PlayerInput uses BroadcastMessages()
-        //       REMOVE the follwing methods if PlayerInput uses Invoke Unity Events
+        //       REMOVE the following methods if PlayerInput uses Invoke Unity Events
         public void OnMoveHand(InputValue value)
         {
             _horizontalMovement = value.Get<float>();

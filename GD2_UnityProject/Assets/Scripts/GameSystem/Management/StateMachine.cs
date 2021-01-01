@@ -39,34 +39,31 @@ namespace GameSystem.Management
 
     public static class GameStates
     {
+        public const string Start = "Start";
         public const string Menu = "Menu";
         public const string Setup = "Setup";
         public const string Play = "Play";
         public const string RoundOver = "RoundOver";
+        public const string End = "End";
     }
 
     public abstract class BaseState : IState<BaseState>
     {
         public StateMachine<BaseState> StateMachine { protected get; set; }
 
-        public virtual void OnEnter()
+        public void OnEnter()
         {
             SetupScene();
         }
 
-        public virtual void OnExit()
+        public void OnExit()
         {
             CleanUpScene();
         }
 
-        protected virtual void CleanUpScene()
-        {
-        }
+        protected abstract void CleanUpScene();
 
-        protected virtual void SetupScene()
-        {
-        }
-
+        protected abstract void SetupScene();
 
     }
 }

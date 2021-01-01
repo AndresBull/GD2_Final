@@ -2,21 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RandomlyShowScript : MonoBehaviour
+
+namespace Graphical
 {
-    [SerializeField]
-    private float _percentChanceObjectGetsShown = 20f;
 
-    void Start()
+    public class RandomlyShowScript : MonoBehaviour
     {
-        float randomNumber = Random.Range(1, 101);
+        [SerializeField]
+        private float _percentChanceObjectGetsShown = 20f;
 
-        if (!ShouldDecalGetShown(randomNumber))
-            Destroy(this.gameObject);
-    }
+        void Start()
+        {
+            float randomNumber = Random.Range(1, 101);
 
-    private bool ShouldDecalGetShown(float randomNumber)
-    {
-        return _percentChanceObjectGetsShown>=randomNumber;
+            if (!ShouldDecalGetShown(randomNumber))
+                Destroy(this.gameObject);
+        }
+
+        private bool ShouldDecalGetShown(float randomNumber)
+        {
+            return _percentChanceObjectGetsShown >= randomNumber;
+        }
     }
 }

@@ -14,12 +14,10 @@ namespace GameSystem.Management
         private bool _isTimerActive = false;
 
         [Tooltip("The maximum number of players that can join a game session.")]
-        [SerializeField]
-        private int MaxPlayers = 4;
+        [SerializeField] private int MaxPlayers = 4;
 
         [Tooltip("The amount of players that needs to be 'Ready' before the round can start")]
-        [SerializeField]
-        private int PlayersNeededReadyBeforeStarting = 3;
+        [SerializeField] private int PlayersNeededReadyBeforeStarting = 3;
 
         internal List<PlayerConfiguration> GetPlayerConfigs()
         {
@@ -61,13 +59,23 @@ namespace GameSystem.Management
 
             if (_timer <= 0.0f)
             {
-                _isTimerActive = false; // prevent the scene from continuous loading
+                // prevent the scene from continuous loading
+                _isTimerActive = false;
                 GameLoop.Instance.StateMachine.MoveTo(GameStates.Play);
             }
         }
 
         public void OnPlayerJoined(PlayerInput input)
         {
+            if (GameLoop.Instance.StateMachine.CurrentState is StartState)
+            {
+                GameLoop.Instance.StateMachine.MoveTo(GameStates.Menu);
+                if (_playerConfigs.Count >= 1)
+                {
+                    return;
+                }
+            }
+
             if (!_playerConfigs.Any(p => p.PlayerIndex == input.playerIndex))
             {
                 print($"Player {input.playerIndex} Joined.");
@@ -78,11 +86,6 @@ namespace GameSystem.Management
             else
             {
                 OnPlayerLeft(input);
-            }
-
-            if (GameLoop.Instance.StateMachine.CurrentState is MenuState)
-            {
-                GameLoop.Instance.StateMachine.MoveTo(GameStates.Setup);
             }
         }
 
@@ -201,5 +204,7 @@ namespace GameSystem.Management
         internal int PlayerIndex { get; private set; }
         internal bool IsReady { get; set; }
         internal bool IsOverlord { get; set; }
+        internal int RoundScore { get; set; }
+        internal int TotalScore { get; set; }
     }
 }

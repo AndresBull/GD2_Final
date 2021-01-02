@@ -83,10 +83,11 @@ namespace GameSystem.Views
             }
         }
 
-        public event EventHandler Landed;
+        public int BlockWidth { get; internal set; }
+        public int BlockHeight { get; internal set; }
         public FloodFill floodFiller;
 
-        private void Start()
+        private void Awake()
         {
             _field = GameLoop.Instance.Field;
             _fieldView = GameLoop.Instance.FieldView;
@@ -97,15 +98,18 @@ namespace GameSystem.Views
                 return;
             }
 
-            //SetSize();
-            SetShape();
-            AllignBlockToGrid();
-            
-            BlockPosition startBlock = new BlockPosition(_field.Rows + 1, _field.Columns);
-            floodFiller = new FloodFill(Neighbours);
-            ClimberBehaviour.floodFiller = floodFiller;
 
-            StartCoroutine(Drop());
+            //SetSize();
+            SetDimensions();
+            //SetShape();
+            //AllignBlockToGrid();
+
+            //BlockPosition startBlock = new BlockPosition(_field.Rows + 1, _field.Columns);
+            //floodFiller = new FloodFill(Neighbours);
+            //ClimberBehaviour.floodFiller = floodFiller;
+
+
+            //StartCoroutine(Drop());
         }
 
         private IEnumerator SetupBlock()
@@ -119,14 +123,16 @@ namespace GameSystem.Views
             }
 
             //SetSize();
-            SetShape();
-            AllignBlockToGrid();
+            SetDimensions();
+            //SetShape();
 
-            BlockPosition startBlock = new BlockPosition(_field.Rows + 1, _field.Columns);
-            floodFiller = new FloodFill(Neighbours);
-            ClimberBehaviour.floodFiller = floodFiller;
+            //AllignBlockToGrid();
+            //
+            //BlockPosition startBlock = new BlockPosition(_field.Rows + 1, _field.Columns);
+            //floodFiller = new FloodFill(Neighbours);
+            //ClimberBehaviour.floodFiller = floodFiller;
 
-            StartCoroutine(Drop());
+            //StartCoroutine(Drop());
         }
 
         private void SetShape()
@@ -146,12 +152,30 @@ namespace GameSystem.Views
             }
         }
 
+        private void SetDimensions()
+        {
+            BlockWidth = 0;
+            BlockHeight = 0;
+            var baseAnchorBlockPos = _fieldView.PositionConverter.ToBlockPosition(_field, transform.GetChild(0).position);
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Transform anchor = transform.GetChild(i);
+                BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, anchor.position);
+
+                var width = blockPosition.X - baseAnchorBlockPos.X + 1;
+                BlockWidth = Mathf.Max(width, BlockWidth);
+
+                var height = blockPosition.Y - baseAnchorBlockPos.Y + 1;
+                BlockHeight = Mathf.Max(height, BlockHeight);
+            }
+        }
+
         private void SetSize()
         {
             Size = _fieldView.PositionConverter.BlockScale;
         }
 
-        public void AllignBlockToGrid()
+        private void AllignBlockToGrid()
         {
             Transform anchor = transform.GetChild(0);
             BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, anchor.position);
@@ -164,8 +188,36 @@ namespace GameSystem.Views
             _position = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
         }
 
-        private IEnumerator Drop()
+        private void UpdateBlockView(int offsetY)
         {
+            UpdateBlocks(offsetY);
+
+            BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
+            blockPosition.Y += offsetY;
+            transform.position = _fieldView.PositionConverter.ToWorldPosition(_field, blockPosition);
+        }
+
+        private void UpdateBlocks(int offset)
+        {
+            for (int i = 0; i < _shapeBlocks.Count; i++)
+            {
+                Block block = _shapeBlocks[i];
+                Block newBlock = new Block(block.Position.X, block.Position.Y + offset);
+                _field.AddToDictionary(newBlock);
+                _shapeBlocks[i] = newBlock;
+            }
+        }
+
+
+        public IEnumerator Drop()
+        {
+            SetShape();
+            AllignBlockToGrid();
+
+            BlockPosition startBlock = new BlockPosition(_field.Rows + 1, _field.Columns);
+            floodFiller = new FloodFill(Neighbours);
+            ClimberBehaviour.floodFiller = floodFiller;
+
             while (Application.isPlaying)
             {
                 foreach (Block block in _shapeBlocks)
@@ -204,30 +256,19 @@ namespace GameSystem.Views
             }
         }
 
-        private void UpdateBlockView(int offsetY)
+        public void MoveAccordingToHand(Vector3 handPosition)
         {
-            UpdateBlocks(offsetY);
+            var handOffset = new Vector3((1 - (BlockWidth % 2)) * (_fieldView.PositionConverter.BlockScale.x / 2), 0, 0); //if even width, set to half a block wide
+            handPosition += handOffset;
 
-            BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
-            blockPosition.Y += offsetY;
-            transform.position = _fieldView.PositionConverter.ToWorldPosition(_field, blockPosition);
-        }
+            var handBlockPos = _fieldView.PositionConverter.ToBlockPosition(_field, handPosition);
+            handBlockPos.Y -= 2;
+            handBlockPos.X = Mathf.Clamp(handBlockPos.X, BlockWidth % 2 - 1, _field.Columns - (BlockWidth + (BlockWidth % 2)) / 2);
 
-        private void UpdateBlocks(int offset)
-        {
-            for (int i = 0; i < _shapeBlocks.Count; i++)
-            {
-                Block block = _shapeBlocks[i];
-                Block newBlock = new Block(block.Position.X, block.Position.Y + offset);
-                _field.AddToDictionary(newBlock);
-                _shapeBlocks[i] = newBlock;
-            }
-        }
-
-        protected virtual void OnLanded(EventArgs args)
-        {
-            var handler = Landed;
-            handler?.Invoke(this, args);
+            var newPos = _fieldView.PositionConverter.ToWorldPosition(_field, handBlockPos);
+            var blockOffset = new Vector3((BlockWidth % 2) * (_fieldView.PositionConverter.BlockScale.x / 2), 0, 0);
+            newPos += blockOffset;
+            transform.position = newPos;
         }
     }
 }

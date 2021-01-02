@@ -10,15 +10,13 @@ namespace GameSystem.Characters
 {
     public class OverlordHand : MonoBehaviour
     {
-        private GameObject _holdBlock;
         private BlockView _holdBlockView;
         private Vector2 _movementConstraints;
-        private float _speed = 25.0f;
+        private float _speed = 10.0f;
         private float _horizontalMovement;
         private float _dropTimer;
         private float _dropDelay = 5.0f;
         private bool _hasBlock = true;
-        private bool _evenNmbrBlock;
 
         public List<GameObject> _blocks = new List<GameObject>();
 
@@ -43,12 +41,6 @@ namespace GameSystem.Characters
 
             var range = (fieldWidth - maxWidth) / 2;
             _movementConstraints = new Vector2(-range, range);
-
-
-            if (blockWidth % 2 == 0)
-                _evenNmbrBlock = true;
-            else
-                _evenNmbrBlock = false;
         }
 
         private void Update()
@@ -59,10 +51,15 @@ namespace GameSystem.Characters
 
         void FixedUpdate()
         {
+            //Hand movement
             float movement = _horizontalMovement * _speed * Time.fixedDeltaTime;
             transform.position = transform.position + new Vector3(movement, 0.0f, 0.0f);
             float clampedX = Mathf.Clamp(transform.position.x, _movementConstraints.x, _movementConstraints.y);
             transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
+
+
+            //Block movement
+            _holdBlockView?.MoveAccordingToHand(transform.position);
         }
 
         public void DropDelay()
@@ -74,6 +71,7 @@ namespace GameSystem.Characters
                 {
                     _hasBlock = true;
                     RandomBlock();
+                    //SetMovementConstraints(_holdBlockView.BlockWidth);
                 }
             }
         }
@@ -81,14 +79,11 @@ namespace GameSystem.Characters
         private void RandomBlock()
         {
             var key = UnityEngine.Random.Range(0, _blocks.Count);
-            _holdBlock = _blocks[key];
-            _holdBlockView = _holdBlock.GetComponent<BlockView>();
-        }
+            var holdBlock = _blocks[key];
 
-        private void Drop()
-        {
             var position = new Vector3(Mathf.Round(gameObject.transform.position.x), gameObject.transform.position.y - gameObject.transform.localScale.y, gameObject.transform.position.z);
-            Instantiate(_holdBlock, position, _holdBlock.transform.rotation);
+            var go = Instantiate(holdBlock, position, holdBlock.transform.rotation);
+            _holdBlockView = go.GetComponent<BlockView>();
         }
 
         // TODO: REMOVE the following methods if PlayerInput uses BroadcastMessages()
@@ -126,7 +121,8 @@ namespace GameSystem.Characters
                 if (_hasBlock)
                 {
                     _hasBlock = false;
-                    Drop();
+                    _holdBlockView.StartCoroutine(_holdBlockView.Drop());
+                    _holdBlockView = null;
                     _dropTimer = 0;
                     return;
                 }

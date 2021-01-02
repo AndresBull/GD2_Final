@@ -127,7 +127,7 @@ namespace GameSystem.Views
             //SetShape();
 
             //AllignBlockToGrid();
-            //
+            
             //BlockPosition startBlock = new BlockPosition(_field.Rows + 1, _field.Columns);
             //floodFiller = new FloodFill(Neighbours);
             //ClimberBehaviour.floodFiller = floodFiller;
@@ -145,10 +145,12 @@ namespace GameSystem.Views
                 _field.AddToDictionary(block);
                 _shapeBlocks.Add(block);
 
-                if (i != 0)
-                {
-                    Destroy(anchor.gameObject);
-                }
+                Destroy(anchor.gameObject);
+
+                //if (i != 0)
+                //{
+                //    Destroy(anchor.gameObject);
+                //}
             }
         }
 
@@ -177,13 +179,15 @@ namespace GameSystem.Views
 
         private void AllignBlockToGrid()
         {
-            Transform anchor = transform.GetChild(0);
-            BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, anchor.position);
-            Vector3 worldPosition = _fieldView.PositionConverter.ToWorldPosition(_field, blockPosition);
+            //Transform anchor = transform.GetChild(0);
+            //BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, anchor.position);
+            //Vector3 worldPosition = _fieldView.PositionConverter.ToWorldPosition(_field, blockPosition);
+            //
+            //Vector3 offset = anchor.position - worldPosition;
+            //transform.position += offset;
+            //Destroy(anchor.gameObject);
 
-            Vector3 offset = anchor.position - worldPosition;
-            transform.position += offset;
-            Destroy(anchor.gameObject);
+
 
             _position = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
         }
@@ -194,7 +198,8 @@ namespace GameSystem.Views
 
             BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
             blockPosition.Y += offsetY;
-            transform.position = _fieldView.PositionConverter.ToWorldPosition(_field, blockPosition);
+            transform.position = _fieldView.PositionConverter.ToWorldPosition(_field, blockPosition) 
+                + new Vector3((BlockWidth % 2) * (_fieldView.PositionConverter.BlockScale.x / 2), 0, 0);
         }
 
         private void UpdateBlocks(int offset)
@@ -263,7 +268,10 @@ namespace GameSystem.Views
 
             var handBlockPos = _fieldView.PositionConverter.ToBlockPosition(_field, handPosition);
             handBlockPos.Y -= 2;
-            handBlockPos.X = Mathf.Clamp(handBlockPos.X, BlockWidth % 2 - 1, _field.Columns - (BlockWidth + (BlockWidth % 2)) / 2);
+
+            var leftLimit = (BlockWidth - (BlockWidth % 2)) / 2;
+            var rightLimit = _field.Columns - (BlockWidth + (BlockWidth % 2)) / 2;
+            handBlockPos.X = Mathf.Clamp(handBlockPos.X, leftLimit, rightLimit);
 
             var newPos = _fieldView.PositionConverter.ToWorldPosition(_field, handBlockPos);
             var blockOffset = new Vector3((BlockWidth % 2) * (_fieldView.PositionConverter.BlockScale.x / 2), 0, 0);

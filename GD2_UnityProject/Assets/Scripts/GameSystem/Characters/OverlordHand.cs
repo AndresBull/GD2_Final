@@ -10,19 +10,30 @@ namespace GameSystem.Characters
 {
     public class OverlordHand : MonoBehaviour
     {
-        private BlockView _holdBlockView;
-        private Vector2 _movementConstraints;
-        private float _speed = 10.0f;
-        private float _horizontalMovement;
-        private float _dropTimer;
-        private float _dropDelay = 5.0f;
-        private bool _hasBlock = true;
+        [Header("Dropping")]
+        [Tooltip("All possible types of blocks that can be dropped.")]
+        [SerializeField] private List<GameObject> _blocks;
+        [Tooltip("How long it takes for a new block to appear after one is dropped (in seconds).")]
+        [SerializeField] private float _nextBlockDelay = 5.0f;
+        [Tooltip("How long the block can be hold before it drops automatically (in seconds).")]
+        [SerializeField] private float _maxHoldTime = 5.0f;
+        
+        [Header("Movement")]
+        [Tooltip("The speed of the hand.")]
+        [SerializeField] private float _speed = 10.0f;
 
-        public List<GameObject> _blocks = new List<GameObject>();
+        private BlockView _holdBlockView;
+
+        private Vector2 _movementConstraints;
+        private float _nextBlockTimer;
+        private float _holdTimer;
+        private float _horizontalMovement;
+        
+        private bool _hasBlock = true;
 
         private void Awake()
         {
-            var spawnPos = new Vector3(0, GameLoop.Instance.Field.Rows / 2 * GameLoop.Instance.FieldView.PositionConverter.BlockScale.y, 0);
+            Vector3 spawnPos = new Vector3(0, GameLoop.Instance.Field.Rows / 2 * GameLoop.Instance.FieldView.PositionConverter.BlockScale.y + 2, 0);
             transform.position = spawnPos;
 
             SetMovementConstraints(0);
@@ -32,14 +43,14 @@ namespace GameSystem.Characters
 
         private void SetMovementConstraints(int blockWidthAmount)
         {
-            var fieldWidth = GameLoop.Instance.Field.Columns * GameLoop.Instance.FieldView.PositionConverter.BlockScale.x;
+            float fieldWidth = GameLoop.Instance.Field.Columns * GameLoop.Instance.FieldView.PositionConverter.BlockScale.x;
 
-            var overlordWidth = 1f; //set to ~model width
-            var blockWidth = blockWidthAmount * GameLoop.Instance.FieldView.PositionConverter.BlockScale.x;
+            float overlordWidth = 1f; // set to ~model width
+            float blockWidth = blockWidthAmount * GameLoop.Instance.FieldView.PositionConverter.BlockScale.x;
 
-            var maxWidth = Mathf.Max(overlordWidth, blockWidth);
+            float maxWidth = Mathf.Max(overlordWidth, blockWidth);
 
-            var range = (fieldWidth - maxWidth) / 2;
+            float range = (fieldWidth - maxWidth) / 2;
             _movementConstraints = new Vector2(-range, range);
         }
 
@@ -47,18 +58,32 @@ namespace GameSystem.Characters
         {
             DropDelay();
 
+            if (_holdTimer >= _maxHoldTime)
+            {
+                DropBlock();
+                return;
+            }
         }
 
-        void FixedUpdate()
+        private void DropBlock()
         {
-            //Hand movement
+            _hasBlock = false;
+            _holdBlockView?.StartCoroutine(_holdBlockView.Drop());
+            _holdBlockView = null;
+            _nextBlockTimer = 0;
+            _holdTimer = 0;
+        }
+
+        private void FixedUpdate()
+        {
+            // Hand movement
             float movement = _horizontalMovement * _speed * Time.fixedDeltaTime;
             transform.position = transform.position + new Vector3(movement, 0.0f, 0.0f);
             float clampedX = Mathf.Clamp(transform.position.x, _movementConstraints.x, _movementConstraints.y);
             transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
 
 
-            //Block movement
+            // Block movement
             _holdBlockView?.MoveAccordingToHand(transform.position);
         }
 
@@ -66,23 +91,26 @@ namespace GameSystem.Characters
         {
             if (!_hasBlock)
             {
-                _dropTimer += Time.deltaTime;
-                if (_dropTimer >= _dropDelay)
+                _nextBlockTimer += Time.deltaTime;
+                if (_nextBlockTimer >= _nextBlockDelay)
                 {
                     _hasBlock = true;
                     RandomBlock();
                     //SetMovementConstraints(_holdBlockView.BlockWidth);
                 }
+                return;
             }
+
+            _holdTimer += Time.deltaTime;
         }
 
         private void RandomBlock()
         {
-            var key = UnityEngine.Random.Range(0, _blocks.Count);
-            var holdBlock = _blocks[key];
+            int key = UnityEngine.Random.Range(0, _blocks.Count);
+            GameObject holdBlock = _blocks[key];
 
-            var position = new Vector3(Mathf.Round(gameObject.transform.position.x), gameObject.transform.position.y - gameObject.transform.localScale.y, gameObject.transform.position.z);
-            var go = Instantiate(holdBlock, position, holdBlock.transform.rotation);
+            Vector3 position = new Vector3(Mathf.Round(transform.position.x), transform.position.y - transform.localScale.y, transform.position.z);
+            GameObject go = Instantiate(holdBlock, position, holdBlock.transform.rotation);
             _holdBlockView = go.GetComponent<BlockView>();
         }
 
@@ -120,11 +148,7 @@ namespace GameSystem.Characters
             {
                 if (_hasBlock)
                 {
-                    _hasBlock = false;
-                    _holdBlockView.StartCoroutine(_holdBlockView.Drop());
-                    _holdBlockView = null;
-                    _dropTimer = 0;
-                    return;
+                    DropBlock();
                 }
             }
         }

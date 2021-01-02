@@ -20,9 +20,11 @@ namespace GameSystem.Management
 
         private void Awake()
         {
-            SetupStateMachine();
-            CreateNewField(8, 8);
-
+            if (Time.time <= Time.deltaTime)
+            {
+                SetupStateMachine();
+                CreateNewField(8, 8);
+            }
         }
 
         private void OnDestroy()

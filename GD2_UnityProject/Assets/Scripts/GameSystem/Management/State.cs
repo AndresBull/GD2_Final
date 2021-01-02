@@ -20,6 +20,7 @@ namespace GameSystem.Management
             if (Time.time >= Time.deltaTime)
             {
                 SceneManager.LoadScene("Start");
+                PlayerConfigManager.Instance.RemovePlayers();
             }
             InputManager.Instance.SwitchToActionMap("UI");
         }
@@ -35,6 +36,7 @@ namespace GameSystem.Management
         {
             SceneManager.LoadScene("MainMenu");
             InputManager.Instance.SwitchToActionMap("UI");
+            PlayerConfigManager.Instance.RemovePlayers(1);
         }
     }
 
@@ -62,7 +64,7 @@ namespace GameSystem.Management
         protected sealed override void SetupScene()
         {
             OnPlayStateEntered?.Invoke(this, EventArgs.Empty);
-            SceneManager.LoadScene("Combination");
+            SceneManager.LoadScene("Play");
             PlayerConfigManager.Instance.SetPlayerAsOverlord(UnityEngine.Random.Range(0, PlayerConfigManager.Instance.GetPlayerConfigs().Count));
             InputManager.Instance.SwitchToActionMap("Player");
         }

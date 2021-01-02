@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Utils;
 
@@ -49,15 +50,23 @@ namespace GameSystem.Management
             if (button == null)
                 return;
 
-            if (button.name.Equals("PlayButton"))
+            switch(button.name)
             {
-                GameLoop.Instance.StateMachine.MoveTo(GameStates.Setup);
+                case "PlayButton":
+                    GameLoop.Instance.StateMachine.MoveTo(GameStates.Setup);
+                    break;
             }
         }
 
         public void OnCancel()
         {
+            StateMachine<BaseState> stateMachine = GameLoop.Instance.StateMachine;
+            BaseState currentState = stateMachine.CurrentState;
 
+            if (currentState is MenuState)
+            {
+                stateMachine.MoveTo(GameStates.Start);
+            }
         }
     }
 }

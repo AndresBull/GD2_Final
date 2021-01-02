@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/CharacterSetup.unity
     guid: a771972d3accbdd469932d8a59ffadc5
   - enabled: 1
-    path: Assets/Scenes/Combination.unity
+    path: Assets/Scenes/Play.unity
     guid: 42b816591fafb7c4187bbf8feaee797a
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: a7609007fa8efbf4eb546412942caed5,

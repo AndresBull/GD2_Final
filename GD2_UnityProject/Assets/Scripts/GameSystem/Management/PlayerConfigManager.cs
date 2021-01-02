@@ -9,34 +9,19 @@ namespace GameSystem.Management
 {
     public class PlayerConfigManager : SingletonMonoBehaviour<PlayerConfigManager>
     {
+        [Tooltip("The maximum number of players that can join a game session.")]
+        [SerializeField] private int _maxPlayers = 4;
+        [Tooltip("The amount of players that needs to be 'Ready' before the round can start")]
+        [SerializeField] private int _playersNeededReadyBeforeStarting = 3;
+        [Tooltip("Time before the round starts when not all joined players are ready yet (in seconds).")]
+        [SerializeField] private float _timeBeforeStarting = 15f;
+        [Tooltip("Time before the round starts when all joined players are ready (in seconds).")]
+        [SerializeField] private float _timeBeforeStartingIfReady = 5f;
+
         private List<PlayerConfiguration> _playerConfigs;
         private float _timer = 0.0f;
         private bool _isTimerActive = false;
-
-        [Tooltip("The maximum number of players that can join a game session.")]
-        [SerializeField] private int MaxPlayers = 4;
-
-        [Tooltip("The amount of players that needs to be 'Ready' before the round can start")]
-        [SerializeField] private int PlayersNeededReadyBeforeStarting = 3;
-
-        internal List<PlayerConfiguration> GetPlayerConfigs()
-        {
-            return _playerConfigs;
-        }
-
-        public List<GameObject> GetAllClimbers()
-        {
-            var climbers = new List<GameObject>();
-            foreach (var playerConfig in _playerConfigs)
-            {
-                if (!playerConfig.IsOverlord)
-                {
-                    climbers.Add(playerConfig.Input.gameObject.transform.GetChild(0).gameObject);
-                }
-            }
-            return climbers;
-        }
-
+        
         public float Timer => _timer;
 
         private void Awake()
@@ -65,7 +50,38 @@ namespace GameSystem.Management
             }
         }
 
-        public void OnPlayerJoined(PlayerInput input)
+
+        internal List<GameObject> GetAllClimbers()
+        {
+            var climbers = new List<GameObject>();
+            foreach (var playerConfig in _playerConfigs)
+            {
+                if (!playerConfig.IsOverlord)
+                {
+                    climbers.Add(playerConfig.Input.gameObject.transform.GetChild(0).gameObject);
+                }
+            }
+            return climbers;
+        }
+
+        internal List<PlayerConfiguration> GetPlayerConfigs()
+        {
+            return _playerConfigs;
+        }
+
+        internal void RemovePlayers(int lastPlayerRemoved = 0)
+        {
+            if (_playerConfigs.Count - 1 <= lastPlayerRemoved)
+                return;
+
+            for (int i = _playerConfigs.Count - 1; i >= lastPlayerRemoved; i++)
+            {
+                PlayerConfiguration config = _playerConfigs[i];
+                OnPlayerLeft(config.Input);
+            }
+        }
+        
+        internal void OnPlayerJoined(PlayerInput input)
         {
             if (!(GameLoop.Instance.StateMachine.CurrentState is SetupState))
             {
@@ -138,6 +154,21 @@ namespace GameSystem.Management
             UnreadyPlayer(playerIndex);
         }
 
+        internal void UpdatePlayerRoundScore(int playerIndex, int addedScore)
+        {
+            _playerConfigs[playerIndex].RoundScore += addedScore;
+        }
+
+        internal void ResetPlayerRoundScore(int playerIndex)
+        {
+            _playerConfigs[playerIndex].RoundScore = 0;
+        }
+
+        internal void UpdatePlayerTotalScore(int playerIndex)
+        {
+            _playerConfigs[playerIndex].TotalScore += _playerConfigs[playerIndex].RoundScore;
+        }
+
         private void JoinPlayer(PlayerInput input)
         {
             if (!_playerConfigs.Any(p => p.PlayerIndex == input.playerIndex))
@@ -168,15 +199,15 @@ namespace GameSystem.Management
         {
             _playerConfigs[playerIndex].IsReady = true;
 
-            if (_playerConfigs.Count >= PlayersNeededReadyBeforeStarting 
-                && _playerConfigs.Count < MaxPlayers && _playerConfigs.All(p => p.IsReady == true))
+            if (_playerConfigs.Count >= _playersNeededReadyBeforeStarting 
+                && _playerConfigs.Count < _maxPlayers && _playerConfigs.All(p => p.IsReady == true))
             {
-                SetTimer(15.0f);
+                SetTimer(_timeBeforeStarting);
             }
 
-            else if (_playerConfigs.Count == MaxPlayers && _playerConfigs.All(p => p.IsReady == true))
+            else if (_playerConfigs.Count == _maxPlayers && _playerConfigs.All(p => p.IsReady == true))
             {
-                SetTimer(5.0f);
+                SetTimer(_timeBeforeStartingIfReady);
             }
         }
 
@@ -184,14 +215,14 @@ namespace GameSystem.Management
         {
             _playerConfigs[playerIndex].IsReady = false;
 
-            if (_playerConfigs.Count(p => p.IsReady == true) < PlayersNeededReadyBeforeStarting)
+            if (_playerConfigs.Count(p => p.IsReady == true) < _playersNeededReadyBeforeStarting)
             {
                 StopTimer();
             }
-            else if (_playerConfigs.Count(p => p.IsReady == true) < MaxPlayers)
+            else if (_playerConfigs.Count(p => p.IsReady == true) < _maxPlayers)
             {
                 StopTimer();
-                SetTimer(15.0f);
+                SetTimer(_timeBeforeStarting);
             }
         }
     }
@@ -209,9 +240,9 @@ namespace GameSystem.Management
         internal Mesh Character { get; set; }
         internal Mesh[] CharacterMeshes { get; set; }
         internal int PlayerIndex { get; private set; }
-        internal bool IsReady { get; set; }
-        internal bool IsOverlord { get; set; }
         internal int RoundScore { get; set; }
         internal int TotalScore { get; set; }
+        internal bool IsReady { get; set; }
+        internal bool IsOverlord { get; set; }
     }
 }

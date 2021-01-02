@@ -217,7 +217,7 @@ namespace GameSystem.Views
         public IEnumerator Drop()
         {
             SetShape();
-            AllignBlockToGrid();
+            //AllignBlockToGrid();
 
             BlockPosition startBlock = new BlockPosition(_field.Rows + 1, _field.Columns);
             floodFiller = new FloodFill(Neighbours);

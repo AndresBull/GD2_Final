@@ -12,7 +12,7 @@ namespace GameSystem.Characters
     {
         [Header("Dropping")]
         [Tooltip("All possible types of blocks that can be dropped.")]
-        [SerializeField] private List<GameObject> _blocks;
+        [SerializeField] private List<GameObject> _blocks = null;
         [Tooltip("How long it takes for a new block to appear after one is dropped (in seconds).")]
         [SerializeField] private float _nextBlockDelay = 5.0f;
         [Tooltip("How long the block can be hold before it drops automatically (in seconds).")]
@@ -23,6 +23,7 @@ namespace GameSystem.Characters
         [SerializeField] private float _speed = 10.0f;
 
         private BlockView _holdBlockView;
+        private BlockView _nextBlockView;
 
         private Vector2 _movementConstraints;
         private float _nextBlockTimer;
@@ -38,7 +39,10 @@ namespace GameSystem.Characters
 
             SetMovementConstraints(0);
 
-            RandomBlock();
+            if (_nextBlockView == null)
+                RandomNextBlock();
+
+            RandomNextBlock();
         }
 
         private void SetMovementConstraints(int blockWidthAmount)
@@ -94,9 +98,7 @@ namespace GameSystem.Characters
                 _nextBlockTimer += Time.deltaTime;
                 if (_nextBlockTimer >= _nextBlockDelay)
                 {
-                    _hasBlock = true;
-                    RandomBlock();
-                    //SetMovementConstraints(_holdBlockView.BlockWidth);
+                    RandomNextBlock();
                 }
                 return;
             }
@@ -104,14 +106,18 @@ namespace GameSystem.Characters
             _holdTimer += Time.deltaTime;
         }
 
-        private void RandomBlock()
+        private void RandomNextBlock()
         {
-            int key = UnityEngine.Random.Range(0, _blocks.Count);
-            GameObject holdBlock = _blocks[key];
+            _hasBlock = true;
+            _holdBlockView = _nextBlockView;
+            _nextBlockView = null;
 
-            Vector3 position = new Vector3(Mathf.Round(transform.position.x), transform.position.y - transform.localScale.y, transform.position.z);
-            GameObject go = Instantiate(holdBlock, position, holdBlock.transform.rotation);
-            _holdBlockView = go.GetComponent<BlockView>();
+            int key = UnityEngine.Random.Range(0, _blocks.Count);
+            GameObject nextBlock = _blocks[key];
+
+            Vector3 offscreenPosition = new Vector3(-20, 0, 0);
+            GameObject go = Instantiate(nextBlock, offscreenPosition, nextBlock.transform.rotation);
+            _nextBlockView = go.GetComponent<BlockView>();
         }
 
         // TODO: REMOVE the following methods if PlayerInput uses BroadcastMessages()

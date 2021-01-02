@@ -12,6 +12,9 @@ namespace GameSystem.Views
     public class BlockFieldView : MonoBehaviour
     {
         [SerializeField]
+        private bool _generateWalls = false;
+
+        [SerializeField]
         private PositionConverter _positionConverter = null;
 
         public PositionConverter PositionConverter => _positionConverter;
@@ -19,7 +22,9 @@ namespace GameSystem.Views
         private void Awake()
         {
             GameLoop.Instance.FieldView = this;
-            GenerateTempWalls();
+
+            if (_generateWalls)
+                GenerateTempWalls();
         }
 
         private void GenerateTempWalls()

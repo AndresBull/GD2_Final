@@ -81,6 +81,7 @@ namespace GameSystem.Characters
         private bool _isHanging = false;                        // bool that keeps track of whether or not the Climber is hanging on a ledge or not
         private bool _isJumping = false;                        // bool to determine if the character is jumping or not
         private bool _hasLadder = true;                         // backup field that determines if the climber has his ladder or not
+        private Vector2 _movementConstraints;
 
         public static FloodFill floodFiller;
         #endregion
@@ -112,6 +113,7 @@ namespace GameSystem.Characters
             _rb = GetComponent<Rigidbody>();
             _col = GetComponent<Collider>();
             _colExtents = _col.bounds.extents;
+            SetMovementConstraints();
 
             // disable the jumpmultiplier in the build
 #if !UNITY_EDITOR
@@ -123,6 +125,8 @@ namespace GameSystem.Characters
         {
             float movement = _horizontalMovement * _maxSpeed * Time.fixedDeltaTime;
             transform.position += new Vector3(movement, 0.0f, 0.0f);
+            float clampedX = Mathf.Clamp(transform.position.x, _movementConstraints.x, _movementConstraints.y);
+            transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
 
             ClimbBlocks();
             UseGravity();
@@ -401,6 +405,16 @@ namespace GameSystem.Characters
         public void GetKilled()
         {
             this.gameObject.SetActive(false);
+        }
+
+        private void SetMovementConstraints()
+        {
+            float fieldWidth = GameLoop.Instance.Field.Columns * GameLoop.Instance.FieldView.PositionConverter.BlockScale.x;
+
+            float playerWidth = 1f; // set to ~model width
+
+            float range = (fieldWidth - playerWidth) / 2;
+            _movementConstraints = new Vector2(-range, range);
         }
 
         #region Input

@@ -429,6 +429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2f57432e4501c54496bb9aef6a22483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _generateWalls: 0
   _positionConverter: {fileID: 11400000, guid: 7444699e7829424459a90dba95faf1d9, type: 2}
 --- !u!4 &816876611
 Transform:

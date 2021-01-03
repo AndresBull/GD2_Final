@@ -48,18 +48,7 @@ namespace GameSystem.Views
                 return;
             }
 
-
-            //SetSize();
             SetDimensions();
-            //SetShape();
-            //AllignBlockToGrid();
-
-            //BlockPosition startBlock = new BlockPosition(_field.Rows + 1, _field.Columns);
-            //floodFiller = new FloodFill(Neighbours);
-            //ClimberBehaviour.floodFiller = floodFiller;
-
-
-            //StartCoroutine(Drop());
         }
 
         private IEnumerator SetupBlock()
@@ -72,13 +61,7 @@ namespace GameSystem.Views
                 yield return new WaitForSeconds(0.1f);
             }
 
-            //SetSize();
             SetDimensions();
-            //SetShape();
-
-            //AllignBlockToGrid();
-
-            //StartCoroutine(Drop());
         }
 
         private List<BlockPosition> Neighbours(BlockPosition startBlock)
@@ -139,15 +122,9 @@ namespace GameSystem.Views
                 Transform anchor = transform.GetChild(i);
                 BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, anchor.position);
                 Block block = new Block(blockPosition.X, blockPosition.Y);
-                _field.AddToDictionary(block);
                 _shapeBlocks.Add(block);
 
                 Destroy(anchor.gameObject);
-
-                //if (i != 0)
-                //{
-                //    Destroy(anchor.gameObject);
-                //}
             }
         }
 
@@ -174,19 +151,6 @@ namespace GameSystem.Views
             Size = _fieldView.PositionConverter.BlockScale;
         }
 
-        private void AllignBlockToGrid()
-        {
-            //Transform anchor = transform.GetChild(0);
-            //BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, anchor.position);
-            //Vector3 worldPosition = _fieldView.PositionConverter.ToWorldPosition(_field, blockPosition);
-            //
-            //Vector3 offset = anchor.position - worldPosition;
-            //transform.position += offset;
-            //Destroy(anchor.gameObject);
-
-            _position = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
-        }
-
         private void UpdateBlockView(int offsetY)
         {
             UpdateBlocks(offsetY);
@@ -203,7 +167,6 @@ namespace GameSystem.Views
             {
                 Block block = _shapeBlocks[i];
                 Block newBlock = new Block(block.Position.X, block.Position.Y + offset);
-                _field.AddToDictionary(newBlock);
                 _shapeBlocks[i] = newBlock;
             }
         }
@@ -212,7 +175,6 @@ namespace GameSystem.Views
         public IEnumerator Drop()
         {
             SetShape();
-            //AllignBlockToGrid();
 
             BlockPosition startBlock = new BlockPosition(_field.Rows + 1, _field.Columns);
             floodFiller = new FloodFill(Neighbours);
@@ -220,16 +182,12 @@ namespace GameSystem.Views
 
             while (Application.isPlaying)
             {
-                foreach (Block block in _shapeBlocks)
-                {
-                    _field.RemoveFromDictionary(block);
-                }
-
                 int offsetPosition = -1;
                 if (_shapeBlocks.Any(b => _field.BlockAt(new BlockPosition(b.Position.X, b.Position.Y + offsetPosition)) != null)
                     || _shapeBlocks.Any(b => b.Position.Y <= 0))
                 {
                     offsetPosition = 0;
+                    StopCoroutine(Drop());
                 }
 
                 if (offsetPosition != 0)
@@ -239,13 +197,20 @@ namespace GameSystem.Views
                     {
                         Debug.Log("Landed");
                         SoundManager.Instance.PlayBlockLanded();
+
+                        UpdateBlockView(offsetPosition);
+
+                        foreach (Block block in _shapeBlocks)
+                        {
+                            _field.AddToDictionary(block);
+                        }
+
                         floodFiller.FloodedPositions = floodFiller.Flood(new BlockPosition(_field.Rows, _field.Columns));
 
                         foreach (GameObject climber in PlayerConfigManager.Instance.GetAllClimbers())
                         {
                             climber.GetComponent<ClimberBehaviour>().CheckIfTrapped();
                         }
-                        UpdateBlockView(offsetPosition);
 
                         yield break;
                     }

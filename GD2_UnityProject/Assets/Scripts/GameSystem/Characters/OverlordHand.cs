@@ -17,7 +17,7 @@ namespace GameSystem.Characters
         [SerializeField] private float _nextBlockDelay = 5.0f;
         [Tooltip("How long the block can be hold before it drops automatically (in seconds).")]
         [SerializeField] private float _maxHoldTime = 5.0f;
-        
+
         [Header("Movement")]
         [Tooltip("The speed of the hand.")]
         [SerializeField] private float _speed = 10.0f;
@@ -29,7 +29,7 @@ namespace GameSystem.Characters
         private float _nextBlockTimer;
         private float _holdTimer;
         private float _horizontalMovement;
-        
+
         private bool _hasBlock = true;
 
         private void Awake()
@@ -60,7 +60,8 @@ namespace GameSystem.Characters
 
         private void Update()
         {
-            DropDelay();
+            if (GameLoop.Instance.StateMachine.CurrentState is PlayState)
+                DropDelay();
 
             if (_holdTimer >= _maxHoldTime)
             {

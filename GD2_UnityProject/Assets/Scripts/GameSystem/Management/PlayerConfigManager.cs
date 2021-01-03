@@ -93,6 +93,12 @@ namespace GameSystem.Management
             }
         }
         
+        internal void DestroyConfigChildren()
+        {
+            foreach (var config in _playerConfigs)
+                Destroy(config.Input.gameObject.transform.GetChild(0).gameObject);
+        }
+
         internal void OnPlayerJoined(PlayerInput input)
         {
             if (!(GameLoop.Instance.StateMachine.CurrentState is SetupState))

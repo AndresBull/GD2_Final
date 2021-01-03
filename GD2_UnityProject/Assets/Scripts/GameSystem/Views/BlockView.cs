@@ -104,7 +104,7 @@ namespace GameSystem.Views
 
             return neighbours;
         }
-        
+
         private bool IsNeighbour(Block block, BlockPosition blockPosition)
         {
             if (block == null && !floodFiller.HasBlock(blockPosition)
@@ -157,7 +157,7 @@ namespace GameSystem.Views
 
             BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
             blockPosition.Y += offsetY;
-            transform.position = _fieldView.PositionConverter.ToWorldPosition(_field, blockPosition) 
+            transform.position = _fieldView.PositionConverter.ToWorldPosition(_field, blockPosition)
                 + new Vector3((BlockWidth % 2) * (_fieldView.PositionConverter.BlockScale.x / 2), 0, 0);
         }
 
@@ -186,8 +186,13 @@ namespace GameSystem.Views
                 if (_shapeBlocks.Any(b => _field.BlockAt(new BlockPosition(b.Position.X, b.Position.Y + offsetPosition)) != null)
                     || _shapeBlocks.Any(b => b.Position.Y <= 0))
                 {
+                    //Should only happen if the block is put atop the limit
                     offsetPosition = 0;
-                    StopCoroutine(Drop());
+                    Debug.Log("Block Above Height Limit");
+
+                    GameLoop.Instance.StateMachine.MoveTo(GameStates.Play);
+
+                    yield break;
                 }
 
                 if (offsetPosition != 0)
@@ -197,8 +202,8 @@ namespace GameSystem.Views
                     {
                         Debug.Log("Landed");
                         SoundManager.Instance.PlayBlockLanded();
-
                         UpdateBlockView(offsetPosition);
+
 
                         foreach (Block block in _shapeBlocks)
                         {
@@ -211,6 +216,10 @@ namespace GameSystem.Views
                         {
                             climber.GetComponent<ClimberBehaviour>().CheckIfTrapped();
                         }
+
+                        if (PlayerConfigManager.Instance.GetAllClimbers().All(c => !c.activeInHierarchy))
+                            GameLoop.Instance.StateMachine.MoveTo(GameStates.Play);
+
 
                         yield break;
                     }

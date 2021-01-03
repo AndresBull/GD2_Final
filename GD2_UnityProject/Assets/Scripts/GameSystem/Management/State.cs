@@ -63,6 +63,7 @@ namespace GameSystem.Management
 
         protected sealed override void CleanUpScene()
         {
+            PlayerConfigManager.Instance.DestroyConfigChildren();
         }
 
         protected sealed override void SetupScene()

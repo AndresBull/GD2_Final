@@ -21,8 +21,8 @@ namespace GameSystem.Management
             {
                 SceneManager.LoadScene("Start");
                 PlayerConfigManager.Instance.RemovePlayers();
+                InputManager.Instance.SwitchToActionMap("UI");
             }
-            InputManager.Instance.SwitchToActionMap("UI");
         }
     }
 

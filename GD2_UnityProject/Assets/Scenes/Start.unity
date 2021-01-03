@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -598,7 +598,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameLoop
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3687257099161991430, guid: 2da1923d6d093da48aefb8b0161dfcbc, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2da1923d6d093da48aefb8b0161dfcbc, type: 3}
 --- !u!1 &1243252967
 GameObject:

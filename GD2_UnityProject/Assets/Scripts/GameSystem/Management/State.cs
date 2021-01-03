@@ -44,6 +44,10 @@ namespace GameSystem.Management
     {
         protected sealed override void CleanUpScene()
         {
+            foreach (PlayerConfiguration config in PlayerConfigManager.Instance.GetPlayerConfigs())
+            {
+                config.Input.gameObject.GetComponent<PlayerSpawn>().ResetPlayerScreen();
+            }
         }
 
         protected sealed override void SetupScene()
@@ -86,10 +90,14 @@ namespace GameSystem.Management
     {
         protected sealed override void CleanUpScene()
         {
+            GameLoop.Destroy(PlayerConfigManager.Instance.gameObject);
+            GameLoop.Destroy(SoundManager.Instance.gameObject);
+            GameLoop.Destroy(GameLoop.Instance.gameObject);
         }
 
         protected sealed override void SetupScene()
         {
+            CleanUpScene();
         }
     }
 

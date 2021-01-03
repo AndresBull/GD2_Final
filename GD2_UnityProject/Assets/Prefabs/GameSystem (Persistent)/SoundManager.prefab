@@ -137,7 +137,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6956130526994338785}
   - component: {fileID: 5037073326349179431}
-  - component: {fileID: 5997790282645206310}
+  - component: {fileID: 4648577895651700867}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -175,7 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   JumpSound: {fileID: 3757165502079307656}
   BlockLandSound: {fileID: 278172259674014093}
---- !u!114 &5997790282645206310
+--- !u!114 &4648577895651700867
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

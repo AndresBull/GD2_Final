@@ -12,19 +12,23 @@ namespace GameSystem.Management
         [SerializeField] private Button _readyButton = null;
         [SerializeField] private Button _colorPicker = null;
 
+        private Material _color;
+        private PlayerConfiguration _config;
         private int _playerIndex;
         private int _index;
 
-        public void SetPlayerIndex(int index)
+        public void SetUpPlayer(int index)
         {
+            _config = PlayerConfigManager.Instance.GetPlayerConfigs()[_playerIndex];
             _playerIndex = index;
             _playerName.SetText($"Player {_playerIndex + 1}");
+            SetCharacter(_config.CharacterMeshes[0]);
+            SetColor(_color);
         }
 
         public void SwitchCharacter()
         {
-            print(_index);
-            if (_index < PlayerConfigManager.Instance.GetPlayerConfigs()[_playerIndex].CharacterMeshes.Length - 1)
+            if (_index < _config.CharacterMeshes.Length - 1)
             {
                 _index++;
             }
@@ -33,7 +37,7 @@ namespace GameSystem.Management
                 _index = 0;
             }
 
-            SetCharacter(PlayerConfigManager.Instance.GetPlayerConfigs()[_playerIndex].CharacterMeshes[_index]);
+            SetCharacter(_config.CharacterMeshes[_index]);
         }
 
         public void ToggleReadyStatus()

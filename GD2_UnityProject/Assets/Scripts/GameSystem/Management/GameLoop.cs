@@ -30,6 +30,7 @@ namespace GameSystem.Management
         private void OnDestroy()
         {
             _playState.OnPlayStateEntered -= OnPlayStateEntered;
+            Application.Quit();
         }
 
         public void CreateNewField(int rows, int columns)
@@ -46,12 +47,14 @@ namespace GameSystem.Management
             SetupState setupState = new SetupState();
             _playState = new PlayState();
             RoundOverState roundOverState = new RoundOverState();
+            EndState endState = new EndState();
 
             _stateMachine.RegisterState(GameStates.Start, startState);
             _stateMachine.RegisterState(GameStates.Menu, menuState);
             _stateMachine.RegisterState(GameStates.Setup, setupState);
             _stateMachine.RegisterState(GameStates.Play, _playState);
             _stateMachine.RegisterState(GameStates.RoundOver, roundOverState);
+            _stateMachine.RegisterState(GameStates.End, endState);
 
             _stateMachine.MoveTo(GameStates.Start);
 

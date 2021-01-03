@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameSystem.Characters;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,6 +37,7 @@ namespace GameSystem.Management
 
         private GameObject _character;
         private Transform _playerScreen, _joinText, _colorPicker, _readyButton, _eventSystem;
+        private PlayerConfiguration _config;
 
         private void Awake()
         {
@@ -49,6 +51,7 @@ namespace GameSystem.Management
                 }
             }
             SceneManager.sceneLoaded += OnSceneLoaded;
+            _config = PlayerConfigManager.Instance.GetPlayerConfigs()[_input.playerIndex];
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -68,6 +71,8 @@ namespace GameSystem.Management
         private void OnDestroy()
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
+            PlayerConfigManager.Instance.OnCharacterMeshChanged -= OnCharacterMeshChanged;
+            PlayerConfigManager.Instance.OnCharacterMaterialChanged -= OnCharacterMaterialChanged;
             ResetPlayerScreen();
         }
 
@@ -76,27 +81,71 @@ namespace GameSystem.Management
             if (GameLoop.Instance.StateMachine.CurrentState is SetupState && _character == null)
             {
                 PlayerConfigManager.Instance.SetPlayerMeshes(_input.playerIndex, _characterMeshes);
-                var menu = GameObject.Find("PlayerMenu");
 
-                _playerScreen = menu.transform.GetChild(_input.playerIndex);
-                _playerScreen.GetComponent<SetupScreenUpdater>().SetPlayerIndex(_input.playerIndex);
-                _playerScreen.GetComponent<SetupScreenUpdater>().SwitchCharacter();
+                GameObject menu = GameObject.Find("PlayerMenu");
+                if (_playerScreen == null)
+                {
+                    _playerScreen = menu.transform.GetChild(_input.playerIndex);
+                }
+                if (_joinText == null)
+                {
+                    _joinText = _playerScreen.Find("CharacterPicker").Find("JoinText");
+                }
+                if (_colorPicker == null)
+                {
+                    _colorPicker = _playerScreen.Find("ColorPicker");
+                }
+                if (_readyButton == null)
+                {
+                    _readyButton = _playerScreen.Find("ReadyButton");
+                }
+                if (_eventSystem == null)
+                {
+                    _eventSystem = _playerScreen.GetChild(_playerScreen.childCount - 1);
+                }
 
-                _joinText = _playerScreen.Find("CharacterPicker").Find("JoinText");
+                _playerScreen.GetComponent<SetupScreenUpdater>().SetUpPlayer(_input.playerIndex);
                 _joinText.gameObject.SetActive(false);
-
-                _colorPicker = _playerScreen.Find("ColorPicker");
                 _colorPicker.GetComponent<Button>().interactable = true;
-
-                _readyButton = _playerScreen.Find("ReadyButton");
                 _readyButton.GetComponent<Button>().interactable = true;
-
-                _eventSystem = _playerScreen.GetChild(_playerScreen.childCount - 1);
                 _input.uiInputModule = _eventSystem.GetComponent<InputSystemUIInputModule>();
                 _eventSystem.GetComponent<MultiplayerEventSystem>().sendNavigationEvents = true;
 
-                _character = Instantiate(_characterView, spawns.transform.GetChild(_input.playerIndex));
+                InstantiatePlayerPreview(spawns);
             }
+        }
+
+        internal void ResetPlayerScreen()
+        {
+            if (GameLoop.Instance.StateMachine.CurrentState is SetupState)
+            {
+                _eventSystem.GetComponent<MultiplayerEventSystem>().sendNavigationEvents = false;
+                _readyButton.GetComponent<Button>().interactable = false;
+                _colorPicker.GetComponent<Button>().interactable = false;
+                _joinText.gameObject.SetActive(true);
+                _character = null;
+            }
+        }
+
+        private void InstantiatePlayerPreview(Transform spawns)
+        {
+            PlayerConfigManager.Instance.OnCharacterMeshChanged += OnCharacterMeshChanged;
+            PlayerConfigManager.Instance.OnCharacterMaterialChanged += OnCharacterMaterialChanged;
+            _character = Instantiate(_characterView, spawns.transform.GetChild(_input.playerIndex));
+        }
+
+        private void OnCharacterMaterialChanged(object sender, EventArgs e)
+        {
+            if (_character == null)
+                return;
+            _character.GetComponentInChildren<MeshRenderer>().material = _config.PlayerMaterial;
+        }
+
+        private void OnCharacterMeshChanged(object sender, EventArgs e)
+        {
+            if (_character == null)
+                return;
+            _character.GetComponentInChildren<MeshFilter>().sharedMesh = _config.Character;
         }
 
         private void SpawnPlayerInLevel(Transform spawns)
@@ -109,7 +158,7 @@ namespace GameSystem.Management
             playerInfo.transform.SetParent(infoPanel.transform, false);
             playerInfo.GetComponent<PlayScreenUpdater>().SetPlayerIndex(_input.playerIndex);
 
-            if (PlayerConfigManager.Instance.GetPlayerConfigs()[_input.playerIndex].IsOverlord)
+            if (_config.IsOverlord)
             {
                 var overlordSpawn = GameObject.Find("OverlordSpawn").transform;
                 GameObject overlord = Instantiate(_overlordPrefab, overlordSpawn.position, overlordSpawn.rotation);
@@ -118,19 +167,8 @@ namespace GameSystem.Management
             }
             GameObject climber = Instantiate(_climberPrefab, spawns.GetChild(_input.playerIndex).position, spawns.GetChild(_input.playerIndex).rotation, transform);
             climber.transform.SetParent(transform);
+            climber.GetComponent<ClimberBehaviour>().InitializePlayer(_config);
         }
 
-        private void ResetPlayerScreen()
-        {
-            if (GameLoop.Instance.StateMachine.CurrentState is SetupState)
-            {
-                _eventSystem.GetComponent<MultiplayerEventSystem>().sendNavigationEvents = false;
-                _input.uiInputModule = null;
-                _readyButton.GetComponent<Button>().interactable = false;
-                _colorPicker.GetComponent<Button>().interactable = false;
-                _joinText.gameObject.SetActive(true);
-                _character = null;
-            }
-        }
     }
 }

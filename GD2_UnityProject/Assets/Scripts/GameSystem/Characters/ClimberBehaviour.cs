@@ -17,6 +17,8 @@ namespace GameSystem.Characters
         private MeshRenderer _meshRenderer = null;
         [SerializeField]
         private MeshFilter _meshFilter = null;
+        [SerializeField]
+        private MeshCollider _meshCollider = null;
 
         [Header("Camera")]
         [SerializeField]
@@ -386,6 +388,7 @@ namespace GameSystem.Characters
         {
             _playerConfig = config;
             _meshFilter.mesh = config.Character;
+            _meshCollider.sharedMesh = config.Character;
             _meshRenderer.material = config.PlayerMaterial;
         }
 

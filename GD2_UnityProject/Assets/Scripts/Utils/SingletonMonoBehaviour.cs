@@ -57,17 +57,13 @@ namespace Utils
 
         private void OnApplicationQuit()
         {
-#if UNITY_EDITOR
             m_ShuttingDown = true;
-#endif
         }
 
 
         private void OnDestroy()
         {
-#if UNITY_EDITOR
             m_ShuttingDown = true;
-#endif
         }
     }
 }

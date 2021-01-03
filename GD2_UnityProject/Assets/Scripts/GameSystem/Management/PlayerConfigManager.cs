@@ -24,6 +24,8 @@ namespace GameSystem.Management
         private bool _isTimerActive = false;
 
         public event EventHandler<ScoreChangedEventArgs> OnScoreChanged;
+        public event EventHandler OnCharacterMeshChanged;
+        public event EventHandler OnCharacterMaterialChanged;
 
         public float Timer => _timer;
 
@@ -53,6 +55,13 @@ namespace GameSystem.Management
             }
         }
 
+        private void OnDestroy()
+        {
+            foreach (PlayerConfiguration config in _playerConfigs)
+            {
+                Destroy(config.Input.gameObject);
+            }
+        }
 
         internal List<GameObject> GetAllClimbers()
         {
@@ -135,6 +144,7 @@ namespace GameSystem.Management
         internal void SetPlayerCharacter(int playerIndex, Mesh character)
         {
             _playerConfigs[playerIndex].Character = character;
+            OnCharacterMeshChanged?.Invoke(this, EventArgs.Empty);
         }
 
         internal void SetPlayerMeshes(int playerIndex, Mesh[] meshes)
@@ -145,6 +155,7 @@ namespace GameSystem.Management
         internal void SetPlayerColor(int playerIndex, Material color)
         {
             _playerConfigs[playerIndex].PlayerMaterial = color;
+            OnCharacterMaterialChanged?.Invoke(this, EventArgs.Empty);
         }
 
         internal void ToggleReadyPlayer(int playerIndex)

@@ -55,6 +55,9 @@ namespace GameSystem.Management
                 case "PlayButton":
                     GameLoop.Instance.StateMachine.MoveTo(GameStates.Setup);
                     break;
+                case "QuitButton":
+                    GameLoop.Instance.StateMachine.MoveTo(GameStates.End);
+                    break;
             }
         }
 
@@ -63,9 +66,9 @@ namespace GameSystem.Management
             StateMachine<BaseState> stateMachine = GameLoop.Instance.StateMachine;
             BaseState currentState = stateMachine.CurrentState;
 
-            if (currentState is MenuState)
+            if (currentState is SetupState)
             {
-                stateMachine.MoveTo(GameStates.Start);
+                stateMachine.MoveTo(GameStates.Menu);
             }
         }
     }

@@ -17,55 +17,7 @@ namespace GameSystem.Views
         private BlockPosition _position;
         private float _dropDownDelay = 1f;
 
-        private List<BlockPosition> Neighbours(BlockPosition startBlock)
-        {
-            List<BlockPosition> neighbours = new List<BlockPosition>();
-
-            BlockPosition position = startBlock;
-
-            BlockPosition northPosition = position;
-            northPosition.Y += 1;
-            Block northBlock = _field.BlockAt(northPosition);
-            if (IsNeighbour(northBlock, northPosition))
-            {
-                neighbours.Add(northPosition);
-            }
-
-            BlockPosition southPosition = position;
-            southPosition.Y -= 1;
-            Block southBlock = _field.BlockAt(southPosition);
-            if (IsNeighbour(southBlock, southPosition))
-            {
-                neighbours.Add(southPosition);
-            }
-
-            BlockPosition eastPosition = position;
-            eastPosition.X += 1;
-            Block eastBlock = _field.BlockAt(eastPosition);
-            if (IsNeighbour(eastBlock, eastPosition))
-            {
-                neighbours.Add(eastPosition);
-            }
-
-            BlockPosition westPosition = position;
-            westPosition.X -= 1;
-            Block westBlock = _field.BlockAt(westPosition);
-            if (IsNeighbour(westBlock, westPosition))
-            {
-                neighbours.Add(westPosition);
-            }
-
-            return neighbours;
-        }
-        private bool IsNeighbour(Block block, BlockPosition blockPosition)
-        {
-            if (block == null && !floodFiller.HasBlock(blockPosition)
-                && blockPosition.X <= _field.Rows && blockPosition.Y <= _field.Columns
-                && blockPosition.X >= 0 && blockPosition.Y >= 0)
-                return true;
-
-            return false;
-        }
+        public FloodFill floodFiller;
         internal Vector3 Size
         {
             set
@@ -82,10 +34,8 @@ namespace GameSystem.Views
                 transform.localScale = new Vector3(ratioX, ratioY, ratioZ);
             }
         }
-
         public int BlockWidth { get; internal set; }
         public int BlockHeight { get; internal set; }
-        public FloodFill floodFiller;
 
         private void Awake()
         {
@@ -127,12 +77,59 @@ namespace GameSystem.Views
             //SetShape();
 
             //AllignBlockToGrid();
-            
-            //BlockPosition startBlock = new BlockPosition(_field.Rows + 1, _field.Columns);
-            //floodFiller = new FloodFill(Neighbours);
-            //ClimberBehaviour.floodFiller = floodFiller;
 
             //StartCoroutine(Drop());
+        }
+
+        private List<BlockPosition> Neighbours(BlockPosition startBlock)
+        {
+            List<BlockPosition> neighbours = new List<BlockPosition>();
+
+            BlockPosition position = startBlock;
+
+            BlockPosition northPosition = position;
+            northPosition.Y += 1;
+            Block northBlock = _field.BlockAt(northPosition);
+            if (IsNeighbour(northBlock, northPosition))
+            {
+                neighbours.Add(northPosition);
+            }
+
+            BlockPosition southPosition = position;
+            southPosition.Y -= 1;
+            Block southBlock = _field.BlockAt(southPosition);
+            if (IsNeighbour(southBlock, southPosition))
+            {
+                neighbours.Add(southPosition);
+            }
+
+            BlockPosition eastPosition = position;
+            eastPosition.X += 1;
+            Block eastBlock = _field.BlockAt(eastPosition);
+            if (IsNeighbour(eastBlock, eastPosition))
+            {
+                neighbours.Add(eastPosition);
+            }
+
+            BlockPosition westPosition = position;
+            westPosition.X -= 1;
+            Block westBlock = _field.BlockAt(westPosition);
+            if (IsNeighbour(westBlock, westPosition))
+            {
+                neighbours.Add(westPosition);
+            }
+
+            return neighbours;
+        }
+        
+        private bool IsNeighbour(Block block, BlockPosition blockPosition)
+        {
+            if (block == null && !floodFiller.HasBlock(blockPosition)
+                && blockPosition.X <= _field.Rows && blockPosition.Y <= _field.Columns
+                && blockPosition.X >= 0 && blockPosition.Y >= 0)
+                return true;
+
+            return false;
         }
 
         private void SetShape()
@@ -158,16 +155,16 @@ namespace GameSystem.Views
         {
             BlockWidth = 0;
             BlockHeight = 0;
-            var baseAnchorBlockPos = _fieldView.PositionConverter.ToBlockPosition(_field, transform.GetChild(0).position);
+            BlockPosition baseAnchorBlockPos = _fieldView.PositionConverter.ToBlockPosition(_field, transform.GetChild(0).position);
             for (int i = 0; i < transform.childCount; i++)
             {
                 Transform anchor = transform.GetChild(i);
                 BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, anchor.position);
 
-                var width = blockPosition.X - baseAnchorBlockPos.X + 1;
+                int width = blockPosition.X - baseAnchorBlockPos.X + 1;
                 BlockWidth = Mathf.Max(width, BlockWidth);
 
-                var height = blockPosition.Y - baseAnchorBlockPos.Y + 1;
+                int height = blockPosition.Y - baseAnchorBlockPos.Y + 1;
                 BlockHeight = Mathf.Max(height, BlockHeight);
             }
         }
@@ -186,8 +183,6 @@ namespace GameSystem.Views
             //Vector3 offset = anchor.position - worldPosition;
             //transform.position += offset;
             //Destroy(anchor.gameObject);
-
-
 
             _position = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
         }
@@ -228,7 +223,6 @@ namespace GameSystem.Views
                 foreach (Block block in _shapeBlocks)
                 {
                     _field.RemoveFromDictionary(block);
-                    print($"{block.Position.X}, {block.Position.Y}");
                 }
 
                 int offsetPosition = -1;
@@ -263,18 +257,18 @@ namespace GameSystem.Views
 
         public void MoveAccordingToHand(Vector3 handPosition)
         {
-            var handOffset = new Vector3((1 - (BlockWidth % 2)) * (_fieldView.PositionConverter.BlockScale.x / 2), 0, 0); //if even width, set to half a block wide
+            Vector3 handOffset = new Vector3((1 - (BlockWidth % 2)) * (_fieldView.PositionConverter.BlockScale.x / 2), 0, 0); //if even width, set to half a block wide
             handPosition += handOffset;
 
-            var handBlockPos = _fieldView.PositionConverter.ToBlockPosition(_field, handPosition);
+            BlockPosition handBlockPos = _fieldView.PositionConverter.ToBlockPosition(_field, handPosition);
             handBlockPos.Y -= 2;
 
-            var leftLimit = (BlockWidth - (BlockWidth % 2)) / 2;
-            var rightLimit = _field.Columns - (BlockWidth + (BlockWidth % 2)) / 2;
+            int leftLimit = (BlockWidth - (BlockWidth % 2)) / 2;
+            int rightLimit = _field.Columns - (BlockWidth + (BlockWidth % 2)) / 2;
             handBlockPos.X = Mathf.Clamp(handBlockPos.X, leftLimit, rightLimit);
 
-            var newPos = _fieldView.PositionConverter.ToWorldPosition(_field, handBlockPos);
-            var blockOffset = new Vector3((BlockWidth % 2) * (_fieldView.PositionConverter.BlockScale.x / 2), 0, 0);
+            Vector3 newPos = _fieldView.PositionConverter.ToWorldPosition(_field, handBlockPos);
+            Vector3 blockOffset = new Vector3((BlockWidth % 2) * (_fieldView.PositionConverter.BlockScale.x / 2), 0, 0);
             newPos += blockOffset;
             transform.position = newPos;
         }

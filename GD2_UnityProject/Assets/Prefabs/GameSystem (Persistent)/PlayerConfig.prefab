@@ -278,3 +278,5 @@ MonoBehaviour:
     type: 3}
   _overlordPrefab: {fileID: 3912653369593397870, guid: 4a8c6fb58250f5e4ebf7c3884213a9cb,
     type: 3}
+  _playerInfoPrefab: {fileID: 480674293103289864, guid: 05d141d654da6ca4aac50d22c4e5cc92,
+    type: 3}

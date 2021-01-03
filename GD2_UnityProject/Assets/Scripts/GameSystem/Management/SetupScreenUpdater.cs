@@ -6,16 +6,11 @@ using UnityEngine.UI;
 
 namespace GameSystem.Management
 {
-    public class PlayerScreenUpdater : MonoBehaviour
+    public class SetupScreenUpdater : MonoBehaviour
     {
-        [SerializeField]
-        private TextMeshProUGUI _playerName = null;
-
-        [SerializeField]
-        private Button _readyButton = null;
-
-        [SerializeField]
-        private Button _colorPicker = null;
+        [SerializeField] private TextMeshProUGUI _playerName = null;
+        [SerializeField] private Button _readyButton = null;
+        [SerializeField] private Button _colorPicker = null;
 
         private int _playerIndex;
         private int _index;

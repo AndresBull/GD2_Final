@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -21,7 +22,9 @@ namespace GameSystem.Management
         private List<PlayerConfiguration> _playerConfigs;
         private float _timer = 0.0f;
         private bool _isTimerActive = false;
-        
+
+        public event EventHandler<ScoreChangedEventArgs> OnScoreChanged;
+
         public float Timer => _timer;
 
         private void Awake()
@@ -156,7 +159,10 @@ namespace GameSystem.Management
 
         internal void UpdatePlayerRoundScore(int playerIndex, int addedScore)
         {
-            _playerConfigs[playerIndex].RoundScore += addedScore;
+            int newScore = _playerConfigs[playerIndex].RoundScore + addedScore;
+            _playerConfigs[playerIndex].RoundScore = newScore;
+
+            OnScoreChanged?.Invoke(this, new ScoreChangedEventArgs(playerIndex, newScore));
         }
 
         internal void ResetPlayerRoundScore(int playerIndex)
@@ -244,5 +250,17 @@ namespace GameSystem.Management
         internal int TotalScore { get; set; }
         internal bool IsReady { get; set; }
         internal bool IsOverlord { get; set; }
+    }
+
+    public class ScoreChangedEventArgs : EventArgs
+    {
+        public int PlayerIndex;
+        public int NewScore;
+
+        public ScoreChangedEventArgs(int playerIndex, int newScore)
+        {
+            PlayerIndex = playerIndex;
+            NewScore = newScore;
+        }
     }
 }

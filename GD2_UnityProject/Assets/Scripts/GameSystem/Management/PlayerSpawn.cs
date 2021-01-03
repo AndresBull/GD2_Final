@@ -30,6 +30,10 @@ namespace GameSystem.Management
         [SerializeField]
         private GameObject _overlordPrefab = null;
 
+        [Header("Player UI")]
+        [Tooltip("The prefab that holds all UI data of a player.")]
+        [SerializeField] private GameObject _playerInfoPrefab = null;
+
         private GameObject _character;
         private Transform _playerScreen, _joinText, _colorPicker, _readyButton, _eventSystem;
 
@@ -75,8 +79,8 @@ namespace GameSystem.Management
                 var menu = GameObject.Find("PlayerMenu");
 
                 _playerScreen = menu.transform.GetChild(_input.playerIndex);
-                _playerScreen.GetComponent<PlayerScreenUpdater>().SetPlayerIndex(_input.playerIndex);
-                _playerScreen.GetComponent<PlayerScreenUpdater>().SwitchCharacter();
+                _playerScreen.GetComponent<SetupScreenUpdater>().SetPlayerIndex(_input.playerIndex);
+                _playerScreen.GetComponent<SetupScreenUpdater>().SwitchCharacter();
 
                 _joinText = _playerScreen.Find("CharacterPicker").Find("JoinText");
                 _joinText.gameObject.SetActive(false);
@@ -99,6 +103,11 @@ namespace GameSystem.Management
         {
             if (!(GameLoop.Instance.StateMachine.CurrentState is PlayState))
                 return;
+
+            GameObject playerInfo = Instantiate(_playerInfoPrefab);
+            GameObject infoPanel = GameObject.Find("InfoPanel");
+            playerInfo.transform.SetParent(infoPanel.transform, false);
+            playerInfo.GetComponent<PlayScreenUpdater>().SetPlayerIndex(_input.playerIndex);
 
             if (PlayerConfigManager.Instance.GetPlayerConfigs()[_input.playerIndex].IsOverlord)
             {

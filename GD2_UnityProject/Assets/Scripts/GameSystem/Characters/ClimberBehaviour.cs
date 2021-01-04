@@ -78,7 +78,7 @@ namespace GameSystem.Characters
         private float _horizontalMovement;                      // float that stores the value of the movement on the x-axis
         private float _jumpTimer = 0.0f;                        // float to compare the current runtime to the jump call time to determine if the call happened inside the jump delay interval
         private float _placementDistance = 0.5f;                // how far from the climber the ladder will be placed
-        private readonly float _jumpForce = 3.0f;               // the force applied to the rigidbody at the start of a jump
+        private readonly float _jumpForce = 6.0f;               // the force applied to the rigidbody at the start of a jump
 
         private bool _isHanging = false;                        // bool that keeps track of whether or not the Climber is hanging on a ledge or not
         private bool _isJumping = false;                        // bool to determine if the character is jumping or not
@@ -102,7 +102,8 @@ namespace GameSystem.Characters
             {
                 _camera = GameObject.FindGameObjectWithTag("MainCamera");
             }
-            ConvertCameraToWorldTransform();
+            _cameraTransform = _camera.transform.GetChild(0);
+            _cameraTransform.forward = Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up);
 
             // store the BlockField in a field for easy access
             _blockField = GameLoop.Instance.Field;
@@ -119,7 +120,7 @@ namespace GameSystem.Characters
 
             // disable the jumpmultiplier in the build
 #if !UNITY_EDITOR
-        JumpMultiplier = 1.0f;
+            _jumpMultiplier = 1.0f;
 #endif
         }
 
@@ -136,7 +137,6 @@ namespace GameSystem.Characters
 
         #endregion
 
-        // TODO: can possibly be stored in another class / might be set to public so others can access this too
         private BlockPosition GetClimberBlockPosition()
         {
             return _blockFieldView.PositionConverter.ToBlockPosition(_blockField, transform.position);
@@ -261,12 +261,6 @@ namespace GameSystem.Characters
                 }
                 ScaleBlock(block);
             }
-        }
-
-        private void ConvertCameraToWorldTransform()
-        {
-            _cameraTransform = _camera.transform;
-            _cameraTransform.forward = Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up);
         }
 
         private void Jump()
@@ -405,7 +399,7 @@ namespace GameSystem.Characters
             }
         }
 
-        public void GetKilled()
+        private void GetKilled()
         {
             PointSystemScript.PlayerGotKilled();
             this.gameObject.SetActive(false);

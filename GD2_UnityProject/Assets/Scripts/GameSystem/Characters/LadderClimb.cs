@@ -120,7 +120,7 @@ namespace GameSystem.Characters
         // TODO: REMOVE the following methods if PlayerInput uses BroadcastMessages()
         //       USE the following methods if PlayerInput uses Invoke Unity Events
 
-        //public void OnStartClimb(InputAction.CallbackContext context)
+        //public void OnClimbLadder(InputAction.CallbackContext context)
         //{
         //    float direction = context.ReadValue<float>();
 
@@ -133,7 +133,7 @@ namespace GameSystem.Characters
 
         // TODO: USE the following methods if PlayerInput uses BroadcastMessages()
         //       REMOVE the follwing methods if PlayerInput uses Invoke Unity Events
-        public void OnStartClimb(InputValue value)
+        public void OnClimbLadder(InputValue value)
         {
             float direction = value.Get<float>();
 

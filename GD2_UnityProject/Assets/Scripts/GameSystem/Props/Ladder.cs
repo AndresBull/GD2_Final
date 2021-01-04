@@ -4,17 +4,14 @@ using UnityEngine;
 
 namespace GameSystem.Props
 {
-    [RequireComponent(typeof(Rigidbody))]
     public class Ladder : MonoBehaviour
     {
-        [SerializeField]
-        private GameObject _exit = null;
-        [SerializeField]
-        private GameObject _enter = null;
-        private Rigidbody _rb;
+        [SerializeField] private GameObject _exit = null;
+        [SerializeField] private GameObject _enter = null;
+
+        private Transform _model;
         private Quaternion _targetRot;
         private float _timer;
-        private Transform _model;
 
         public GameObject Owner { get; set; } = null;           // the character that owns the ladder
 
@@ -25,11 +22,8 @@ namespace GameSystem.Props
 
         void Awake()
         {
-            _rb = GetComponent<Rigidbody>();
             _model = transform.GetChild(0).transform;
-
-            _model.rotation *= Quaternion.Euler(-15.0f, 0.0f, 0.0f);
-            _targetRot = Quaternion.Euler(15.0f + _model.eulerAngles.x, _model.eulerAngles.y, _model.eulerAngles.z);
+            _targetRot = Quaternion.Euler(-20.0f, _model.eulerAngles.y, _model.eulerAngles.z);
 
             _timer = Time.time;
         }
@@ -47,10 +41,6 @@ namespace GameSystem.Props
             {
                 _model.rotation = Quaternion.Slerp(_model.rotation, _targetRot, Time.fixedDeltaTime * 0.5f);
                 return;
-            }
-            if (Time.time >= _timer + 2.0f)
-            {
-                _rb.isKinematic = true;
             }
         }
 

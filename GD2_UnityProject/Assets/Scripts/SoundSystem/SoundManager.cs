@@ -18,15 +18,20 @@ public class SoundManager : SingletonMonoBehaviour<SoundManager>
      */
 
     [SerializeField]
-    private AudioSource JumpSound, BlockLandSound;
+    private AudioSource JumpSound, SlowBlockLandSound, FastBlockLandSound;
 
     public void PlayJump()
     {
         JumpSound.Play();
     }
 
-    public void PlayBlockLanded()
+    public void PlaySlowBlockLanded()
     {
-        BlockLandSound.Play();
+        SlowBlockLandSound.Play();
+    }
+
+    public void PlayFastBlockLanded()
+    {
+        FastBlockLandSound.Play();
     }
 }

@@ -152,11 +152,11 @@ namespace GameSystem.Management
                 return;
             }
             // TODO: enable this after testing to set an overlord
-            //if (overlord.Count <= 0)
-            //{
-            //    _playerConfigs[playerIndex].IsOverlord = true;
-            //    return;
-            //}
+            if (overlord.Count <= 0)
+            {
+                _playerConfigs[playerIndex].IsOverlord = true;
+                return;
+            }
         }
 
         internal void SetPlayerCharacter(int playerIndex, Mesh character)

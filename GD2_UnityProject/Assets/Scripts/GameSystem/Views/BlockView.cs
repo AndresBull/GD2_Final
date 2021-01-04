@@ -17,6 +17,7 @@ namespace GameSystem.Views
         private BlockFieldView _fieldView;
         private float _elapsedDelayTime = 0f;
         private float _minTimeDelay = 0.1f;
+        private bool _wasThrownHard;
 
         internal Vector3 Size
         {
@@ -168,7 +169,7 @@ namespace GameSystem.Views
             _blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
             floodFiller = new FloodFill(Neighbours);
             ClimberBehaviour.floodFiller = floodFiller;
-
+            _wasThrownHard = true;
             _dropDownDelay = _minTimeDelay;
 
             enabled = true;
@@ -180,6 +181,7 @@ namespace GameSystem.Views
             _blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
             floodFiller = new FloodFill(Neighbours);
             ClimberBehaviour.floodFiller = floodFiller;
+            _wasThrownHard = false;
 
             enabled = true;
         }
@@ -213,9 +215,8 @@ namespace GameSystem.Views
                         || _shapeBlocks.Any(b => b.Position.Y + offsetPosition <= 0))
                     {
                         Debug.Log("Landed");
-                        SoundManager.Instance.PlayBlockLanded();
-                        UpdateBlockView(offsetPosition);
 
+                        UpdateBlockView(offsetPosition);
 
                         foreach (Block block in _shapeBlocks)
                         {
@@ -230,7 +231,22 @@ namespace GameSystem.Views
                         }
 
                         if (PlayerConfigManager.Instance.GetAllClimbers().All(c => !c.activeInHierarchy))
+                        {
                             GameLoop.Instance.StateMachine.MoveTo(GameStates.Play);
+                            StopUpdate();
+                            return;
+                        }
+
+                        if (_wasThrownHard)
+                        {
+                            Camera.main.gameObject.GetComponent<ScreenShake>().BigShake();
+                            SoundManager.Instance.PlayFastBlockLanded();
+                        }
+                        else
+                        {
+                            Camera.main.gameObject.GetComponent<ScreenShake>().SmallShake();
+                            SoundManager.Instance.PlaySlowBlockLanded();
+                        }
 
                         StopUpdate();
                         return;

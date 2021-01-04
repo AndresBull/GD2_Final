@@ -156,7 +156,7 @@ namespace GameSystem.Views
         private bool IsNeighbour(Block block, BlockPosition blockPosition)
         {
             if (block == null && !floodFiller.HasBlock(blockPosition)
-                && blockPosition.X <= _field.Rows && blockPosition.Y <= _field.Columns
+                && blockPosition.X < _field.Columns && blockPosition.Y <= _field.Rows
                 && blockPosition.X >= 0 && blockPosition.Y >= 0)
                 return true;
 
@@ -223,7 +223,7 @@ namespace GameSystem.Views
                             _field.AddToDictionary(block);
                         }
 
-                        floodFiller.FloodedPositions = floodFiller.Flood(new BlockPosition(_field.Rows, _field.Columns));
+                        floodFiller.FloodedPositions = floodFiller.Flood(new BlockPosition(0, _field.Rows));
 
                         foreach (GameObject climber in PlayerConfigManager.Instance.GetAllClimbers())
                         {

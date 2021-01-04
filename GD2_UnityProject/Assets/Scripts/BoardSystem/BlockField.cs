@@ -9,10 +9,12 @@ namespace BoardSystem
     public class BlockField
     {
         private Dictionary<BlockPosition, Block> _blocks = new Dictionary<BlockPosition, Block>();
+        private Dictionary<BlockPosition, Block> _rimBlocks = new Dictionary<BlockPosition, Block>();
 
         public readonly int Rows, Columns;
         private List<BlockPosition> BlockPositions => _blocks.Keys.ToList();
         private List<Block> Blocks => _blocks.Values.ToList();
+        private List<Block> RimBlocks => _rimBlocks.Values.ToList();
 
         public BlockField(int rows, int columns)
         {
@@ -20,6 +22,7 @@ namespace BoardSystem
             Columns = columns;
 
             CreateDictionary();
+            CreateRim(); 
         }
 
         private void CreateDictionary()
@@ -32,7 +35,19 @@ namespace BoardSystem
                 }
             }
         }
-
+        private void CreateRim()
+        {
+            for (int i = -1; i < Columns; i++)
+            {
+                _rimBlocks.Add(new BlockPosition { X = i, Y = -1 },new Block(i,-1));
+                //_rimBlocks.Add(new BlockPosition { X = Rows + 1, Y = i }, null);
+            }
+            for (int i = -1; i < Rows; i++)
+            {
+                _rimBlocks.Add(new BlockPosition { X = -1, Y = i }, new Block(-1,i));
+                _rimBlocks.Add(new BlockPosition { X = Columns + 1, Y = i }, new Block(Columns + 1, i));
+            }
+        }
         public Block BlockAt(BlockPosition blockPosition)
         {
             _blocks.TryGetValue(blockPosition, out Block foundBlock);
@@ -89,6 +104,11 @@ namespace BoardSystem
         {
             var arrayPositions = _blocks.Keys.ToList();
             return arrayPositions;
+        }
+        public List<BlockPosition> GetAllRimPositions()
+        {
+            var rimPositions = _rimBlocks.Keys.ToList();
+            return rimPositions;
         }
     }
 }

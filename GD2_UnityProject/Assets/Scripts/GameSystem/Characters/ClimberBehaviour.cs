@@ -402,12 +402,12 @@ namespace GameSystem.Characters
             if (filledPositions.Contains(_blockFieldView.PositionConverter.ToBlockPosition(_blockField, transform.position)))
             {
                 GetKilled();
-                PointSystemScript.PlayerGotKilled();
             }
         }
 
         public void GetKilled()
         {
+            PointSystemScript.PlayerGotKilled();
             this.gameObject.SetActive(false);
         }
 

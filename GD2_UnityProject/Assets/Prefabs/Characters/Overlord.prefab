@@ -106,10 +106,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a72b8aece1653e44ebc804149b5a1e87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementConstraint: 6
   _blocks:
-  - {fileID: 7092595066095823089, guid: 2a15973583425b84c8c59cfb7c76fa94, type: 3}
-  - {fileID: 7374774696315374807, guid: dde0d951fb4f35e4aa7362117915b751, type: 3}
-  - {fileID: 285410900236504125, guid: 9b3b93fae4eb90346b65a848c7571d85, type: 3}
-  - {fileID: 231314832585442664, guid: 532bfd74e97bcf8409dbda0f63f31f06, type: 3}
-  - {fileID: 921796882053848782, guid: 1e238b0f2926abd4c9b4e865400da2aa, type: 3}
+  - {fileID: 8302041355234425221, guid: 7a9518fce0f91d742a4452f93cb84318, type: 3}
+  - {fileID: 8679153964108786490, guid: 10ac0cb6b23dd1e4ea4ba92e30928541, type: 3}
+  - {fileID: 7291176055359440986, guid: cee2b8f628967f744b9ec5b501e2843d, type: 3}
+  - {fileID: 1660643690654134021, guid: 7af0ca099456b9940822396bc9e0106d, type: 3}
+  - {fileID: 3586642830331701452, guid: 9a11af9468499b444911a59b5681e993, type: 3}
+  - {fileID: 2190886897421087460, guid: 3b4fc299313568a4e9eb17e4dab66099, type: 3}
+  _nextBlockDelay: 5
+  _maxHoldTime: 5
+  _speed: 10

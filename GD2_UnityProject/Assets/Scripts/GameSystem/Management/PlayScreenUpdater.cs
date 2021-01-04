@@ -20,6 +20,7 @@ namespace GameSystem.Management
         private void Awake()
         {
             PlayerConfigManager.Instance.OnScoreChanged += OnScoreChanged;
+            _scoreText.text = "0000";
         }
 
         public void SetPlayerIndex(int index)

@@ -117,14 +117,18 @@ namespace GameSystem.Views
 
         private void SetShape()
         {
-            for (int i = 0; i < transform.childCount; i++)
+            Transform[] children = new Transform[transform.childCount];
+            for (int i = 0; i < children.Length; i++)
             {
-                Transform anchor = transform.GetChild(i);
-                BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, anchor.position);
-                Block block = new Block(blockPosition.X, blockPosition.Y);
-                _shapeBlocks.Add(block);
+                Transform child = transform.GetChild(i);
+                if (child.gameObject.name.Contains("Anchor"))
+                {
+                    BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, child.position);
+                    Block block = new Block(blockPosition.X, blockPosition.Y);
+                    _shapeBlocks.Add(block);
 
-                Destroy(anchor.gameObject);
+                    Destroy(child.gameObject);
+                }
             }
         }
 

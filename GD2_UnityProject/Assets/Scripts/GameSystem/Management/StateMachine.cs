@@ -18,7 +18,7 @@ namespace GameSystem.Management
             _states.Add(name, state);
         }
 
-        public void MoveTo(string name)
+        internal void MoveTo(string name)
         {
             var state = _states[name];
 

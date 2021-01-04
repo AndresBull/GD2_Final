@@ -277,7 +277,7 @@ MonoBehaviour:
   - {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
   _climberPrefab: {fileID: 8811266625348397413, guid: fb4893de3c4066d4998c2e2ddcca5988,
     type: 3}
-  _overlordPrefab: {fileID: 3912653369593397870, guid: 4a8c6fb58250f5e4ebf7c3884213a9cb,
+  _overlordPrefab: {fileID: 3912653369593397870, guid: 2d2270fe5f1844b4b9b87cd67fdf9d88,
     type: 3}
   _playerInfoPrefab: {fileID: 480674293103289864, guid: 05d141d654da6ca4aac50d22c4e5cc92,
     type: 3}

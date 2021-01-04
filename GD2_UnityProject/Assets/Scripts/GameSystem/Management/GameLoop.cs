@@ -62,7 +62,6 @@ namespace GameSystem.Management
 
         private void OnPlayStateEntered(object sender, EventArgs e)
         {
-            // TODO: move CreateNewField here
             CreateNewField(8, 8);
         }
     }

@@ -84,8 +84,10 @@ namespace GameSystem.Characters
         private bool _isJumping = false;                        // bool to determine if the character is jumping or not
         private bool _hasLadder = true;                         // backup field that determines if the climber has his ladder or not
         private Vector2 _movementConstraints;
+        private int _highestYPositionReached=0;
 
         public static FloodFill floodFiller;
+
         #endregion
 
         public bool IsCarryingLadder
@@ -126,6 +128,8 @@ namespace GameSystem.Characters
 
         private void FixedUpdate()
         {
+            CheckIfNewHeightIsReached(); //Has To do with giving points
+
             float movement = _horizontalMovement * _maxSpeed * Time.fixedDeltaTime;
             transform.position += new Vector3(movement, 0.0f, 0.0f);
             float clampedX = Mathf.Clamp(transform.position.x, _movementConstraints.x, _movementConstraints.y);
@@ -136,6 +140,18 @@ namespace GameSystem.Characters
         }
 
         #endregion
+
+        private void CheckIfNewHeightIsReached()
+        {
+            int currentYPosition = GetClimberBlockPosition().Y;
+
+            if (_highestYPositionReached < currentYPosition)
+            {
+                int scoreMultiplier =  currentYPosition-_highestYPositionReached;
+                PointSystemScript.PlayerReachedNewHeight(_playerConfig.PlayerIndex, scoreMultiplier);
+                _highestYPositionReached = currentYPosition;
+            }
+        }
 
         private BlockPosition GetClimberBlockPosition()
         {

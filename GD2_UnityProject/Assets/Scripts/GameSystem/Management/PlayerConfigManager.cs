@@ -260,6 +260,19 @@ namespace GameSystem.Management
                 SetTimer(_timeBeforeStarting);
             }
         }
+
+        internal List<int> GetClimberIndexes()
+        {
+            List<int> climberIndexes = new List<int>();
+
+            for (int i = 0; i < _playerConfigs.Count; i++)
+            {
+                if (!_playerConfigs[i].IsOverlord)
+                    climberIndexes.Add(i);
+            }
+            return climberIndexes;
+        }
+
     }
 
     public class PlayerConfiguration

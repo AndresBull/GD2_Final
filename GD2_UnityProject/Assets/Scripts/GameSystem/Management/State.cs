@@ -79,10 +79,25 @@ namespace GameSystem.Management
     {
         protected sealed override void CleanUpScene()
         {
+
         }
 
         protected sealed override void SetupScene()
         {
+            InputManager.Instance.SwitchToActionMap("UI");
+        }
+    }
+
+    public class GameOverState : BaseState
+    {
+        protected override void CleanUpScene()
+        {
+            
+        }
+
+        protected override void SetupScene()
+        {
+            SceneManager.LoadScene("HighScoreScreen");
             InputManager.Instance.SwitchToActionMap("UI");
         }
     }

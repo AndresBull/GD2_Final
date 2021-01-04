@@ -523,6 +523,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Fast Drop Block",
+                    "type": "Button",
+                    "id": "5602630d-4525-4dad-bec0-0bb5681ddfae",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -589,6 +597,28 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Drop Block",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c07e62a3-0776-4af3-bbe7-e8177cf63d20",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Fast Drop Block",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "92fb6d3d-4eea-477e-87d8-99363839ea7f",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Fast Drop Block",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

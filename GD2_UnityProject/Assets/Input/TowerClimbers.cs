@@ -536,6 +536,14 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Fast Drop Block"",
+                    ""type"": ""Button"",
+                    ""id"": ""5602630d-4525-4dad-bec0-0bb5681ddfae"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -602,6 +610,28 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Drop Block"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c07e62a3-0776-4af3-bbe7-e8177cf63d20"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Fast Drop Block"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""92fb6d3d-4eea-477e-87d8-99363839ea7f"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Fast Drop Block"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -689,6 +719,7 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
         m_Overlord = asset.FindActionMap("Overlord", throwIfNotFound: true);
         m_Overlord_MoveHand = m_Overlord.FindAction("Move Hand", throwIfNotFound: true);
         m_Overlord_DropBlock = m_Overlord.FindAction("Drop Block", throwIfNotFound: true);
+        m_Overlord_FastDropBlock = m_Overlord.FindAction("Fast Drop Block", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -870,12 +901,14 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
     private IOverlordActions m_OverlordActionsCallbackInterface;
     private readonly InputAction m_Overlord_MoveHand;
     private readonly InputAction m_Overlord_DropBlock;
+    private readonly InputAction m_Overlord_FastDropBlock;
     public struct OverlordActions
     {
         private @TowerClimbers m_Wrapper;
         public OverlordActions(@TowerClimbers wrapper) { m_Wrapper = wrapper; }
         public InputAction @MoveHand => m_Wrapper.m_Overlord_MoveHand;
         public InputAction @DropBlock => m_Wrapper.m_Overlord_DropBlock;
+        public InputAction @FastDropBlock => m_Wrapper.m_Overlord_FastDropBlock;
         public InputActionMap Get() { return m_Wrapper.m_Overlord; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -891,6 +924,9 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 @DropBlock.started -= m_Wrapper.m_OverlordActionsCallbackInterface.OnDropBlock;
                 @DropBlock.performed -= m_Wrapper.m_OverlordActionsCallbackInterface.OnDropBlock;
                 @DropBlock.canceled -= m_Wrapper.m_OverlordActionsCallbackInterface.OnDropBlock;
+                @FastDropBlock.started -= m_Wrapper.m_OverlordActionsCallbackInterface.OnFastDropBlock;
+                @FastDropBlock.performed -= m_Wrapper.m_OverlordActionsCallbackInterface.OnFastDropBlock;
+                @FastDropBlock.canceled -= m_Wrapper.m_OverlordActionsCallbackInterface.OnFastDropBlock;
             }
             m_Wrapper.m_OverlordActionsCallbackInterface = instance;
             if (instance != null)
@@ -901,6 +937,9 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 @DropBlock.started += instance.OnDropBlock;
                 @DropBlock.performed += instance.OnDropBlock;
                 @DropBlock.canceled += instance.OnDropBlock;
+                @FastDropBlock.started += instance.OnFastDropBlock;
+                @FastDropBlock.performed += instance.OnFastDropBlock;
+                @FastDropBlock.canceled += instance.OnFastDropBlock;
             }
         }
     }
@@ -970,5 +1009,6 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
     {
         void OnMoveHand(InputAction.CallbackContext context);
         void OnDropBlock(InputAction.CallbackContext context);
+        void OnFastDropBlock(InputAction.CallbackContext context);
     }
 }

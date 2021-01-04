@@ -12,12 +12,12 @@ namespace GameSystem.Views
     public class BlockView : MonoBehaviour
     {
         private List<Block> _shapeBlocks = new List<Block>();
+        private BlockPosition _blockPosition;
         private BlockField _field;
         private BlockFieldView _fieldView;
-        private BlockPosition _position;
-        private float _dropDownDelay = 1f;
+        private float _elapsedDelayTime = 0f;
+        private float _minTimeDelay = 0.1f;
 
-        public FloodFill floodFiller;
         internal Vector3 Size
         {
             set
@@ -34,8 +34,13 @@ namespace GameSystem.Views
                 transform.localScale = new Vector3(ratioX, ratioY, ratioZ);
             }
         }
+
+
+        public FloodFill floodFiller;
         public int BlockWidth { get; internal set; }
         public int BlockHeight { get; internal set; }
+        public float _dropDownDelay { get; internal set; } = 0.4f;
+
 
         private void Awake()
         {
@@ -49,6 +54,7 @@ namespace GameSystem.Views
             }
 
             SetDimensions();
+            enabled = false;
         }
 
         private IEnumerator SetupBlock()
@@ -62,6 +68,47 @@ namespace GameSystem.Views
             }
 
             SetDimensions();
+            enabled = false;
+        }
+
+        private void SetSize()
+        {
+            Size = _fieldView.PositionConverter.BlockScale;
+        }
+
+        private void SetShape()
+        {
+            Transform[] children = new Transform[transform.childCount];
+            for (int i = 0; i < children.Length; i++)
+            {
+                Transform child = transform.GetChild(i);
+                if (child.gameObject.name.Contains("Anchor"))
+                {
+                    BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, child.position);
+                    Block block = new Block(blockPosition.X, blockPosition.Y);
+                    _shapeBlocks.Add(block);
+
+                    Destroy(child.gameObject);
+                }
+            }
+        }
+
+        private void SetDimensions()
+        {
+            BlockWidth = 0;
+            BlockHeight = 0;
+            BlockPosition baseAnchorBlockPos = _fieldView.PositionConverter.ToBlockPosition(_field, transform.GetChild(0).position);
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Transform anchor = transform.GetChild(i);
+                BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, anchor.position);
+
+                int width = blockPosition.X - baseAnchorBlockPos.X + 1;
+                BlockWidth = Mathf.Max(width, BlockWidth);
+
+                int height = blockPosition.Y - baseAnchorBlockPos.Y + 1;
+                BlockHeight = Mathf.Max(height, BlockHeight);
+            }
         }
 
         private List<BlockPosition> Neighbours(BlockPosition startBlock)
@@ -115,92 +162,53 @@ namespace GameSystem.Views
             return false;
         }
 
-        private void SetShape()
-        {
-            Transform[] children = new Transform[transform.childCount];
-            for (int i = 0; i < children.Length; i++)
-            {
-                Transform child = transform.GetChild(i);
-                if (child.gameObject.name.Contains("Anchor"))
-                {
-                    BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, child.position);
-                    Block block = new Block(blockPosition.X, blockPosition.Y);
-                    _shapeBlocks.Add(block);
-
-                    Destroy(child.gameObject);
-                }
-            }
-        }
-
-        private void SetDimensions()
-        {
-            BlockWidth = 0;
-            BlockHeight = 0;
-            BlockPosition baseAnchorBlockPos = _fieldView.PositionConverter.ToBlockPosition(_field, transform.GetChild(0).position);
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                Transform anchor = transform.GetChild(i);
-                BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, anchor.position);
-
-                int width = blockPosition.X - baseAnchorBlockPos.X + 1;
-                BlockWidth = Mathf.Max(width, BlockWidth);
-
-                int height = blockPosition.Y - baseAnchorBlockPos.Y + 1;
-                BlockHeight = Mathf.Max(height, BlockHeight);
-            }
-        }
-
-        private void SetSize()
-        {
-            Size = _fieldView.PositionConverter.BlockScale;
-        }
-
-        private void UpdateBlockView(int offsetY)
-        {
-            UpdateBlocks(offsetY);
-
-            BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
-            blockPosition.Y += offsetY;
-            transform.position = _fieldView.PositionConverter.ToWorldPosition(_field, blockPosition)
-                + new Vector3((BlockWidth % 2) * (_fieldView.PositionConverter.BlockScale.x / 2), 0, 0);
-        }
-
-        private void UpdateBlocks(int offset)
-        {
-            for (int i = 0; i < _shapeBlocks.Count; i++)
-            {
-                Block block = _shapeBlocks[i];
-                Block newBlock = new Block(block.Position.X, block.Position.Y + offset);
-                _shapeBlocks[i] = newBlock;
-            }
-        }
-
-
-        public IEnumerator Drop()
+        public void FastDrop()
         {
             SetShape();
-
-            BlockPosition startBlock = new BlockPosition(_field.Rows + 1, _field.Columns);
+            _blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
             floodFiller = new FloodFill(Neighbours);
             ClimberBehaviour.floodFiller = floodFiller;
 
-            while (Application.isPlaying)
+            _dropDownDelay = _minTimeDelay;
+
+            enabled = true;
+        }
+
+        public void SlowDrop()
+        {
+            SetShape();
+            _blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
+            floodFiller = new FloodFill(Neighbours);
+            ClimberBehaviour.floodFiller = floodFiller;
+
+            enabled = true;
+        }
+
+        private void Update()
+        {
+            _elapsedDelayTime += Time.deltaTime;
+            if (_elapsedDelayTime >= _dropDownDelay)
             {
+                _elapsedDelayTime -= _dropDownDelay;
                 int offsetPosition = -1;
+
+                //Should only happen if the block is put atop the limit
                 if (_shapeBlocks.Any(b => _field.BlockAt(new BlockPosition(b.Position.X, b.Position.Y + offsetPosition)) != null)
                     || _shapeBlocks.Any(b => b.Position.Y <= 0))
                 {
-                    //Should only happen if the block is put atop the limit
                     offsetPosition = 0;
                     Debug.Log("Block Above Height Limit");
 
                     GameLoop.Instance.StateMachine.MoveTo(GameStates.Play);
-
-                    yield break;
+                    StopUpdate();
+                    return;
                 }
 
+
+                //Working like normal
                 if (offsetPosition != 0)
                 {
+                    //Landed check
                     if (_shapeBlocks.Any(b => _field.BlockAt(new BlockPosition(b.Position.X, b.Position.Y + offsetPosition * 2)) != null)
                         || _shapeBlocks.Any(b => b.Position.Y + offsetPosition <= 0))
                     {
@@ -224,13 +232,58 @@ namespace GameSystem.Views
                         if (PlayerConfigManager.Instance.GetAllClimbers().All(c => !c.activeInHierarchy))
                             GameLoop.Instance.StateMachine.MoveTo(GameStates.Play);
 
-
-                        yield break;
+                        StopUpdate();
+                        return;
                     }
+
+                    //Functions when normally falling
                     UpdateBlockView(offsetPosition);
+
+                    //Need to make this a smoother function
+                    _dropDownDelay = Mathf.Max(_dropDownDelay * 0.8f, _minTimeDelay);
                 }
-                yield return new WaitForSeconds(_dropDownDelay);
             }
+        }
+
+        private void FixedUpdate()
+        {
+            var blockHeightPercentage = Mathf.Min((_elapsedDelayTime / _dropDownDelay), 1);
+
+            transform.position = _fieldView.PositionConverter.ToWorldPosition(_field, _blockPosition)
+                + new Vector3((BlockWidth % 2) * (_fieldView.PositionConverter.BlockScale.x / 2), 0, 0)
+                - new Vector3(0, blockHeightPercentage * _fieldView.PositionConverter.BlockScale.y, 0);
+        }
+
+        private void UpdateBlockView(int offsetY)
+        {
+            UpdateBlocks(offsetY);
+
+            BlockPosition blockPosition = _blockPosition;
+            blockPosition.Y += offsetY;
+            _blockPosition = blockPosition;
+
+#if UNITY_EDITOR
+            //This is not necessary, just to check for visual "glitching"
+            transform.position = _fieldView.PositionConverter.ToWorldPosition(_field, blockPosition)
+                + new Vector3((BlockWidth % 2) * (_fieldView.PositionConverter.BlockScale.x / 2), 0, 0);
+#endif
+        }
+
+        private void UpdateBlocks(int offset)
+        {
+            for (int i = 0; i < _shapeBlocks.Count; i++)
+            {
+                Block block = _shapeBlocks[i];
+                Block newBlock = new Block(block.Position.X, block.Position.Y + offset);
+                _shapeBlocks[i] = newBlock;
+            }
+        }
+
+        private void StopUpdate()
+        {
+            _dropDownDelay = 1;
+            _elapsedDelayTime = 0;
+            enabled = false;
         }
 
         public void MoveAccordingToHand(Vector3 handPosition)

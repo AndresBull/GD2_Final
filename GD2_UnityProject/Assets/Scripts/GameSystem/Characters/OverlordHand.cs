@@ -73,7 +73,16 @@ namespace GameSystem.Characters
         private void DropBlock()
         {
             _hasBlock = false;
-            _holdBlockView?.StartCoroutine(_holdBlockView.Drop());
+            _holdBlockView?.SlowDrop();
+            _holdBlockView = null;
+            _nextBlockTimer = 0;
+            _holdTimer = 0;
+        }
+
+        private void FastDropBlock()
+        {
+            _hasBlock = false;
+            _holdBlockView?.FastDrop();
             _holdBlockView = null;
             _nextBlockTimer = 0;
             _holdTimer = 0;
@@ -156,6 +165,17 @@ namespace GameSystem.Characters
                 if (_hasBlock)
                 {
                     DropBlock();
+                }
+            }
+        }
+
+        public void OnFastDropBlock(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                if (_hasBlock)
+                {
+                    FastDropBlock();
                 }
             }
         }

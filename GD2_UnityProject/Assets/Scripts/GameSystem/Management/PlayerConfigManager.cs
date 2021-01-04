@@ -76,6 +76,16 @@ namespace GameSystem.Management
             return climbers;
         }
 
+        internal int GetOverLordIndex()
+        {
+            for (int i = 0; i < _playerConfigs.Count; i++)
+            {
+                if (_playerConfigs[i].IsOverlord)
+                    return i;
+            }
+            return -1;
+        }
+
         internal List<PlayerConfiguration> GetPlayerConfigs()
         {
             return _playerConfigs;

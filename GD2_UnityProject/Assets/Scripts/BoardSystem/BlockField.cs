@@ -39,13 +39,24 @@ namespace BoardSystem
         {
             for (int i = -1; i < Columns; i++)
             {
-                _rimBlocks.Add(new BlockPosition { X = i, Y = -1 },new Block(i,-1));
-                //_rimBlocks.Add(new BlockPosition { X = Rows + 1, Y = i }, null);
+                BlockPosition keyToAdd = new BlockPosition { X = i, Y = -1 };
+                if (!_rimBlocks.ContainsKey(keyToAdd))
+                {
+                    _rimBlocks.Add(keyToAdd, new Block(i, -1));
+                }
             }
             for (int i = -1; i < Rows; i++)
             {
-                _rimBlocks.Add(new BlockPosition { X = -1, Y = i }, new Block(-1,i));
-                _rimBlocks.Add(new BlockPosition { X = Columns + 1, Y = i }, new Block(Columns + 1, i));
+                BlockPosition keyToAdd = new BlockPosition { X = -1, Y = i };
+                if (!_rimBlocks.ContainsKey(keyToAdd))
+                {
+                    _rimBlocks.Add(keyToAdd, new Block(-1, i));
+                }
+                keyToAdd = new BlockPosition { X = Columns + 1, Y = i };
+                if (!_rimBlocks.ContainsKey(keyToAdd))
+                {
+                    _rimBlocks.Add(keyToAdd, new Block(Columns + 1, i));
+                }
             }
         }
         public Block BlockAt(BlockPosition blockPosition)

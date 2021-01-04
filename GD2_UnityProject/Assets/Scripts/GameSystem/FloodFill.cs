@@ -31,7 +31,10 @@ namespace GameSystem
             blocksToVisit.Enqueue(startingPosition);
             foreach (var rimPosition in GameLoop.Instance.Field.GetAllRimPositions())
             {
-                blocksToVisit.Enqueue(rimPosition);
+                if (!blocksToVisit.Contains(rimPosition))
+                {
+                    blocksToVisit.Enqueue(rimPosition);
+                }
             }
             while (blocksToVisit.Count > 0)
             {

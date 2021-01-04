@@ -76,6 +76,7 @@ namespace GameSystem.Management
             return climbers;
         }
 
+        // TODO: remove this
         internal int GetOverLordIndex()
         {
             for (int i = 0; i < _playerConfigs.Count; i++)
@@ -150,11 +151,12 @@ namespace GameSystem.Management
                 _playerConfigs[playerIndex].IsOverlord = true;
                 return;
             }
-            if (overlord.Count <= 0)
-            {
-                _playerConfigs[playerIndex].IsOverlord = true;
-                return;
-            }
+            // TODO: enable this after testing to set an overlord
+            //if (overlord.Count <= 0)
+            //{
+            //    _playerConfigs[playerIndex].IsOverlord = true;
+            //    return;
+            //}
         }
 
         internal void SetPlayerCharacter(int playerIndex, Mesh character)

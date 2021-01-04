@@ -158,13 +158,14 @@ namespace GameSystem.Management
             playerInfo.transform.SetParent(infoPanel.transform, false);
             playerInfo.GetComponent<PlayScreenUpdater>().SetPlayerIndex(_input.playerIndex);
 
-            if (_config.IsOverlord)
-            {
-                var overlordSpawn = GameObject.Find("OverlordSpawn").transform;
-                GameObject overlord = Instantiate(_overlordPrefab, overlordSpawn.position, overlordSpawn.rotation);
-                overlord.transform.SetParent(transform);
-                return;
-            }
+            // TODO: enable after testing is done to spawn overlord 
+            //if (_config.IsOverlord)
+            //{
+            //    var overlordSpawn = GameObject.Find("OverlordSpawn").transform;
+            //    GameObject overlord = Instantiate(_overlordPrefab, overlordSpawn.position, overlordSpawn.rotation);
+            //    overlord.transform.SetParent(transform);
+            //    return;
+            //}
             GameObject climber = Instantiate(_climberPrefab, spawns.GetChild(_input.playerIndex).position, spawns.GetChild(_input.playerIndex).rotation, transform);
             climber.transform.SetParent(transform);
             climber.GetComponent<ClimberBehaviour>().InitializePlayer(_config);

@@ -29,7 +29,7 @@ namespace GameSystem.Characters
         [Tooltip("The time interval in which a jump can be called before the player touches the ground (in seconds).")]
         [SerializeField] private float _jumpDelay = 0.25f;
         [Tooltip("The height of the jump (in units).")]
-        [SerializeField] private float _jumpHeight = 0.5f;
+        [SerializeField] private float _jumpHeight = 1f;
 
         [Header("Physics")]
         [Tooltip("The layers to test collision against. Default tests against everything.")]

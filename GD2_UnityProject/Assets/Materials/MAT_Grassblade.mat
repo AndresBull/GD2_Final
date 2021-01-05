@@ -79,11 +79,14 @@ Material:
     - _windDensity: 0.5
     - _windStrenght: 2
     m_Colors:
+    - Color_FB7B62C5: {r: 0.34509796, g: 0.5686274, b: 0.49019605, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _color: {r: 0.490196, g: 0.7725491, b: 0.6666667, a: 1}
+    - _color: {r: 0.4901961, g: 0.7725491, b: 0.6666667, a: 1}
+    - _color1: {r: 0.49019608, g: 0.77254903, b: 0.5740008, a: 1}
+    - _color2: {r: 0.3615611, g: 0.6132076, b: 0.43607688, a: 1}
     - _windMovemnt: {r: 0.5, g: 0, b: 0, a: 0}
 --- !u!114 &7931406146444353408
 MonoBehaviour:

@@ -550,6 +550,20 @@ namespace GameSystem.Characters
                 }
             }
         }
+
+        public void OnPushBlock(InputValue value)
+        {
+            if (value.isPressed && _horizontalMovement != 0)
+            {
+                var direction = (int)Mathf.Sign(_horizontalMovement);
+
+                var checkBlockPos = GetClimberBlockPosition();
+                checkBlockPos.X += direction;
+                _blockField.BlockAt(checkBlockPos);
+                //Need to find a way to link block to blockview
+
+            }
+        }
         #endregion
     }
 }

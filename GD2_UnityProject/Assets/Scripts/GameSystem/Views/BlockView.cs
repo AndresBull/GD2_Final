@@ -41,7 +41,7 @@ namespace GameSystem.Views
         public FloodFill floodFiller;
         public int BlockWidth { get; internal set; }
         public int BlockHeight { get; internal set; }
-        public float _dropDownDelay { get; internal set; } = 0.4f;
+        public float DropDownDelay { get; internal set; } = 0.4f;
 
 
         private void Awake()
@@ -167,9 +167,9 @@ namespace GameSystem.Views
         private void Update()
         {
             _elapsedDelayTime += Time.deltaTime;
-            if (_elapsedDelayTime >= _dropDownDelay)
+            if (_elapsedDelayTime >= DropDownDelay)
             {
-                _elapsedDelayTime -= _dropDownDelay;
+                _elapsedDelayTime -= DropDownDelay;
                 int offsetPosition = -1;
 
                 //Should only happen if the block is put atop the limit
@@ -234,14 +234,14 @@ namespace GameSystem.Views
                     UpdateBlockView(new Vector2Int(0,offsetPosition));
 
                     //Need to make this a smoother function
-                    _dropDownDelay = Mathf.Max(_dropDownDelay * 0.8f, _minTimeDelay);
+                    DropDownDelay = Mathf.Max(DropDownDelay * 0.8f, _minTimeDelay);
                 }
             }
         }
 
         private void FixedUpdate()
         {
-            var blockHeightPercentage = Mathf.Min((_elapsedDelayTime / _dropDownDelay), 1);
+            var blockHeightPercentage = Mathf.Min((_elapsedDelayTime / DropDownDelay), 1);
 
             transform.position = _fieldView.PositionConverter.ToWorldPosition(_field, _blockPosition)
                 + new Vector3((BlockWidth % 2) * (_fieldView.PositionConverter.BlockScale.x / 2), 0, 0)
@@ -272,7 +272,7 @@ namespace GameSystem.Views
 
         private void StopUpdate()
         {
-            _dropDownDelay = 1;
+            DropDownDelay = 1;
             _elapsedDelayTime = 0;
             _wasThrownHard = false;
             enabled = false;
@@ -287,7 +287,7 @@ namespace GameSystem.Views
             floodFiller = new FloodFill(Neighbours);
             ClimberBehaviour.FloodFiller = floodFiller;
             _wasThrownHard = true;
-            _dropDownDelay = _minTimeDelay;
+            DropDownDelay = _minTimeDelay;
 
             enabled = true;
         }
@@ -345,19 +345,14 @@ namespace GameSystem.Views
             }
 
 
-            //Checks if player is left or right and set direction (simple, but might give problems with weird shapes)
-            // int direction;
-            // if (transform.position.x <= playerPosition.x)
-            //     direction = -1;
-            // else
-            //     direction = 1;
-
-
             //Check if other blocks are in the direction
             foreach (var block in _shapeBlocks)
             {
                 var posInDirection = block.Position;
                 posInDirection.X += direction;
+
+                if (posInDirection.X < 0 || posInDirection.X >= _field.Columns)
+                    return;
 
                 var checkBlock = _field.BlockAt(posInDirection);
                 if (_shapeBlocks.Contains(checkBlock))
@@ -368,7 +363,14 @@ namespace GameSystem.Views
             }
 
 
-            //Move blockView to the right
+            //Unregister old blocks from field
+            foreach (Block b in _shapeBlocks)
+            {
+                _field.RemoveFromDictionary(b);
+            }
+
+
+            //Move blockView to the Direction
             UpdateBlockView(new Vector2Int(direction, 0));
             SoundManager.Instance.PlayPushBlock();
 
@@ -379,12 +381,27 @@ namespace GameSystem.Views
                 var posBelow = block.Position;
                 posBelow.Y -= 1;
 
+                if (posBelow.Y < 0)
+                {
+                    foreach (Block b in _shapeBlocks)
+                    {
+                        _field.AddToDictionary(b);
+                    }
+                    return;
+                }
+
                 var checkBlock = _field.BlockAt(posBelow);
                 if (_shapeBlocks.Contains(checkBlock))
                     continue;
 
                 if (checkBlock != null)
+                {
+                    foreach (Block b in _shapeBlocks)
+                    {
+                        _field.AddToDictionary(b);
+                    }
                     return;
+                }
             }
 
 

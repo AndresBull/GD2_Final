@@ -105,10 +105,10 @@ namespace GameSystem.Characters
         private void FixedUpdate()
         {
             CheckIfNewHeightIsReached();
-            
-            if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + _colExtents.y/2, transform.position.z), transform.forward, _rayLength, _collisionMask)
+            var horizontalMovement = _horizontalMovement;
+            if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + _colExtents.y / 2, transform.position.z), transform.forward, _rayLength, _collisionMask)
                 || Physics.Raycast(new Vector3(transform.position.x, transform.position.y - _colExtents.y / 2, transform.position.z), transform.forward, _rayLength, _collisionMask))
-                _horizontalMovement = 0.0f;
+                horizontalMovement = 0f;
 
             if (_rb.velocity.y <= 0)
             {
@@ -124,7 +124,7 @@ namespace GameSystem.Characters
                 //}
             }
 
-            float movement = _horizontalMovement * _maxSpeed * Time.fixedDeltaTime;
+            float movement = horizontalMovement * _maxSpeed * Time.fixedDeltaTime;
             transform.position += new Vector3(movement, 0.0f, 0.0f);
 
             float clampedX = Mathf.Clamp(transform.position.x, _movementConstraints.x, _movementConstraints.y);
@@ -559,9 +559,11 @@ namespace GameSystem.Characters
 
                 var checkBlockPos = GetClimberBlockPosition();
                 checkBlockPos.X += direction;
-                _blockField.BlockAt(checkBlockPos);
-                //Need to find a way to link block to blockview
+                var checkBlock = _blockField.BlockAt(checkBlockPos);
 
+                //Need to maybe find a better way to link block to blockview
+                var checkblockView = _blockFieldView.CheckIfBlockViewContainsBlock(checkBlock);
+                checkblockView?.PushBlock(transform.position, direction);
             }
         }
         #endregion

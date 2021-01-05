@@ -194,20 +194,21 @@ namespace GameSystem.Views
                     {
                         Debug.Log("Landed");
 
+                        //Update all views/blocks/positions and register them in the field
                         UpdateBlockView(new Vector2Int(0, offsetPosition));
-
                         foreach (Block block in _shapeBlocks)
                         {
                             _field.AddToDictionary(block);
                         }
 
+                        //Floodfill and check for trapped players
                         floodFiller.FloodedPositions = floodFiller.Flood(new BlockPosition(0, _field.Rows));
-
                         foreach (GameObject climber in PlayerConfigManager.Instance.GetAllClimbers())
                         {
                             climber.GetComponent<ClimberBehaviour>().CheckIfTrapped();
                         }
 
+                        //Check for next round
                         if (PlayerConfigManager.Instance.GetAllClimbers().All(c => !c.activeInHierarchy))
                         {
                             GameLoop.Instance.StateMachine.MoveTo(GameStates.Play);
@@ -215,6 +216,7 @@ namespace GameSystem.Views
                             return;
                         }
 
+                        //Sound effects
                         if (_wasThrownHard)
                         {
                             Camera.main.gameObject.GetComponent<ScreenShake>().BigShake();
@@ -226,6 +228,8 @@ namespace GameSystem.Views
                             SoundManager.Instance.PlaySlowBlockLanded();
                         }
 
+                        //call when nothing special happenend
+                        _fieldView.AddToBlockViewList(this);
                         StopUpdate();
                         return;
                     }
@@ -253,6 +257,7 @@ namespace GameSystem.Views
             UpdateBlocks(offset);
 
             BlockPosition blockPosition = _blockPosition;
+            blockPosition.X += offset.x;
             blockPosition.Y += offset.y;
             _blockPosition = blockPosition;
 
@@ -407,6 +412,11 @@ namespace GameSystem.Views
 
             //Fall again
             SlowDrop();
+        }
+
+        public bool CheckIfContainsBlock(Block block)
+        {
+            return _shapeBlocks.Contains(block);
         }
     }
 }

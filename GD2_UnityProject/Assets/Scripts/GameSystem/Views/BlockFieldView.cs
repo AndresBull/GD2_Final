@@ -19,6 +19,8 @@ namespace GameSystem.Views
 
         public PositionConverter PositionConverter => _positionConverter;
 
+        private List<BlockView> _blockViews = new List<BlockView>();
+
         private void Awake()
         {
             GameLoop.Instance.FieldView = this;
@@ -42,6 +44,22 @@ namespace GameSystem.Views
             leftWall.transform.localScale = wallScale;
             rightWall.transform.position = rightWallPos;
             rightWall.transform.localScale = wallScale;
+        }
+
+        public void AddToBlockViewList(BlockView blockView)
+        {
+            _blockViews.Add(blockView);
+        }
+
+        public BlockView CheckIfBlockViewContainsBlock(Block block)
+        {
+            foreach(var blockView in _blockViews)
+            {
+                if (blockView.CheckIfContainsBlock(block))
+                    return blockView;
+            }
+
+            return null;
         }
     }
 }

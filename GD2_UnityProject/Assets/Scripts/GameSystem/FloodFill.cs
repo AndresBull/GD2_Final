@@ -29,13 +29,7 @@ namespace GameSystem
 
             var blocksToVisit = new Queue<BlockPosition>();
             blocksToVisit.Enqueue(startingPosition);
-            //foreach (var rimPosition in GameLoop.Instance.Field.GetAllRimPositions())
-            //{
-            //    if (!blocksToVisit.Contains(rimPosition))
-            //    {
-            //        blocksToVisit.Enqueue(rimPosition);
-            //    }
-            //}
+           
             while (blocksToVisit.Count > 0)
             {
                 var currentBlock = blocksToVisit.Dequeue();

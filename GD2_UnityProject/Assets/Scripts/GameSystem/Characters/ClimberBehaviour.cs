@@ -149,10 +149,17 @@ namespace GameSystem.Characters
         public void CheckIfTrapped()
         {
             List<BlockPosition> filledPositions = _blockField.GetAllFieldPositions();
+
+            foreach (BlockPosition rimPosition in _blockField.GetAllRimPositions())
+            {
+                filledPositions.Add(rimPosition);
+            }
+
             foreach (BlockPosition floodedPosition in FloodFiller.FloodedPositions)
             {
                 filledPositions.Remove(floodedPosition);
             }
+            
             if (filledPositions.Contains(_blockFieldView.PositionConverter.ToBlockPosition(_blockField, transform.position)))
             {
                 GetKilled();

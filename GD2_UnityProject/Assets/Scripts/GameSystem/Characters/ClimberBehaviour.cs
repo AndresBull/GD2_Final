@@ -71,10 +71,14 @@ namespace GameSystem.Characters
         private Vector2 _movementConstraints;
         #endregion
 
-        public bool IsCarryingLadder
+        private bool IsCarryingLadder
         {
             get => _hasLadder;
-            private set => _hasLadder = value;
+            set
+            {
+                _hasLadder = value;
+                PlayerConfigManager.Instance.ToggleLadderEquip(_playerConfig.PlayerIndex, _hasLadder);
+            }
         }
 
         #region Unity Lifecycle
@@ -271,6 +275,34 @@ namespace GameSystem.Characters
             }
         }
 
+        private void PickupLadder()
+        {
+            if (!IsCarryingLadder)
+            {
+                BlockPosition climberBlock = GetClimberBlockPosition();
+
+                // TODO: change this method to use the blocks assigend in teh PlaceLadder method instead of recalculating everything
+
+                // get all objects inside the range and filter for ladders
+                var colliders = Physics.OverlapSphere(transform.position, _range);
+
+                foreach (var collider in colliders)
+                {
+                    if (collider.transform.root.TryGetComponent(out Ladder ladderScript))
+                    {
+                        if (ladderScript.Owner == gameObject)
+                        {
+                            Destroy(ladderScript.gameObject);
+                            print("Picked up Ladder");
+                            IsCarryingLadder = true;
+                            break;
+                        }
+                        continue;
+                    }
+                }
+            }
+        }
+
         private void PlaceLadderAt(BlockPosition climberBlock)
         {
             bool placeLadderWest;
@@ -302,6 +334,7 @@ namespace GameSystem.Characters
             Vector3 position = transform.position;
             position.y -= _colExtents.y;
             Quaternion rotation;
+            //_placementDistance = _blockFieldView.PositionConverter.BlockScale.x - (GetXLocationOnBlock() + Mathf.Cos(30.0f * Mathf.Deg2Rad) * ladderLength);
 
             if (placeLadderLeft)
             {
@@ -501,42 +534,9 @@ namespace GameSystem.Characters
                     }
 
                     PlaceLadderAt(climberBlock);
+                    return;
                 }
-                else
-                {
-                    print("No ladder available");
-                }
-            }
-        }
-
-        public void OnPickupLadder(InputValue value)
-        {
-            if (value.isPressed)
-            {
-                if (!IsCarryingLadder)
-                {
-                    BlockPosition climberBlock = GetClimberBlockPosition();
-
-                    // TODO: change this method to use the blocks assigend in teh PlaceLadder method instead of recalculating everything
-
-                    // get all objects inside the range and filter for ladders
-                    var colliders = Physics.OverlapSphere(transform.position, _range);
-
-                    foreach (var collider in colliders)
-                    {
-                        if (collider.transform.root.TryGetComponent(out Ladder ladderScript))
-                        {
-                            if (ladderScript.Owner == gameObject)
-                            {
-                                Destroy(ladderScript.gameObject);
-                                print("Picked up Ladder");
-                                IsCarryingLadder = true;
-                                break;
-                            }
-                            continue;
-                        }
-                    }
-                }
+                PickupLadder();
             }
         }
 

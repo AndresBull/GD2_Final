@@ -24,6 +24,7 @@ namespace GameSystem.Management
         private bool _isTimerActive = false;
 
         public event EventHandler<ScoreChangedEventArgs> OnScoreChanged;
+        public event EventHandler<LadderEquipChangedEventArgs> OnLadderEquipChanged;
         public event EventHandler OnCharacterMeshChanged;
         public event EventHandler OnCharacterMaterialChanged;
 
@@ -94,18 +95,6 @@ namespace GameSystem.Management
             return _playerConfigs;
         }
 
-        internal void RemovePlayers(int lastPlayerRemoved = 0)
-        {
-            if (_playerConfigs.Count - 1 <= lastPlayerRemoved)
-                return;
-
-            for (int i = _playerConfigs.Count - 1; i >= lastPlayerRemoved; i++)
-            {
-                PlayerConfiguration config = _playerConfigs[i];
-                OnPlayerLeft(config.Input);
-            }
-        }
-        
         internal void DestroyConfigChildren()
         {
             foreach (var config in _playerConfigs)
@@ -135,6 +124,18 @@ namespace GameSystem.Management
                 var config = _playerConfigs[input.playerIndex];
                 _playerConfigs.Remove(config);
                 Destroy(config.Input.gameObject);
+            }
+        }
+
+        internal void RemovePlayers(int lastPlayerRemoved = 0)
+        {
+            if (_playerConfigs.Count - 1 <= lastPlayerRemoved)
+                return;
+
+            for (int i = _playerConfigs.Count - 1; i >= lastPlayerRemoved; i++)
+            {
+                PlayerConfiguration config = _playerConfigs[i];
+                OnPlayerLeft(config.Input);
             }
         }
 
@@ -178,6 +179,11 @@ namespace GameSystem.Management
             OnCharacterMaterialChanged?.Invoke(this, EventArgs.Empty);
         }
 
+        internal void ToggleLadderEquip(int playerIndex, bool hasLadder)
+        {
+            OnLadderEquipChanged?.Invoke(this, new LadderEquipChangedEventArgs(playerIndex, hasLadder));
+        }
+        
         internal void ToggleReadyPlayer(int playerIndex)
         {
             if (!_playerConfigs[playerIndex].IsReady)
@@ -292,6 +298,18 @@ namespace GameSystem.Management
         {
             PlayerIndex = playerIndex;
             NewScore = newScore;
+        }
+    }
+
+    public class LadderEquipChangedEventArgs : EventArgs
+    {
+        public int PlayerIndex;
+        public bool IsCarryingLadder;
+
+        public LadderEquipChangedEventArgs(int playerIndex, bool isCarryingLadder)
+        {
+            PlayerIndex = playerIndex;
+            IsCarryingLadder = isCarryingLadder;
         }
     }
 }

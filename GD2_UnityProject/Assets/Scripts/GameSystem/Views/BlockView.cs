@@ -283,8 +283,6 @@ namespace GameSystem.Views
             enabled = false;
         }
 
-
-
         public void FastDrop()
         {
             SetShape();

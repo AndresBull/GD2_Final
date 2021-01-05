@@ -20,6 +20,8 @@ namespace GameSystem.Management
         private void Awake()
         {
             PlayerConfigManager.Instance.OnScoreChanged += OnScoreChanged;
+            PlayerConfigManager.Instance.OnLadderEquipChanged += OnLadderEquipChanged;
+            _ladderImage.gameObject.SetActive(true);
             _scoreText.text = "0000";
         }
 
@@ -35,6 +37,14 @@ namespace GameSystem.Management
                 return;
 
             _scoreText.text = e.NewScore.ToString("0000");
+        }
+
+        private void OnLadderEquipChanged(object sender, LadderEquipChangedEventArgs e)
+        {
+            if (e.PlayerIndex != _playerIndex)
+                return;
+            
+            //_ladderImage.gameObject.SetActive(e.IsCarryingLadder);
         }
 
     }

@@ -9,23 +9,23 @@ namespace GameSystem.Characters
         [Tooltip("The speed of the climber when mounting a ladder.")][SerializeField]
         private float _climbSpeed = 0;
 
-        private ClimberBehaviour _climberScript;
+        private ClimberBehaviour _moveScript;
         private Transform _ladderClimbed;
 
-        private bool _isClimbingUp;
-        private bool _isOnTopTrigger;
-        private bool _isOnBottomTrigger;
-        private int _direction;
+        private bool _isClimbingUp = false;
+        private bool _isOnTopTrigger = false;
+        private bool _isOnBottomTrigger = false;
+        private int _direction = 0;
 
         public bool IsClimbing
         {
-            get => _climberScript.IsClimbing;
-            set => _climberScript.IsClimbing = value;
+            get => _moveScript.IsClimbing;
+            set => _moveScript.IsClimbing = value;
         }
 
         private void Start()
         {
-            _climberScript = GetComponent<ClimberBehaviour>();
+            _moveScript = GetComponent<ClimberBehaviour>();
         }
 
         private void FixedUpdate()
@@ -53,34 +53,33 @@ namespace GameSystem.Characters
         {
             if (!_isOnBottomTrigger && !_isOnTopTrigger && !IsClimbing)
                 return;
-
-            if (_isOnBottomTrigger && !_isClimbingUp)
+            
+            if (_isOnBottomTrigger)
             {
-                _climberScript.enabled = true;
-                IsClimbing = false;
-                _isClimbingUp = false;
-            }
-            if (_isOnBottomTrigger && !IsClimbing)
-            {
-                if (_direction == 1)
+                if (IsClimbing && !_isClimbingUp)
                 {
-                    _climberScript.enabled = false;
+                    IsClimbing = false;
+                    _moveScript.enabled = true;
+                }
+                else if (!IsClimbing && _direction == 1)
+                {
+                    _moveScript.enabled = false;
                     IsClimbing = true;
                     _isClimbingUp = true;
                     return;
                 }
             }
-            else if (_isOnTopTrigger && _isClimbingUp)
+            else if (_isOnTopTrigger)
             {
-                _climberScript.enabled = true;
-                IsClimbing = false;
-                _isClimbingUp = false;
-            }
-            if (_isOnTopTrigger && !IsClimbing)
-            {
-                if (_direction == -1)
+                if (IsClimbing && _isClimbingUp)
                 {
-                    _climberScript.enabled = false;
+                    IsClimbing = false;
+                    _isClimbingUp = false;
+                    _moveScript.enabled = true;
+                }
+                else if (!IsClimbing && _direction == -1)
+                {
+                    _moveScript.enabled = false;
                     IsClimbing = true;
                     _isClimbingUp = false;
                 }

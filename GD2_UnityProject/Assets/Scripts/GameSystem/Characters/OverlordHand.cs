@@ -31,6 +31,7 @@ namespace GameSystem.Characters
         private float _horizontalMovement;
 
         private bool _hasBlock = true;
+        private bool _canFastThrow = true;
 
         private void Awake()
         {
@@ -86,6 +87,13 @@ namespace GameSystem.Characters
             _holdBlockView = null;
             _nextBlockTimer = 0;
             _holdTimer = 0;
+        }
+
+        private IEnumerator FastThrowCooldown(float timeInSec)
+        {
+            _canFastThrow = false;
+            yield return new WaitForSeconds(timeInSec);
+            _canFastThrow = true;
         }
 
         private void FixedUpdate()
@@ -173,9 +181,10 @@ namespace GameSystem.Characters
         {
             if (value.isPressed)
             {
-                if (_hasBlock)
+                if (_hasBlock && _canFastThrow)
                 {
                     FastDropBlock();
+                    StartCoroutine(FastThrowCooldown(10));
                 }
             }
         }

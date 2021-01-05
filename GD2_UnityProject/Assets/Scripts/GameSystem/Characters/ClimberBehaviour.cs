@@ -2,6 +2,7 @@
 using GameSystem.Management;
 using GameSystem.Props;
 using GameSystem.Views;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -69,6 +70,7 @@ namespace GameSystem.Characters
         private bool _isJumping = false;                        // bool to determine if the character is jumping or not
         private bool _hasLadder = true;                         // backup field that determines if the climber has his ladder or not
         private Vector2 _movementConstraints;
+        private bool _canPush = true;
         #endregion
 
         private bool IsCarryingLadder
@@ -116,9 +118,9 @@ namespace GameSystem.Characters
 
             if (_rb.velocity.y <= 0)
             {
-                    _rb.AddForce(Physics.gravity.normalized * _jumpHeight, ForceMode.Impulse);
+                _rb.AddForce(Physics.gravity.normalized * _jumpHeight, ForceMode.Impulse);
             }
-            
+
             if (_isJumping)
             {
                 // still working on this
@@ -133,7 +135,7 @@ namespace GameSystem.Characters
 
             float clampedX = Mathf.Clamp(transform.position.x, _movementConstraints.x, _movementConstraints.y);
             transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
-            
+
             UseGravity();
         }
 
@@ -159,7 +161,7 @@ namespace GameSystem.Characters
             {
                 filledPositions.Remove(floodedPosition);
             }
-            
+
             if (filledPositions.Contains(_blockFieldView.PositionConverter.ToBlockPosition(_blockField, transform.position)))
             {
                 GetKilled();
@@ -172,7 +174,7 @@ namespace GameSystem.Characters
             return _blockFieldView.PositionConverter.ToBlockPosition(_blockField, transform.position);
         }
 
-        
+
         private bool FindSuitablePlacementOnSide(int direction, BlockPosition climberBlock, ref int ladderLength, ref bool isAtPreferredSide)
         {
             for (int i = 1; i <= _maxLadderHeight; i++)
@@ -232,7 +234,7 @@ namespace GameSystem.Characters
             return hit.collider != null && _rb.velocity.y <= 0;
         }
 
-        
+
         private float GetXLocationOnBlock()
         {
             return transform.position.x - Mathf.Floor(transform.position.x);
@@ -375,7 +377,7 @@ namespace GameSystem.Characters
             ladder.GetComponent<Ladder>().Length = ladderLength;
             IsCarryingLadder = false;
         }
-        
+
         private void SetMovementConstraints()
         {
             float fieldWidth = _blockField.Columns * _blockFieldView.PositionConverter.BlockScale.x;
@@ -407,6 +409,13 @@ namespace GameSystem.Characters
             Gizmos.color = Color.blue;
             Gizmos.DrawRay(new Vector3(transform.position.x, transform.position.y + _colExtents.y / 2, transform.position.z), transform.forward * _rayLength);
             Gizmos.DrawRay(new Vector3(transform.position.x, transform.position.y - _colExtents.y / 2, transform.position.z), transform.forward * _rayLength);
+        }
+
+        private IEnumerator PushCooldown(float timeInSec)
+        {
+            _canPush = false;
+            yield return new WaitForSeconds(timeInSec);
+            _canPush = true;
         }
 
         #region Input
@@ -560,17 +569,24 @@ namespace GameSystem.Characters
 
         public void OnPushBlock(InputValue value)
         {
-            if (value.isPressed && _horizontalMovement != 0)
+            if (value.isPressed)
             {
-                var direction = (int)Mathf.Sign(_horizontalMovement);
+                if (_horizontalMovement != 0 && _canPush)
+                {
+                    var direction = (int)Mathf.Sign(_horizontalMovement);
 
-                var checkBlockPos = GetClimberBlockPosition();
-                checkBlockPos.X += direction;
-                var checkBlock = _blockField.BlockAt(checkBlockPos);
+                    var checkBlockPos = GetClimberBlockPosition();
+                    checkBlockPos.X += direction;
+                    var checkBlock = _blockField.BlockAt(checkBlockPos);
 
-                //Need to maybe find a better way to link block to blockview
-                var checkblockView = _blockFieldView.CheckIfBlockViewContainsBlock(checkBlock);
-                checkblockView?.PushBlock(transform.position, direction);
+                    //Need to maybe find a better way to link block to blockview
+                    var checkblockView = _blockFieldView.CheckIfBlockViewContainsBlock(checkBlock);
+                    if (checkblockView != null)
+                    {
+                        if (checkblockView.PushBlock(transform.position, direction))
+                            StartCoroutine(PushCooldown(5));
+                    }
+                }
             }
         }
         #endregion

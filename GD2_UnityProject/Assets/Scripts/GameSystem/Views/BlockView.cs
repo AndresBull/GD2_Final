@@ -324,13 +324,13 @@ namespace GameSystem.Views
             transform.position = newPos;
         }
 
-        public void PushBlock(Vector3 playerPosition, int direction)
+        public bool PushBlock(Vector3 playerPosition, int direction)
         {
             //Check if the player is standing on the block
             var posBelowPlayer = _fieldView.PositionConverter.ToBlockPosition(_field, playerPosition);
             posBelowPlayer.Y -= 1;
             if (_shapeBlocks.Contains(_field.BlockAt(posBelowPlayer)))
-                return;
+                return false;
 
 
             //Check for blocks above
@@ -344,7 +344,7 @@ namespace GameSystem.Views
                     continue;
 
                 if (checkBlock != null)
-                    return;
+                    return false;
             }
 
 
@@ -355,14 +355,14 @@ namespace GameSystem.Views
                 posInDirection.X += direction;
 
                 if (posInDirection.X < 0 || posInDirection.X >= _field.Columns)
-                    return;
+                    return false;
 
                 var checkBlock = _field.BlockAt(posInDirection);
                 if (_shapeBlocks.Contains(checkBlock))
                     continue;
 
                 if (checkBlock != null)
-                    return;
+                    return false;
             }
 
 
@@ -390,7 +390,7 @@ namespace GameSystem.Views
                     {
                         _field.AddToDictionary(b);
                     }
-                    return;
+                    return true;
                 }
 
                 var checkBlock = _field.BlockAt(posBelow);
@@ -403,13 +403,14 @@ namespace GameSystem.Views
                     {
                         _field.AddToDictionary(b);
                     }
-                    return;
+                    return true;
                 }
             }
 
 
             //Fall again
             SlowDrop();
+            return true;
         }
 
         public bool CheckIfContainsBlock(Block block)

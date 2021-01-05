@@ -5,13 +5,12 @@ using UnityEngine;
 
 namespace Graphical
 {
-
     public class RandomlyShowScript : MonoBehaviour
     {
         [SerializeField]
         private float _percentChanceObjectGetsShown = 20f;
 
-        void Start()
+        private void Start()
         {
             float randomNumber = Random.Range(1, 101);
 

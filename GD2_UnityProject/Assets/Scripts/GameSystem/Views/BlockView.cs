@@ -1,6 +1,7 @@
 ﻿using BoardSystem;
 using GameSystem.Characters;
 using GameSystem.Management;
+using Graphical;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -284,7 +285,7 @@ namespace GameSystem.Views
             SetShape();
             _blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
             floodFiller = new FloodFill(Neighbours);
-            ClimberBehaviour.floodFiller = floodFiller;
+            ClimberBehaviour.FloodFiller = floodFiller;
             _wasThrownHard = true;
             _dropDownDelay = _minTimeDelay;
 
@@ -296,7 +297,7 @@ namespace GameSystem.Views
             SetShape();
             _blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
             floodFiller = new FloodFill(Neighbours);
-            ClimberBehaviour.floodFiller = floodFiller;
+            ClimberBehaviour.FloodFiller = floodFiller;
             _wasThrownHard = false;
 
             enabled = true;
@@ -320,7 +321,7 @@ namespace GameSystem.Views
             transform.position = newPos;
         }
 
-        public void PushBlock(Vector3 playerPosition)
+        public void PushBlock(Vector3 playerPosition, int direction)
         {
             //Check if the player is standing on the block
             var posBelowPlayer = _fieldView.PositionConverter.ToBlockPosition(_field, playerPosition);
@@ -345,11 +346,11 @@ namespace GameSystem.Views
 
 
             //Checks if player is left or right and set direction (simple, but might give problems with weird shapes)
-            int direction;
-            if (transform.position.x <= playerPosition.x)
-                direction = -1;
-            else
-                direction = 1;
+            // int direction;
+            // if (transform.position.x <= playerPosition.x)
+            //     direction = -1;
+            // else
+            //     direction = 1;
 
 
             //Check if other blocks are in the direction

@@ -11,13 +11,17 @@ namespace GameSystem.Management
 {
     public class GameLoop : SingletonMonoBehaviour<GameLoop>
     {
-        private StateMachine<BaseState> _stateMachine;
+        [SerializeField] private int _fieldRows = 8;
+        [SerializeField] private int _fieldColumns = 8;
+
         private PlayState _playState;
+        private StateMachine<BaseState> _stateMachine;
 
         public BlockField Field { get; private set; }
         public BlockFieldView FieldView { get; internal set; }
         public StateMachine<BaseState> StateMachine => _stateMachine;
 
+        #region Unity Lifecycle
         private void Awake()
         {
             if (Time.time <= Time.deltaTime)
@@ -25,14 +29,15 @@ namespace GameSystem.Management
                 SetupStateMachine();
             }
         }
-
+        
         private void OnDestroy()
         {
             _playState.OnPlayStateEntered -= OnPlayStateEntered;
             Application.Quit();
         }
+        #endregion
 
-        public void CreateNewField(int rows, int columns)
+        private void CreateNewField(int rows, int columns)
         {
             Field = new BlockField(rows, columns);
         }
@@ -58,11 +63,13 @@ namespace GameSystem.Management
             _stateMachine.MoveTo(GameStates.Start);
 
             _playState.OnPlayStateEntered += OnPlayStateEntered;
-        }           
+        }
 
+        #region Events
         private void OnPlayStateEntered(object sender, EventArgs e)
         {
             CreateNewField(8, 8);
         }
+        #endregion
     }
 }

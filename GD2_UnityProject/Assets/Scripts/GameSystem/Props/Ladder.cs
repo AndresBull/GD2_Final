@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using BoardSystem;
+using GameSystem.Management;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,10 +16,8 @@ namespace GameSystem.Props
         private float _timer;
 
         public GameObject Owner { get; set; } = null;           // the character that owns the ladder
-
         public Transform Exit => _exit.transform;
         public Transform Enter => _enter.transform;
-
         public int Length { get; set; } = 1;
 
         void Awake()
@@ -44,9 +44,9 @@ namespace GameSystem.Props
             }
         }
 
-        public void Break()
+        internal void Break()
         {
-            // change to broken ladder
+            // TODO: change to broken ladder
             Destroy(gameObject);
         }
     }

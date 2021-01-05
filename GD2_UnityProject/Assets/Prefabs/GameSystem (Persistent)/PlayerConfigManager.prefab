@@ -144,5 +144,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxPlayers: 4
   _playersNeededReadyBeforeStarting: 1
-  _timeBeforeStarting: 15
+  _timeBeforeStarting: 10
   _timeBeforeStartingIfReady: 5

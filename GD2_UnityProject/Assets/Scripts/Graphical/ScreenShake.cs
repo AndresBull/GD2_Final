@@ -2,69 +2,72 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScreenShake : MonoBehaviour
+namespace Graphical
 {
-    [Range(0.1f, 0.5f)]
-    private float _shakeStrength = 0.15f;
-
-    [Range(0.2f, 2f)]
-    private float _shakeDuration = 0.5f;
-
-    private float _strength, _duration, _fadeTime;
-    private Vector3 _originalTransform, _newPosition;
-
-    private void Start()
+    public class ScreenShake : MonoBehaviour
     {
-        _originalTransform = transform.position;
-        enabled = false;
-    }
+        [Range(0.1f, 0.5f)]
+        [SerializeField] private float _shakeStrength = 0.15f;
 
-    private void Update()
-    {
-        _duration -= Time.deltaTime;
+        [Range(0.2f, 2f)]
+        [SerializeField] private float _shakeDuration = 0.5f;
 
-        float xShake = Random.Range(-1f, 1f) * _strength;
-        float yShake = Random.Range(-1f, 1f) * _strength;
+        private float _strength, _duration, _fadeTime;
+        private Vector3 _originalTransform, _newPosition;
 
-        _newPosition = _originalTransform + new Vector3(xShake, yShake, 0);
-
-        _strength = Mathf.MoveTowards(_strength, 0f, Time.deltaTime * _fadeTime);
-
-        if (_duration <= 0f)
+        private void Start()
         {
-            EndShake();
+            _originalTransform = transform.position;
+            enabled = false;
         }
-    }
 
-    private void FixedUpdate()
-    {
-        transform.position = _newPosition;
-    }
+        private void Update()
+        {
+            _duration -= Time.deltaTime;
+
+            float xShake = Random.Range(-1f, 1f) * _strength;
+            float yShake = Random.Range(-1f, 1f) * _strength;
+
+            _newPosition = _originalTransform + new Vector3(xShake, yShake, 0);
+
+            _strength = Mathf.MoveTowards(_strength, 0f, Time.deltaTime * _fadeTime);
+
+            if (_duration <= 0f)
+            {
+                EndShake();
+            }
+        }
+
+        private void FixedUpdate()
+        {
+            transform.position = _newPosition;
+        }
 
 
-    private void EndShake()
-    {
-        transform.position = _originalTransform;
-        _newPosition = _originalTransform;
+        private void EndShake()
+        {
+            transform.position = _originalTransform;
+            _newPosition = _originalTransform;
 
-        enabled = false;
-    }
+            enabled = false;
+        }
 
-    public void SmallShake()
-    {
-        _strength = _shakeStrength;
-        _duration = _shakeDuration;
-        _fadeTime = _strength / _shakeDuration;
+        public void SmallShake()
+        {
+            _strength = _shakeStrength;
+            _duration = _shakeDuration;
+            _fadeTime = _strength / _shakeDuration;
 
-        enabled = true;
-    }
+            enabled = true;
+        }
 
-    public void BigShake()
-    {
-        _strength = _shakeStrength * 2;
-        _duration = _shakeDuration * 1.5f;
-        _fadeTime = _strength / _shakeDuration;
+        public void BigShake()
+        {
+            _strength = _shakeStrength * 2;
+            _duration = _shakeDuration * 1.5f;
+            _fadeTime = _strength / _shakeDuration;
 
-        enabled = true;
+            enabled = true;
+        }
     }
 }

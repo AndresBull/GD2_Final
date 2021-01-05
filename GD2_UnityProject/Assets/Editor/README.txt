@@ -1,17 +1,25 @@
-__________________________________
-==========--Controls--============
-Left stick L/R: L/R Movement
-Left Stick U/D: Move U/D Ladder
-B / ∆ Button: Join/Leave
-X Button: Jump / Drop Block
-A / [_] Button: Place Ladder
-Y / O Button: Pick up Ladder
+________________________________________________________________
+ ========================--Controls--==========================	|
+________________________________________________________________|
+																|
+Left stick L/R:	L/R Movement			//	L/R Movement		|
+Left Stick U/D:	Move U/D Ladder			//	N/A					|
+Y / ∆	Button:	Join/Leave				//	Join/Leave			|
+X / [_] Button:	Place / Pick up Ladder	//	N/A					|
+A / X	Button:	Jump					//	Drop Block Normal	|
+B / O	Button:	Push Block				//	Throw Block Down	|
+																|
+================================================================
 
-
-==========--Controls - TEMP--============
-A/D: L/R Movement
-W/S: Move U/D Ladder
-Tab: Join/Leave
-Space: Jump / Drop Block
-Q: Place Ladder
-E: Pick up Ladder
+________________________________________________________________
+ ======================--Controls - TEMP--===================== |
+________________________________________________________________|
+																|
+A/D		: L/R Movement				//	L/R Movement			|
+W/S		: Move U/D Ladder			//	N/A						|
+Tab		: Join/Leave				//	Join/Leave				|
+Q		: Place /Pick up Ladder		//	N/A						|
+Space	: Jump						//	Drop Block Normal		|
+Enter	: Push Block				//	Throw Block Down		|
+																|
+================================================================

@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class RandomPrefabOutOfListSpawnerScript : MonoBehaviour
+namespace Graphical
 {
-    [SerializeField]
-    List<GameObject> _prefabsToChooseFrom = new List<GameObject>();
-    // Start is called before the first frame update
-    void Start()
+    public class RandomPrefabOutOfListSpawnerScript : MonoBehaviour
     {
-        int randomNumber= Random.Range(0, _prefabsToChooseFrom.Count);
+        [SerializeField]
+        List<GameObject> _prefabsToChooseFrom = new List<GameObject>();
+        // Start is called before the first frame update
+        private void Start()
+        {
+            int randomNumber = Random.Range(0, _prefabsToChooseFrom.Count);
 
-        Instantiate(_prefabsToChooseFrom[randomNumber]);
+            Instantiate(_prefabsToChooseFrom[randomNumber]);
+        }
+
     }
-
 }

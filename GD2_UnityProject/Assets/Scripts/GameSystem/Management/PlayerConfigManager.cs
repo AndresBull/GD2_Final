@@ -76,15 +76,17 @@ namespace GameSystem.Management
             return climbers;
         }
 
-        // TODO: remove this
-        internal int GetOverLordIndex()
+        internal List<PlayerConfiguration> GetAllClimberConfigs()
         {
-            for (int i = 0; i < _playerConfigs.Count; i++)
+            List<PlayerConfiguration> configs = new List<PlayerConfiguration>();
+            foreach (PlayerConfiguration playerConfig in _playerConfigs)
             {
-                if (_playerConfigs[i].IsOverlord)
-                    return i;
+                if (!playerConfig.IsOverlord)
+                {
+                    configs.Add(playerConfig);
+                }
             }
-            return -1;
+            return configs;
         }
 
         internal List<PlayerConfiguration> GetPlayerConfigs()
@@ -260,19 +262,6 @@ namespace GameSystem.Management
                 SetTimer(_timeBeforeStarting);
             }
         }
-
-        internal List<int> GetClimberIndexes()
-        {
-            List<int> climberIndexes = new List<int>();
-
-            for (int i = 0; i < _playerConfigs.Count; i++)
-            {
-                if (!_playerConfigs[i].IsOverlord)
-                    climberIndexes.Add(i);
-            }
-            return climberIndexes;
-        }
-
     }
 
     public class PlayerConfiguration

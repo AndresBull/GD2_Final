@@ -43,14 +43,6 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Pick-up Ladder"",
-                    ""type"": ""Button"",
-                    ""id"": ""fe2dfc8f-cb57-4c25-b0a3-26dc460af776"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
                     ""name"": ""ClimbLadder"",
                     ""type"": ""Value"",
                     ""id"": ""57ce97f3-f235-4baa-8ab7-8d66edec87f6"",
@@ -62,6 +54,14 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                     ""name"": ""KillOverlord"",
                     ""type"": ""Button"",
                     ""id"": ""3514e7b0-3e25-4a8a-9607-9a0c2bb3ca59"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""PushBlock"",
+                    ""type"": ""Button"",
+                    ""id"": ""e834b0a9-0b30-499e-83b5-85b9fcc27dd9"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -120,28 +120,6 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Place Ladder"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""88092884-f9a4-447e-8108-1491502093bd"",
-                    ""path"": ""<Gamepad>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Pick-up Ladder"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b0003055-c215-4216-bce0-751f7bfe15d7"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Pick-up Ladder"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -241,6 +219,28 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""KillOverlord"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""55054bb9-5041-4f0e-bdc2-3eb5c09c688d"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""PushBlock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""08eb89e7-a4a6-4731-be9d-ca27fd4d05bc"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""PushBlock"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -706,9 +706,9 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
         m_Climber_Move = m_Climber.FindAction("Move", throwIfNotFound: true);
         m_Climber_Jump = m_Climber.FindAction("Jump", throwIfNotFound: true);
         m_Climber_PlaceLadder = m_Climber.FindAction("Place Ladder", throwIfNotFound: true);
-        m_Climber_PickupLadder = m_Climber.FindAction("Pick-up Ladder", throwIfNotFound: true);
         m_Climber_ClimbLadder = m_Climber.FindAction("ClimbLadder", throwIfNotFound: true);
         m_Climber_KillOverlord = m_Climber.FindAction("KillOverlord", throwIfNotFound: true);
+        m_Climber_PushBlock = m_Climber.FindAction("PushBlock", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -772,9 +772,9 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
     private readonly InputAction m_Climber_Move;
     private readonly InputAction m_Climber_Jump;
     private readonly InputAction m_Climber_PlaceLadder;
-    private readonly InputAction m_Climber_PickupLadder;
     private readonly InputAction m_Climber_ClimbLadder;
     private readonly InputAction m_Climber_KillOverlord;
+    private readonly InputAction m_Climber_PushBlock;
     public struct ClimberActions
     {
         private @TowerClimbers m_Wrapper;
@@ -782,9 +782,9 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
         public InputAction @Move => m_Wrapper.m_Climber_Move;
         public InputAction @Jump => m_Wrapper.m_Climber_Jump;
         public InputAction @PlaceLadder => m_Wrapper.m_Climber_PlaceLadder;
-        public InputAction @PickupLadder => m_Wrapper.m_Climber_PickupLadder;
         public InputAction @ClimbLadder => m_Wrapper.m_Climber_ClimbLadder;
         public InputAction @KillOverlord => m_Wrapper.m_Climber_KillOverlord;
+        public InputAction @PushBlock => m_Wrapper.m_Climber_PushBlock;
         public InputActionMap Get() { return m_Wrapper.m_Climber; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -803,15 +803,15 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 @PlaceLadder.started -= m_Wrapper.m_ClimberActionsCallbackInterface.OnPlaceLadder;
                 @PlaceLadder.performed -= m_Wrapper.m_ClimberActionsCallbackInterface.OnPlaceLadder;
                 @PlaceLadder.canceled -= m_Wrapper.m_ClimberActionsCallbackInterface.OnPlaceLadder;
-                @PickupLadder.started -= m_Wrapper.m_ClimberActionsCallbackInterface.OnPickupLadder;
-                @PickupLadder.performed -= m_Wrapper.m_ClimberActionsCallbackInterface.OnPickupLadder;
-                @PickupLadder.canceled -= m_Wrapper.m_ClimberActionsCallbackInterface.OnPickupLadder;
                 @ClimbLadder.started -= m_Wrapper.m_ClimberActionsCallbackInterface.OnClimbLadder;
                 @ClimbLadder.performed -= m_Wrapper.m_ClimberActionsCallbackInterface.OnClimbLadder;
                 @ClimbLadder.canceled -= m_Wrapper.m_ClimberActionsCallbackInterface.OnClimbLadder;
                 @KillOverlord.started -= m_Wrapper.m_ClimberActionsCallbackInterface.OnKillOverlord;
                 @KillOverlord.performed -= m_Wrapper.m_ClimberActionsCallbackInterface.OnKillOverlord;
                 @KillOverlord.canceled -= m_Wrapper.m_ClimberActionsCallbackInterface.OnKillOverlord;
+                @PushBlock.started -= m_Wrapper.m_ClimberActionsCallbackInterface.OnPushBlock;
+                @PushBlock.performed -= m_Wrapper.m_ClimberActionsCallbackInterface.OnPushBlock;
+                @PushBlock.canceled -= m_Wrapper.m_ClimberActionsCallbackInterface.OnPushBlock;
             }
             m_Wrapper.m_ClimberActionsCallbackInterface = instance;
             if (instance != null)
@@ -825,15 +825,15 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 @PlaceLadder.started += instance.OnPlaceLadder;
                 @PlaceLadder.performed += instance.OnPlaceLadder;
                 @PlaceLadder.canceled += instance.OnPlaceLadder;
-                @PickupLadder.started += instance.OnPickupLadder;
-                @PickupLadder.performed += instance.OnPickupLadder;
-                @PickupLadder.canceled += instance.OnPickupLadder;
                 @ClimbLadder.started += instance.OnClimbLadder;
                 @ClimbLadder.performed += instance.OnClimbLadder;
                 @ClimbLadder.canceled += instance.OnClimbLadder;
                 @KillOverlord.started += instance.OnKillOverlord;
                 @KillOverlord.performed += instance.OnKillOverlord;
                 @KillOverlord.canceled += instance.OnKillOverlord;
+                @PushBlock.started += instance.OnPushBlock;
+                @PushBlock.performed += instance.OnPushBlock;
+                @PushBlock.canceled += instance.OnPushBlock;
             }
         }
     }
@@ -994,9 +994,9 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnPlaceLadder(InputAction.CallbackContext context);
-        void OnPickupLadder(InputAction.CallbackContext context);
         void OnClimbLadder(InputAction.CallbackContext context);
         void OnKillOverlord(InputAction.CallbackContext context);
+        void OnPushBlock(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

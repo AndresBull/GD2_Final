@@ -163,29 +163,6 @@ namespace GameSystem.Views
             return false;
         }
 
-        public void FastDrop()
-        {
-            SetShape();
-            _blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
-            floodFiller = new FloodFill(Neighbours);
-            ClimberBehaviour.floodFiller = floodFiller;
-            _wasThrownHard = true;
-            _dropDownDelay = _minTimeDelay;
-
-            enabled = true;
-        }
-
-        public void SlowDrop()
-        {
-            SetShape();
-            _blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
-            floodFiller = new FloodFill(Neighbours);
-            ClimberBehaviour.floodFiller = floodFiller;
-            _wasThrownHard = false;
-
-            enabled = true;
-        }
-
         private void Update()
         {
             _elapsedDelayTime += Time.deltaTime;
@@ -216,7 +193,7 @@ namespace GameSystem.Views
                     {
                         Debug.Log("Landed");
 
-                        UpdateBlockView(offsetPosition);
+                        UpdateBlockView(new Vector2Int(0, offsetPosition));
 
                         foreach (Block block in _shapeBlocks)
                         {
@@ -253,7 +230,7 @@ namespace GameSystem.Views
                     }
 
                     //Functions when normally falling
-                    UpdateBlockView(offsetPosition);
+                    UpdateBlockView(new Vector2Int(0,offsetPosition));
 
                     //Need to make this a smoother function
                     _dropDownDelay = Mathf.Max(_dropDownDelay * 0.8f, _minTimeDelay);
@@ -270,27 +247,24 @@ namespace GameSystem.Views
                 - new Vector3(0, blockHeightPercentage * _fieldView.PositionConverter.BlockScale.y, 0);
         }
 
-        private void UpdateBlockView(int offsetY)
+        private void UpdateBlockView(Vector2Int offset)
         {
-            UpdateBlocks(offsetY);
+            UpdateBlocks(offset);
 
             BlockPosition blockPosition = _blockPosition;
-            blockPosition.Y += offsetY;
+            blockPosition.Y += offset.y;
             _blockPosition = blockPosition;
 
-#if UNITY_EDITOR
-            //This is not necessary, just to check for visual "glitching"
             transform.position = _fieldView.PositionConverter.ToWorldPosition(_field, blockPosition)
                 + new Vector3((BlockWidth % 2) * (_fieldView.PositionConverter.BlockScale.x / 2), 0, 0);
-#endif
         }
 
-        private void UpdateBlocks(int offset)
+        private void UpdateBlocks(Vector2Int offset)
         {
             for (int i = 0; i < _shapeBlocks.Count; i++)
             {
                 Block block = _shapeBlocks[i];
-                Block newBlock = new Block(block.Position.X, block.Position.Y + offset);
+                Block newBlock = new Block(block.Position.X +offset.x, block.Position.Y + offset.y);
                 _shapeBlocks[i] = newBlock;
             }
         }
@@ -299,7 +273,33 @@ namespace GameSystem.Views
         {
             _dropDownDelay = 1;
             _elapsedDelayTime = 0;
+            _wasThrownHard = false;
             enabled = false;
+        }
+
+
+
+        public void FastDrop()
+        {
+            SetShape();
+            _blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
+            floodFiller = new FloodFill(Neighbours);
+            ClimberBehaviour.floodFiller = floodFiller;
+            _wasThrownHard = true;
+            _dropDownDelay = _minTimeDelay;
+
+            enabled = true;
+        }
+
+        public void SlowDrop()
+        {
+            SetShape();
+            _blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, transform.position);
+            floodFiller = new FloodFill(Neighbours);
+            ClimberBehaviour.floodFiller = floodFiller;
+            _wasThrownHard = false;
+
+            enabled = true;
         }
 
         public void MoveAccordingToHand(Vector3 handPosition)
@@ -318,6 +318,77 @@ namespace GameSystem.Views
             Vector3 blockOffset = new Vector3((BlockWidth % 2) * (_fieldView.PositionConverter.BlockScale.x / 2), 0, 0);
             newPos += blockOffset;
             transform.position = newPos;
+        }
+
+        public void PushBlock(Vector3 playerPosition)
+        {
+            //Check if the player is standing on the block
+            var posBelowPlayer = _fieldView.PositionConverter.ToBlockPosition(_field, playerPosition);
+            posBelowPlayer.Y -= 1;
+            if (_shapeBlocks.Contains(_field.BlockAt(posBelowPlayer)))
+                return;
+
+
+            //Check for blocks above
+            foreach (var block in _shapeBlocks)
+            {
+                var posAbove = block.Position;
+                posAbove.Y += 1;
+
+                var checkBlock = _field.BlockAt(posAbove);
+                if (_shapeBlocks.Contains(checkBlock))
+                    continue;
+
+                if (checkBlock != null)
+                    return;
+            }
+
+
+            //Checks if player is left or right and set direction (simple, but might give problems with weird shapes)
+            int direction;
+            if (transform.position.x <= playerPosition.x)
+                direction = -1;
+            else
+                direction = 1;
+
+
+            //Check if other blocks are in the direction
+            foreach (var block in _shapeBlocks)
+            {
+                var posInDirection = block.Position;
+                posInDirection.X += direction;
+
+                var checkBlock = _field.BlockAt(posInDirection);
+                if (_shapeBlocks.Contains(checkBlock))
+                    continue;
+
+                if (checkBlock != null)
+                    return;
+            }
+
+
+            //Move blockView to the right
+            UpdateBlockView(new Vector2Int(direction, 0));
+            SoundManager.Instance.PlayPushBlock();
+
+
+            //Check for blocks below
+            foreach (var block in _shapeBlocks)
+            {
+                var posBelow = block.Position;
+                posBelow.Y -= 1;
+
+                var checkBlock = _field.BlockAt(posBelow);
+                if (_shapeBlocks.Contains(checkBlock))
+                    continue;
+
+                if (checkBlock != null)
+                    return;
+            }
+
+
+            //Fall again
+            SlowDrop();
         }
     }
 }

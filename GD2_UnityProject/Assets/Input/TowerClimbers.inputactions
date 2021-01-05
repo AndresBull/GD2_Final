@@ -30,14 +30,6 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Pick-up Ladder",
-                    "type": "Button",
-                    "id": "fe2dfc8f-cb57-4c25-b0a3-26dc460af776",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
                     "name": "ClimbLadder",
                     "type": "Value",
                     "id": "57ce97f3-f235-4baa-8ab7-8d66edec87f6",
@@ -49,6 +41,14 @@
                     "name": "KillOverlord",
                     "type": "Button",
                     "id": "3514e7b0-3e25-4a8a-9607-9a0c2bb3ca59",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "PushBlock",
+                    "type": "Button",
+                    "id": "e834b0a9-0b30-499e-83b5-85b9fcc27dd9",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -107,28 +107,6 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Place Ladder",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "88092884-f9a4-447e-8108-1491502093bd",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Pick-up Ladder",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b0003055-c215-4216-bce0-751f7bfe15d7",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Pick-up Ladder",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -228,6 +206,28 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "KillOverlord",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "55054bb9-5041-4f0e-bdc2-3eb5c09c688d",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "PushBlock",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "08eb89e7-a4a6-4731-be9d-ca27fd4d05bc",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "PushBlock",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

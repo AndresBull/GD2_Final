@@ -405,16 +405,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: SoundManager
       objectReference: {fileID: 0}
-    - target: {fileID: 5037073326349179431, guid: e7ceb6b8c1ebfe04db46d62e49028035,
-        type: 3}
-      propertyPath: JumpSound
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5037073326349179431, guid: e7ceb6b8c1ebfe04db46d62e49028035,
-        type: 3}
-      propertyPath: BlockLandSound
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6956130526994338785, guid: e7ceb6b8c1ebfe04db46d62e49028035,
         type: 3}
       propertyPath: m_LocalPosition.x

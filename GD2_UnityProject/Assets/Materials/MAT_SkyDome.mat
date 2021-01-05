@@ -84,7 +84,7 @@ Material:
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _color: {r: 0.9294118, g: 0.5137255, b: 0.69803923, a: 1}
     - _color2: {r: 0.054901943, g: 0.3098039, b: 0.6156863, a: 1}
-    - _scrollingSPeed: {r: -0.15, g: 0.15, b: 0, a: 0}
+    - _scrollingSPeed: {r: -0.05, g: 0.05, b: 0, a: 0}
 --- !u!114 &170489743925417878
 MonoBehaviour:
   m_ObjectHideFlags: 11

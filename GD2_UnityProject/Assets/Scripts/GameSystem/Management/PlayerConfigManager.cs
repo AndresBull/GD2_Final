@@ -26,8 +26,8 @@ namespace GameSystem.Management
         public event EventHandler<ScoreChangedEventArgs> OnScoreChanged;
         public event EventHandler<LadderEquipChangedEventArgs> OnLadderEquipChanged;
         public event EventHandler<SpecialChangedEventArgs> OnSpecialChanged;
-        public event EventHandler OnCharacterMeshChanged;
-        public event EventHandler OnCharacterMaterialChanged;
+        public event EventHandler OnCharacterSpriteChanged;
+        public event EventHandler OnCharacterColorChanged;
 
         public float Timer => _timer;
 
@@ -163,21 +163,21 @@ namespace GameSystem.Management
             }
         }
 
-        internal void SetPlayerCharacter(int playerIndex, Mesh character)
+        internal void SetPlayerCharacter(int playerIndex, GameObject character)
         {
             _playerConfigs[playerIndex].Character = character;
-            OnCharacterMeshChanged?.Invoke(this, EventArgs.Empty);
+            OnCharacterSpriteChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        internal void SetPlayerMeshes(int playerIndex, Mesh[] meshes)
+        internal void SetPlayerSprites(int playerIndex, GameObject[] sprites)
         {
-            _playerConfigs[playerIndex].CharacterMeshes = meshes;
+            _playerConfigs[playerIndex].CharacterMeshes = sprites;
         }
 
-        internal void SetPlayerColor(int playerIndex, Material color)
+        internal void SetPlayerColor(int playerIndex, Color color)
         {
-            _playerConfigs[playerIndex].PlayerMaterial = color;
-            OnCharacterMaterialChanged?.Invoke(this, EventArgs.Empty);
+            _playerConfigs[playerIndex].PlayerColor = color;
+            OnCharacterColorChanged?.Invoke(this, EventArgs.Empty);
         }
 
         internal void ToggleLadderEquip(int playerIndex, bool hasLadder)
@@ -285,9 +285,9 @@ namespace GameSystem.Management
         }
 
         internal PlayerInput Input { get; private set; }
-        internal Material PlayerMaterial { get; set; }
-        internal Mesh Character { get; set; }
-        internal Mesh[] CharacterMeshes { get; set; }
+        internal Color PlayerColor { get; set; }
+        internal GameObject Character { get; set; }
+        internal GameObject[] CharacterMeshes { get; set; }
         internal int PlayerIndex { get; private set; }
         internal int RoundScore { get; set; }
         internal int TotalScore { get; set; }

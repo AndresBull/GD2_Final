@@ -52,10 +52,10 @@ namespace GameSystem.Management
 
             switch(button.name)
             {
-                case "PlayButton":
+                case "Button - Play":
                     GameLoop.Instance.StateMachine.MoveTo(GameStates.Setup);
                     break;
-                case "QuitButton":
+                case "Button - Quit":
                     GameLoop.Instance.StateMachine.MoveTo(GameStates.End);
                     break;
             }

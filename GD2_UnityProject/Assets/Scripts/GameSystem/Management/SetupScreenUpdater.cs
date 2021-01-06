@@ -10,9 +10,8 @@ namespace GameSystem.Management
     {
         [SerializeField] private TextMeshProUGUI _playerName = null;
         [SerializeField] private Button _readyButton = null;
-        [SerializeField] private Button _colorPicker = null;
+        //[SerializeField] private Button _colorPicker = null;
 
-        private Material _color;
         private PlayerConfiguration _config;
         private int _playerIndex;
         private int _index;
@@ -23,7 +22,6 @@ namespace GameSystem.Management
             _playerIndex = index;
             _playerName.SetText($"Player {_playerIndex + 1}");
             SetCharacter(_config.CharacterMeshes[0]);
-            SetColor(_color);
         }
 
         public void SwitchCharacter()
@@ -52,12 +50,7 @@ namespace GameSystem.Management
             _readyButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Ready");
         }
 
-        public void SetColor(Material color)
-        {
-            PlayerConfigManager.Instance.SetPlayerColor(_playerIndex, color);
-        }
-
-        private void SetCharacter(Mesh character)
+        private void SetCharacter(GameObject character)
         {
             PlayerConfigManager.Instance.SetPlayerCharacter(_playerIndex, character);
         }

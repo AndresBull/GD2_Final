@@ -24,6 +24,7 @@ namespace GameSystem.Management
         private List<PlayerConfiguration> _playerConfigs;
         private float _timer = 0.0f;
         private bool _isTimerActive = false;
+        public int NextOverlordIndex;
 
         public event EventHandler<ScoreChangedEventArgs> OnScoreChanged;
         public event EventHandler<LadderEquipChangedEventArgs> OnLadderEquipChanged;
@@ -167,7 +168,7 @@ namespace GameSystem.Management
             }
         }
 
-        internal void SetPlayerAsOverlord(int playerIndex)
+        internal void SetPlayerAsOverlord()
         {
             var overlord = _playerConfigs.Where(pc => pc.IsOverlord).ToList();
             
@@ -179,13 +180,13 @@ namespace GameSystem.Management
             if (overlord.Count > 0)
             {
                 overlord[0].IsOverlord = false;
-                _playerConfigs[playerIndex].IsOverlord = true;
+                _playerConfigs[NextOverlordIndex].IsOverlord = true;
                 return;
             }
             // TODO: enable this after testing to set an overlord
             if (overlord.Count <= 0)
             {
-                _playerConfigs[playerIndex].IsOverlord = true;
+                _playerConfigs[NextOverlordIndex].IsOverlord = true;
                 return;
             }
         }

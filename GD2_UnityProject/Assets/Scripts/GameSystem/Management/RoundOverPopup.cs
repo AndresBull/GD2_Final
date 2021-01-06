@@ -35,9 +35,21 @@ namespace GameSystem.Management
 
             gameObject.SetActive(true);
             if (e.PlayerIndex >= 0)
+            {
                 _roundWinnerText.text = $"Round won by: Player {e.PlayerIndex + 1}!";
+                PlayerConfigManager.Instance.NextOverlordIndex = e.PlayerIndex;
+            }
             else
+            {
                 _roundWinnerText.text = $"Climbers won this round!";
+                var overlordIdx = PlayerConfigManager.Instance.GetOverlordIndex();
+                var nextIdx = overlordIdx;
+                while (nextIdx == overlordIdx)
+                {
+                    nextIdx = UnityEngine.Random.Range(0, PlayerConfigManager.Instance.GetPlayerConfigs().Count);
+                }
+                PlayerConfigManager.Instance.NextOverlordIndex = nextIdx;
+            }
 
             StartCoroutine(EndOfRoundCountdown(10));
         }

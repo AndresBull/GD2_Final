@@ -558,16 +558,16 @@ namespace GameSystem.Characters
             }
         }
 
-        public void OnTryKill(InputValue value)
-        {
-            if (value.isPressed)
-            {
-                if (_blockFieldView.PositionConverter.ToBlockPosition(_blockField, transform.position).Y > _blockField.Rows)
-                {
-                    PlayerConfigManager.Instance.SetPlayerAsOverlord(_playerConfig.PlayerIndex);
-                }
-            }
-        }
+        //public void OnTryKill(InputValue value)
+        //{
+        //    if (value.isPressed)
+        //    {
+        //        if (_blockFieldView.PositionConverter.ToBlockPosition(_blockField, transform.position).Y > _blockField.Rows)
+        //        {
+        //            PlayerConfigManager.Instance.SetPlayerAsOverlord(_playerConfig.PlayerIndex);
+        //        }
+        //    }
+        //}
 
         public void OnPushBlock(InputValue value)
         {

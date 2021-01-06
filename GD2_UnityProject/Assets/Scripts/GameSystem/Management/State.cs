@@ -48,6 +48,7 @@ namespace GameSystem.Management
             {
                 config.Input.gameObject.GetComponent<PlayerSpawn>().ResetPlayerScreen();
             }
+            PlayerConfigManager.Instance.NextOverlordIndex = UnityEngine.Random.Range(0, PlayerConfigManager.Instance.GetPlayerConfigs().Count);
         }
 
         protected sealed override void SetupScene()
@@ -82,7 +83,7 @@ namespace GameSystem.Management
         {
             OnPlayStateEntered?.Invoke(this, EventArgs.Empty);
             SceneManager.LoadScene("Play");
-            PlayerConfigManager.Instance.SetPlayerAsOverlord(UnityEngine.Random.Range(0, PlayerConfigManager.Instance.GetPlayerConfigs().Count));
+            PlayerConfigManager.Instance.SetPlayerAsOverlord();
             InputManager.Instance.SwitchToActionMap("Player");
         }
     }

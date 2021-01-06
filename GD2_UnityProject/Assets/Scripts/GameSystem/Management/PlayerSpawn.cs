@@ -12,24 +12,21 @@ namespace GameSystem.Management
 {
     public class PlayerSpawn : MonoBehaviour
     {
-        [SerializeField]
-        private PlayerInput _input = null;
+        [SerializeField] private PlayerInput _input = null;
 
         [Header("Character Setup")]
         [Tooltip("A preview of the character without functionality;\nused to update character customization in realtime.")]
-        [SerializeField]
-        private GameObject _characterView = null;
-        [Tooltip("The different player models to choose from for customization.")]
-        [SerializeField]
-        private Mesh[] _characterMeshes = null;
+        [SerializeField] private GameObject _characterView = null;
+        [Tooltip("The different player objects to choose from for customization purposes.")]
+        [SerializeField] private GameObject[] _characterObjects = null;
+        [Tooltip("The different colors to pick from. Each player gets one of these colors.")]
+        [SerializeField] private Color[] _characterColors = null;
 
         [Header("Player Runtime Spawn")]
         [Tooltip("The general Climber object, with all its functionality; used during gameplay.")]
-        [SerializeField]
-        private GameObject _climberPrefab = null;
+        [SerializeField] private GameObject _climberPrefab = null;
         [Tooltip("The Overlord object, with all its functionality; used during gameplay.")]
-        [SerializeField]
-        private GameObject _overlordPrefab = null;
+        [SerializeField] private GameObject _overlordPrefab = null;
 
         [Header("Player UI")]
         [Tooltip("The prefab that holds all UI data of a player.")]
@@ -71,8 +68,8 @@ namespace GameSystem.Management
         private void OnDestroy()
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
-            PlayerConfigManager.Instance.OnCharacterMeshChanged -= OnCharacterMeshChanged;
-            PlayerConfigManager.Instance.OnCharacterMaterialChanged -= OnCharacterMaterialChanged;
+            PlayerConfigManager.Instance.OnCharacterSpriteChanged -= OnCharacterSpriteChanged;
+            PlayerConfigManager.Instance.OnCharacterColorChanged -= OnCharacterColorChanged;
             ResetPlayerScreen();
         }
 
@@ -80,7 +77,7 @@ namespace GameSystem.Management
         {
             if (GameLoop.Instance.StateMachine.CurrentState is SetupState && _character == null)
             {
-                PlayerConfigManager.Instance.SetPlayerMeshes(_input.playerIndex, _characterMeshes);
+                PlayerConfigManager.Instance.SetPlayerSprites(_input.playerIndex, _characterObjects);
 
                 GameObject menu = GameObject.Find("PlayerMenu");
                 if (_playerScreen == null)
@@ -90,10 +87,6 @@ namespace GameSystem.Management
                 if (_joinText == null)
                 {
                     _joinText = _playerScreen.Find("CharacterPicker").Find("JoinText");
-                }
-                if (_colorPicker == null)
-                {
-                    _colorPicker = _playerScreen.Find("ColorPicker");
                 }
                 if (_readyButton == null)
                 {
@@ -106,7 +99,6 @@ namespace GameSystem.Management
 
                 _playerScreen.GetComponent<SetupScreenUpdater>().SetUpPlayer(_input.playerIndex);
                 _joinText.gameObject.SetActive(false);
-                _colorPicker.GetComponent<Button>().interactable = true;
                 _readyButton.GetComponent<Button>().interactable = true;
                 _input.uiInputModule = _eventSystem.GetComponent<InputSystemUIInputModule>();
                 _eventSystem.GetComponent<MultiplayerEventSystem>().sendNavigationEvents = true;
@@ -121,7 +113,6 @@ namespace GameSystem.Management
             {
                 _eventSystem.GetComponent<MultiplayerEventSystem>().sendNavigationEvents = false;
                 _readyButton.GetComponent<Button>().interactable = false;
-                _colorPicker.GetComponent<Button>().interactable = false;
                 _joinText.gameObject.SetActive(true);
                 _character = null;
             }
@@ -129,23 +120,29 @@ namespace GameSystem.Management
 
         private void InstantiatePlayerPreview(Transform spawns)
         {
-            PlayerConfigManager.Instance.OnCharacterMeshChanged += OnCharacterMeshChanged;
-            PlayerConfigManager.Instance.OnCharacterMaterialChanged += OnCharacterMaterialChanged;
+            PlayerConfigManager.Instance.OnCharacterSpriteChanged += OnCharacterSpriteChanged;
+            PlayerConfigManager.Instance.OnCharacterColorChanged += OnCharacterColorChanged;
+            PlayerConfigManager.Instance.SetPlayerColor(_input.playerIndex, _characterColors[_input.playerIndex]);
             _character = Instantiate(_characterView, spawns.transform.GetChild(_input.playerIndex));
         }
 
-        private void OnCharacterMaterialChanged(object sender, EventArgs e)
+        private void OnCharacterColorChanged(object sender, EventArgs e)
         {
             if (_character == null)
                 return;
-            _character.GetComponentInChildren<MeshRenderer>().material = _config.PlayerMaterial;
+
+            GameObject scarf = GameObject.Find("Scarf");
+            GameObject feather = GameObject.Find("Feather");
+            scarf.GetComponent<SpriteRenderer>().color = _config.PlayerColor;
+            feather.GetComponent<SpriteRenderer>().color = _config.PlayerColor;
         }
 
-        private void OnCharacterMeshChanged(object sender, EventArgs e)
+        private void OnCharacterSpriteChanged(object sender, EventArgs e)
         {
             if (_character == null)
                 return;
-            _character.GetComponentInChildren<MeshFilter>().sharedMesh = _config.Character;
+
+            _character = _config.Character;
         }
 
         private void SpawnPlayerInLevel(Transform spawns)
@@ -160,7 +157,7 @@ namespace GameSystem.Management
 
             if (_config.IsOverlord)
             {
-                var overlordSpawn = GameObject.Find("OverlordSpawn").transform;
+                Transform overlordSpawn = GameObject.Find("OverlordSpawn").transform;
                 GameObject overlord = Instantiate(_overlordPrefab, overlordSpawn.position, overlordSpawn.rotation);
                 overlord.transform.SetParent(transform);
                 return;
@@ -169,6 +166,5 @@ namespace GameSystem.Management
             climber.transform.SetParent(transform);
             climber.GetComponent<ClimberBehaviour>().InitializePlayer(_config);
         }
-
     }
 }

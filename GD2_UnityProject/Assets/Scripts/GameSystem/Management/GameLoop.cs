@@ -68,7 +68,7 @@ namespace GameSystem.Management
         #region Events
         private void OnPlayStateEntered(object sender, EventArgs e)
         {
-            CreateNewField(8, 12);
+            CreateNewField(_fieldRows, _fieldColumns);
         }
         #endregion
     }

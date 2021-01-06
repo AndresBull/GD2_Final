@@ -60,26 +60,24 @@ namespace GameSystem.Characters
         private Vector2 _movementConstraints = Vector2.zero;
         private float _horizontalMovement = 0.0f;                      // float that stores the value of the movement on the x-axis
         private float _jumpTimer = 0.0f;                               // float to compare the current runtime to the jump call time to determine if the call happened inside the jump delay interval
-        private float _placementDistance = 0.4f;                       // how far from the climber the ladder will be placed
-        private float _rayLength = 0.45f;                              // the length of the ray that tests against collision in order to prevent 'sticky' colliders
+        private float _rayLength = 0.4f;                              // the length of the ray that tests against collision in order to prevent 'sticky' colliders
         private readonly float _jumpForce = 6.0f;                      // the force applied to the rigidbody at the start of a jump
         private readonly float _ladderUnitDistance = 1.0f / Mathf.Tan(75.0f * Mathf.Deg2Rad);   // the 'constant' unit distance for a ladder placed under an angle of 75 degrees
         private int _highestYPositionReached = 0;
 
         private bool _canPush = true;
         private bool _isGrounded = true;
-        private bool _hasLadder = true;                                // backup field that determines if the climber has his ladder or not
         private bool _isJumping = false;                               // bool to determine if the character is jumping or not
 
         #endregion
 
         private bool IsCarryingLadder
         {
-            get => _hasLadder;
+            get => IsCarryingLadder;
             set
             {
-                _hasLadder = value;
-                PlayerConfigManager.Instance.ToggleLadderEquip(_playerConfig.PlayerIndex, _hasLadder);
+                IsCarryingLadder = value;
+                PlayerConfigManager.Instance.ToggleLadderEquip(_playerConfig.PlayerIndex, IsCarryingLadder);
             }
         }
 
@@ -124,14 +122,10 @@ namespace GameSystem.Characters
                 _rb.AddForce(Physics.gravity.normalized * _jumpHeight, ForceMode.Impulse);
             }
 
-            if (_isJumping)
-            {
-                // still working on this
-                //if (_rb.velocity.y != 0)
-                //{
-                //    _horizontalMovement -= Mathf.Sign(_horizontalMovement) * Mathf.Abs(_rb.velocity.y);
-                //}
-            }
+            //if (_isJumping)
+            //{
+            //    _horizontalMovement -= Mathf.Sign(_horizontalMovement) * Mathf.Abs(_rb.velocity.y * 10);
+            //}
 
             float movement = horizontalMovement * _maxSpeed * Time.fixedDeltaTime;
             transform.position += new Vector3(movement, 0.0f, 0.0f);
@@ -283,28 +277,27 @@ namespace GameSystem.Characters
 
         private void PickupLadder()
         {
-            if (!IsCarryingLadder)
+            if (IsCarryingLadder)
             {
-                BlockPosition climberBlock = GetClimberBlockPosition();
+                return;
+            }
+            
 
-                // TODO: change this method to use the blocks assigend in teh PlaceLadder method instead of recalculating everything
 
-                // get all objects inside the range and filter for ladders
-                var colliders = Physics.OverlapSphere(transform.position, _range);
+            // get all objects inside the range and filter for ladders
+            Collider[] colliders = Physics.OverlapSphere(transform.position, _range);
 
-                foreach (var collider in colliders)
+            foreach (Collider collider in colliders)
+            {
+                if (collider.transform.root.TryGetComponent(out Ladder ladderScript))
                 {
-                    if (collider.transform.root.TryGetComponent(out Ladder ladderScript))
+                    if (ladderScript.Owner == gameObject)
                     {
-                        if (ladderScript.Owner == gameObject)
-                        {
-                            Destroy(ladderScript.gameObject);
-                            print("Picked up Ladder");
-                            IsCarryingLadder = true;
-                            break;
-                        }
-                        continue;
+                        Destroy(ladderScript.gameObject);
+                        IsCarryingLadder = true;
+                        break;
                     }
+                    continue;
                 }
             }
         }
@@ -526,7 +519,7 @@ namespace GameSystem.Characters
 
         public void OnPlaceLadder(InputValue value)
         {
-            if (value.isPressed)
+            if (value.isPressed && IsGrounded())
             {
                 if (IsCarryingLadder)
                 {

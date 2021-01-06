@@ -285,10 +285,7 @@ namespace GameSystem.Characters
                 _animator.SetBool("IsWalking", true);
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction * _cameraTransform.right, _cameraTransform.up), 0.5f);
             }
-            else
-            {
-                _animator.SetBool("IsWalking", false);
-            }
+            _animator.SetBool("IsWalking", false);
         }
 
         private void PickupLadder()

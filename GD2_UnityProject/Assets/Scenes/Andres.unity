@@ -33574,10 +33574,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.045
-    y: 0.08
-    width: 0.61
-    height: 0.84
+    x: 0.03
+    y: 0.05
+    width: 0.74
+    height: 0.9
   near clip plane: 0.3
   far clip plane: 150
   field of view: 60
@@ -38470,6 +38470,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Climber
+      objectReference: {fileID: 0}
+    - target: {fileID: 5237320628234950743, guid: 01254aec4ca41fb4f8435845e00be1c0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5237320628234950760, guid: 01254aec4ca41fb4f8435845e00be1c0,
         type: 3}

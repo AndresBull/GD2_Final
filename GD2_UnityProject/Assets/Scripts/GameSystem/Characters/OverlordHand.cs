@@ -81,7 +81,7 @@ namespace GameSystem.Characters
         private void DropBlock()
         {
             _hasBlock = false;
-            _holdBlockView.gameObject.GetComponent<Collider>().enabled = true;
+            //_holdBlockView.gameObject.GetComponent<Collider>().enabled = true;
             _holdBlockView?.SlowDrop();
             _holdBlockView = null;
             _nextBlockTimer = 0;
@@ -91,7 +91,7 @@ namespace GameSystem.Characters
         private void FastDropBlock()
         {
             _hasBlock = false;
-            _holdBlockView.gameObject.GetComponent<Collider>().enabled = true;
+            //_holdBlockView.gameObject.GetComponent<Collider>().enabled = true;
             _holdBlockView?.FastDrop();
             _holdBlockView = null;
             _nextBlockTimer = 0;

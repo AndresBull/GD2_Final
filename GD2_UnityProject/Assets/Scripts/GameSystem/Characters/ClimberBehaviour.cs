@@ -248,6 +248,9 @@ namespace GameSystem.Characters
                     PointSystemScript.PlayerReachedNewHeight(_playerConfig.PlayerIndex, scoreMultiplier);
                     _highestYPositionReached = currentYPosition;
                 }
+
+                if (currentYPosition >= _blockField.Rows)
+                    PlayerConfigManager.Instance.TriggerRoundOver(_playerConfig.PlayerIndex);
             }
         }
 

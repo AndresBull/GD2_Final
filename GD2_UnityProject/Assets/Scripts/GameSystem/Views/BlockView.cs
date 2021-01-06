@@ -165,7 +165,8 @@ namespace GameSystem.Views
                     offsetPosition = 0;
                     Debug.Log("Block Above Height Limit");
 
-                    GameLoop.Instance.StateMachine.MoveTo(GameStates.Play);
+                    PlayerConfigManager.Instance.TriggerRoundOver(-1);
+
                     StopUpdate();
                     return;
                 }
@@ -181,22 +182,22 @@ namespace GameSystem.Views
                         Debug.Log("Landed");
 
                         //Update all views/blocks/positions and register them in the field
+                        gameObject.GetComponent<Collider>().enabled = true;
                         UpdateBlockView(new Vector2Int(0, offsetPosition));
                         foreach (Block block in _shapeBlocks)
                         {
+                            if (block.Position.Y >= _field.Rows)
+                            {
+                                Debug.Log("Block Above Height Limit");
+                                PlayerConfigManager.Instance.TriggerRoundOver(-1);
+                                return;
+                            }
+
                             _field.AddToDictionary(block);
                         }
 
                         //Floodfill and check for trapped players
                         FloodFillCheck();
-
-                        //Check for next round
-                        if (PlayerConfigManager.Instance.GetAllClimbers().All(c => !c.activeInHierarchy))
-                        {
-                            GameLoop.Instance.StateMachine.MoveTo(GameStates.Play);
-                            StopUpdate();
-                            return;
-                        }
 
                         //Sound effects
                         if (_wasThrownHard)
@@ -233,6 +234,28 @@ namespace GameSystem.Views
             foreach (GameObject climber in PlayerConfigManager.Instance.GetAllClimbers())
             {
                 climber.GetComponent<ClimberBehaviour>().CheckIfTrapped();
+            }
+
+            //Check for next round
+            if (PlayerConfigManager.Instance.GetAllClimbers().All(c => !c.activeInHierarchy))
+            {
+                int overlordIndex = PlayerConfigManager.Instance.GetOverlordIndex();
+                PlayerConfigManager.Instance.TriggerRoundOver(overlordIndex);
+                StopUpdate();
+                return;
+            }
+        }
+
+        private void FirstBlockCheck()
+        {
+            if (_shapeBlocks.Any(b => _field.BlockAt(new BlockPosition(b.Position.X, b.Position.Y - 1)) != null)
+                    || _shapeBlocks.Any(b => b.Position.Y <= 0))
+            {
+                Debug.Log("Block Above Height Limit");
+
+                PlayerConfigManager.Instance.TriggerRoundOver(-1);
+
+                StopUpdate();
             }
         }
 
@@ -276,6 +299,7 @@ namespace GameSystem.Views
             enabled = false;
         }
 
+
         public void FastDrop()
         {
             SetShape();
@@ -286,6 +310,7 @@ namespace GameSystem.Views
             DropDownDelay = _minTimeDelay;
 
             enabled = true;
+            FirstBlockCheck();
         }
 
         public void SlowDrop()
@@ -297,6 +322,7 @@ namespace GameSystem.Views
             _wasThrownHard = false;
 
             enabled = true;
+            FirstBlockCheck();
         }
 
         public void MoveAccordingToHand(Vector3 handPosition)

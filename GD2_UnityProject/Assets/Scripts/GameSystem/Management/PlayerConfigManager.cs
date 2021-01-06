@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameSystem.Characters;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,7 @@ namespace GameSystem.Management
         public event EventHandler<ScoreChangedEventArgs> OnScoreChanged;
         public event EventHandler<LadderEquipChangedEventArgs> OnLadderEquipChanged;
         public event EventHandler<SpecialChangedEventArgs> OnSpecialChanged;
+        public event EventHandler<RoundOverEventArgs> OnRoundOver;
         public event EventHandler OnCharacterSpriteChanged;
         public event EventHandler OnCharacterColorChanged;
 
@@ -79,6 +81,19 @@ namespace GameSystem.Management
             return climbers;
         }
 
+        internal int GetOverlordIndex()
+        {
+            foreach (var playerConfig in _playerConfigs)
+            {
+                if (playerConfig.IsOverlord)
+                {
+                    return playerConfig.Input.playerIndex;
+                }
+            }
+
+            return 0;
+        }
+
         internal List<PlayerConfiguration> GetAllClimberConfigs()
         {
             List<PlayerConfiguration> configs = new List<PlayerConfiguration>();
@@ -95,6 +110,17 @@ namespace GameSystem.Management
         internal List<PlayerConfiguration> GetPlayerConfigs()
         {
             return _playerConfigs;
+        }
+
+        internal void DisablePlayerCharacters()
+        {
+            foreach (var config in _playerConfigs)
+            {
+                if (config.IsOverlord)
+                    Destroy(config.Input.gameObject.transform.GetChild(0).gameObject.GetComponent<OverlordHand>());
+                else
+                    Destroy(config.Input.gameObject.transform.GetChild(0).gameObject.GetComponent<ClimberBehaviour>());
+            }
         }
 
         internal void DestroyConfigChildren()
@@ -199,6 +225,11 @@ namespace GameSystem.Management
         internal void ToggleSpecialUsed(int playerIndex, bool canUseSpecial)
         {
             OnSpecialChanged?.Invoke(this, new SpecialChangedEventArgs(playerIndex, canUseSpecial));
+        }
+
+        internal void TriggerRoundOver(int playerIndex)
+        {
+            OnRoundOver?.Invoke(this, new RoundOverEventArgs(playerIndex));
         }
 
         internal void UpdatePlayerRoundScore(int playerIndex, int addedScore)
@@ -329,6 +360,16 @@ namespace GameSystem.Management
         {
             PlayerIndex = playerIndex;
             CanUseSpecial = canUseSpecial;
+        }
+    }
+
+    public class RoundOverEventArgs : EventArgs
+    {
+        public int PlayerIndex;
+
+        public RoundOverEventArgs(int playerIndex)
+        {
+            PlayerIndex = playerIndex;
         }
     }
 }

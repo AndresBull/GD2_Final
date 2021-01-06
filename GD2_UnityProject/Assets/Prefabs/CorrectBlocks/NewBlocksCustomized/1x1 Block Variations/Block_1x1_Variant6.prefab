@@ -131,6 +131,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6867676027347393128, guid: e5f11ee99df15ae45b0d1382a45fe148,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6867676027347393128, guid: e5f11ee99df15ae45b0d1382a45fe148,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7026617906773883447, guid: e5f11ee99df15ae45b0d1382a45fe148,
         type: 3}
       propertyPath: _smallSmokePrefab

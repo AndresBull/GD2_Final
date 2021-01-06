@@ -66,6 +66,7 @@ namespace GameSystem.Characters
         private int _highestYPositionReached = 0;
 
         private bool _canPush = true;
+        private bool _isCarryingLadder = true;
         private bool _isGrounded = true;
         private bool _isJumping = false;                               // bool to determine if the character is jumping or not
 
@@ -73,11 +74,11 @@ namespace GameSystem.Characters
 
         private bool IsCarryingLadder
         {
-            get => IsCarryingLadder;
+            get => _isCarryingLadder;
             set
             {
-                IsCarryingLadder = value;
-                PlayerConfigManager.Instance.ToggleLadderEquip(_playerConfig.PlayerIndex, IsCarryingLadder);
+                _isCarryingLadder = value;
+                PlayerConfigManager.Instance.ToggleLadderEquip(_playerConfig.PlayerIndex, _isCarryingLadder);
             }
         }
 

@@ -76,20 +76,27 @@ namespace GameSystem.Views
 
         private void SetDimensions()
         {
-            BlockWidth = 0;
-            BlockHeight = 0;
-            BlockPosition baseAnchorBlockPos = _fieldView.PositionConverter.ToBlockPosition(_field, transform.GetChild(0).position);
-            for (int i = 0; i < transform.childCount; i++)
+            int lowestX = _field.Columns + 1;
+            int lowestY = _field.Rows + 1;
+            int highestX = -100;
+            int highestY = -100;
+
+            Transform[] children = new Transform[transform.childCount];
+            for (int i = 0; i < children.Length; i++)
             {
-                Transform anchor = transform.GetChild(i);
-                BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, anchor.position);
-
-                int width = blockPosition.X - baseAnchorBlockPos.X + 1;
-                BlockWidth = Mathf.Max(width, BlockWidth);
-
-                int height = blockPosition.Y - baseAnchorBlockPos.Y + 1;
-                BlockHeight = Mathf.Max(height, BlockHeight);
+                Transform child = transform.GetChild(i);
+                if (child.gameObject.name.Contains("Anchor"))
+                {
+                    BlockPosition blockPosition = _fieldView.PositionConverter.ToBlockPosition(_field, child.position);
+                    lowestX = Math.Min(lowestX, blockPosition.X);
+                    lowestY = Math.Min(lowestY, blockPosition.Y);
+                    highestX = Math.Max(highestX, blockPosition.X);
+                    highestY = Math.Max(highestY, blockPosition.Y);
+                }
             }
+
+            BlockWidth = highestX - lowestX + 1;
+            BlockHeight = highestY - lowestY + 1;
         }
 
         private List<BlockPosition> Neighbours(BlockPosition startBlock)
@@ -212,7 +219,7 @@ namespace GameSystem.Views
                     }
 
                     //Functions when normally falling
-                    UpdateBlockView(new Vector2Int(0,offsetPosition));
+                    UpdateBlockView(new Vector2Int(0, offsetPosition));
 
                     //Need to make this a smoother function
                     DropDownDelay = Mathf.Max(DropDownDelay * 0.8f, _minTimeDelay);
@@ -256,7 +263,7 @@ namespace GameSystem.Views
             for (int i = 0; i < _shapeBlocks.Count; i++)
             {
                 Block block = _shapeBlocks[i];
-                Block newBlock = new Block(block.Position.X +offset.x, block.Position.Y + offset.y);
+                Block newBlock = new Block(block.Position.X + offset.x, block.Position.Y + offset.y);
                 _shapeBlocks[i] = newBlock;
             }
         }

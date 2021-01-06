@@ -278,7 +278,7 @@ MonoBehaviour:
   - {r: 0.97647065, g: 0.74509805, b: 0.4431373, a: 1}
   - {r: 0.8980393, g: 0.14509805, b: 0.16470589, a: 1}
   - {r: 0.4901961, g: 0.7725491, b: 0.6666667, a: 1}
-  _climberPrefab: {fileID: 5237320628234950743, guid: 01254aec4ca41fb4f8435845e00be1c0,
+  _climberPrefab: {fileID: 8811266625348397413, guid: fb4893de3c4066d4998c2e2ddcca5988,
     type: 3}
   _overlordPrefab: {fileID: 3912653369593397870, guid: 2d2270fe5f1844b4b9b87cd67fdf9d88,
     type: 3}

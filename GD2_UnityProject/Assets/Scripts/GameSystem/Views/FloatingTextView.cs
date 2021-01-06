@@ -10,4 +10,9 @@ public class FloatingTextView : MonoBehaviour
     {
         Destroy(this.gameObject, _destroyTextTime);
     }
+
+    private void Update()
+    {
+        
+    }
 }

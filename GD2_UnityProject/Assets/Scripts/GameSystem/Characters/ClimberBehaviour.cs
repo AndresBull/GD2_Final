@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 namespace GameSystem.Characters
 {
@@ -73,6 +74,7 @@ namespace GameSystem.Characters
         private bool _isCarryingLadder = true;
         private bool _isGrounded = true;
         private bool _isJumping = false;                               // bool to determine if the character is jumping or not
+        private bool _isDead = false;
 
         #endregion
 
@@ -166,7 +168,9 @@ namespace GameSystem.Characters
 
             if (filledPositions.Contains(_blockFieldView.PositionConverter.ToBlockPosition(_blockField, transform.position)))
             {
+                if(this.gameObject)
                 GetKilled();
+                
             }
         }
 
@@ -249,10 +253,14 @@ namespace GameSystem.Characters
 
         private void GetKilled()
         {
-            PointSystemScript.PlayerGotKilled();
-            // TODO: IDEA: every time a player dies, another random message is shown
-            print($"Player {_playerConfig.PlayerIndex + 1} is out of the run.");
-            gameObject.SetActive(false);
+            if (!_isDead)
+            {
+                PointSystemScript.PlayerGotKilled();
+                // TODO: IDEA: every time a player dies, another random message is shown
+                print($"Player {_playerConfig.PlayerIndex + 1} is out of the run.");
+                gameObject.SetActive(false);
+                _isDead = true;
+            }
         }
 
         private void Jump()

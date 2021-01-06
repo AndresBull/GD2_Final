@@ -25,7 +25,12 @@ namespace GameSystem.Management
             PlayerConfigManager.Instance.OnSpecialChanged += OnSpecialChanged;
             _ladderImage.gameObject.SetActive(true);
         }
-
+        private void OnDestroy()
+        {
+            PlayerConfigManager.Instance.OnScoreChanged -= OnScoreChanged;
+            PlayerConfigManager.Instance.OnLadderEquipChanged -= OnLadderEquipChanged;
+            PlayerConfigManager.Instance.OnSpecialChanged -= OnSpecialChanged;
+        }
         public void SetPlayerIndex(int index)
         {
             _playerIndex = index;
@@ -51,7 +56,13 @@ namespace GameSystem.Management
 
         private void OnSpecialChanged(object sender, SpecialChangedEventArgs e)
         {
+            if (e.PlayerIndex != _playerIndex)
+                return;
 
+            if (e.CanUseSpecial)
+                _lightImage.sprite = _greenLight;
+            else
+                _lightImage.sprite = _redLight;
         }
 
     }

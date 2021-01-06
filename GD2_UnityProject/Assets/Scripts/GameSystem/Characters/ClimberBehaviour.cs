@@ -397,8 +397,17 @@ namespace GameSystem.Characters
         private IEnumerator PushCooldown(float timeInSec)
         {
             _canPush = false;
+            PlayerConfigManager.Instance.ToggleSpecialUsed(_playerConfig.PlayerIndex, _canPush);
+
             yield return new WaitForSeconds(timeInSec);
+
             _canPush = true;
+            PlayerConfigManager.Instance.ToggleSpecialUsed(_playerConfig.PlayerIndex, _canPush);
+        }
+
+        private void OnDestroy()
+        {
+            StopAllCoroutines();
         }
 
         #region Input

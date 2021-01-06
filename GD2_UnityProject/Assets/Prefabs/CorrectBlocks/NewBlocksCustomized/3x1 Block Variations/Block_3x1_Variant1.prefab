@@ -7,6 +7,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4305763582398963441, guid: 9e03db5c781e3dc4199406a7cc991f72,
+        type: 3}
+      propertyPath: _smallSmokePrefab
+      value: 
+      objectReference: {fileID: 6649812136396034264, guid: e768432a476bb8e4a9df5b2a280e0d98,
+        type: 3}
+    - target: {fileID: 4305763582398963441, guid: 9e03db5c781e3dc4199406a7cc991f72,
+        type: 3}
+      propertyPath: _bigSmokePrefab
+      value: 
+      objectReference: {fileID: 4552428218854777542, guid: ec8594cd701c58f4e89e3805c005ec00,
+        type: 3}
     - target: {fileID: 6013479940293294665, guid: 9e03db5c781e3dc4199406a7cc991f72,
         type: 3}
       propertyPath: m_LocalPosition.x

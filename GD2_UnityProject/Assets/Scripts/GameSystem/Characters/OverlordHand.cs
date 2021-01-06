@@ -22,6 +22,8 @@ namespace GameSystem.Characters
         [Tooltip("The speed of the hand.")]
         [SerializeField] private float _speed = 10.0f;
 
+        private PlayerConfiguration _playerConfig = null;
+
         private BlockView _holdBlockView;
         private BlockView _nextBlockView;
 
@@ -44,6 +46,11 @@ namespace GameSystem.Characters
                 RandomNextBlock();
 
             RandomNextBlock();
+        }
+
+        public void SetPlayerConfig(PlayerConfiguration config)
+        {
+            _playerConfig = config;
         }
 
         private void SetMovementConstraints(int blockWidthAmount)
@@ -94,8 +101,12 @@ namespace GameSystem.Characters
         private IEnumerator FastThrowCooldown(float timeInSec)
         {
             _canFastThrow = false;
+            PlayerConfigManager.Instance.ToggleSpecialUsed(_playerConfig.PlayerIndex, _canFastThrow);
+
             yield return new WaitForSeconds(timeInSec);
             _canFastThrow = true;
+            PlayerConfigManager.Instance.ToggleSpecialUsed(_playerConfig.PlayerIndex, _canFastThrow);
+
         }
 
         private void FixedUpdate()
@@ -190,6 +201,11 @@ namespace GameSystem.Characters
                     StartCoroutine(FastThrowCooldown(10));
                 }
             }
+        }
+
+        private void OnDestroy()
+        {
+            StopAllCoroutines();
         }
     }
 }

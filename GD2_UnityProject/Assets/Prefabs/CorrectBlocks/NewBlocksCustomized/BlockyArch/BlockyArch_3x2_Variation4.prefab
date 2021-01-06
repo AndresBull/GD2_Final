@@ -151,6 +151,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: BlockyArch_3x2_Variation4
       objectReference: {fileID: 0}
+    - target: {fileID: 5537599044207396987, guid: a1791f2d74b9ce14abdf3721919db333,
+        type: 3}
+      propertyPath: _smallSmokePrefab
+      value: 
+      objectReference: {fileID: 6649812136396034264, guid: e768432a476bb8e4a9df5b2a280e0d98,
+        type: 3}
+    - target: {fileID: 5537599044207396987, guid: a1791f2d74b9ce14abdf3721919db333,
+        type: 3}
+      propertyPath: _bigSmokePrefab
+      value: 
+      objectReference: {fileID: 4552428218854777542, guid: ec8594cd701c58f4e89e3805c005ec00,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1791f2d74b9ce14abdf3721919db333, type: 3}
 --- !u!4 &7219205128740306556 stripped

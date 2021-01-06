@@ -144,6 +144,7 @@ namespace GameSystem.Management
 
             _character = _config.Character;
         }
+        
 
         private void SpawnPlayerInLevel(Transform spawns)
         {
@@ -160,6 +161,7 @@ namespace GameSystem.Management
                 Transform overlordSpawn = GameObject.Find("OverlordSpawn").transform;
                 GameObject overlord = Instantiate(_overlordPrefab, overlordSpawn.position, overlordSpawn.rotation);
                 overlord.transform.SetParent(transform);
+                overlord.GetComponent<OverlordHand>().SetPlayerConfig(_config);
                 return;
             }
             GameObject climber = Instantiate(_climberPrefab, spawns.GetChild(_input.playerIndex).position, spawns.GetChild(_input.playerIndex).rotation, transform);

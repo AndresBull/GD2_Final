@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 3888041314708288869}
   - component: {fileID: 659076897191180436}
   - component: {fileID: -2655535800688079255}
+  - component: {fileID: 2991002784938133256}
   m_Layer: 8
   m_Name: ClimberPrefab
   m_TagString: Untagged
@@ -181,3 +182,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _climbSpeed: 3
+--- !u!114 &2991002784938133256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8811266625348397413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 959ce0b4c7b71e046b1d6beffffed271, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _floatingTextPrefab: {fileID: 1925771900014206996, guid: ff891a991fb2fec4b9430d327d715bd5,
+    type: 3}

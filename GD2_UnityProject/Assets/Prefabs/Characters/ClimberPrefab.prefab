@@ -156,15 +156,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c9c2a0562951094a9ac19a645a9ecd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshRenderer: {fileID: 8811266624796323659}
-  _meshFilter: {fileID: 8811266624796323656}
   _camera: {fileID: 0}
   _maxSpeed: 10
   _jumpDelay: 0.25
-  _jumpHeight: 0.8
+  _jumpHeight: 1
   _collisionMask:
     serializedVersion: 2
-    m_Bits: 535
+    m_Bits: 23
   _ladderPrefab: {fileID: 1920797143079988020, guid: 3c9c4135af3d1a24aac34f0b422627ef,
     type: 3}
   _range: 1

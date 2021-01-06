@@ -158,7 +158,6 @@ namespace GameSystem.Management
             playerInfo.transform.SetParent(infoPanel.transform, false);
             playerInfo.GetComponent<PlayScreenUpdater>().SetPlayerIndex(_input.playerIndex);
 
-            // TODO: enable after testing is done to spawn overlord 
             if (_config.IsOverlord)
             {
                 var overlordSpawn = GameObject.Find("OverlordSpawn").transform;

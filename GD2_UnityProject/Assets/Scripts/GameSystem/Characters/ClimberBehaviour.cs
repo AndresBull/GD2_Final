@@ -14,10 +14,6 @@ namespace GameSystem.Characters
     public class ClimberBehaviour : MonoBehaviour
     {
         #region Fields
-
-        [SerializeField] private MeshRenderer _meshRenderer = null;
-        [SerializeField] private MeshFilter _meshFilter = null;
-
         [Header("Camera")]
         [Tooltip("The camera that renders the scene to the viewport. If no camera is assigned the object tagged \"MainCamera\" will be used.")]
         [SerializeField] private GameObject _camera = null;
@@ -50,27 +46,30 @@ namespace GameSystem.Characters
         public bool IsClimbing = false;
 
         // Components
-        private BlockField _blockField;                         // reference to the array that represents the layout of the blocks
-        private BlockFieldView _blockFieldView;                 // reference to the visual representation of the layout of the blocks
-        private Collider _col;                                  // reference to the (base) collider component attached to this gameobject;
-        private PlayerConfiguration _playerConfig;
-        private Rigidbody _rb;                                  // reference to the rigidbody component attached to this gameobject
-        private Transform _cameraTransform;                     // holds the camera transform locally to preserve the original transform from changes
-        private Transform _ladderClimbed;                       // the current ladder being climbed
+        private BlockField _blockField = null;                         // reference to the array that represents the layout of the blocks
+        private BlockFieldView _blockFieldView = null;                 // reference to the visual representation of the layout of the blocks
+        private Animation _animation = null;
+        private Collider _col = null;                                  // reference to the (base) collider component attached to this gameobject;
+        private PlayerConfiguration _playerConfig = null;
+        private Rigidbody _rb = null;                                  // reference to the rigidbody component attached to this gameobject
+        private Transform _cameraTransform = null;                     // holds the camera transform locally to preserve the original transform from changes
+        private Transform _ladderClimbed = null;                       // the current ladder being climbed
 
         // Structs
-        private Vector3 _colExtents;                            // the extents of the collider
-        private float _horizontalMovement;                      // float that stores the value of the movement on the x-axis
-        private float _jumpTimer = 0.0f;                        // float to compare the current runtime to the jump call time to determine if the call happened inside the jump delay interval
-        private float _placementDistance = 0.4f;                // how far from the climber the ladder will be placed
-        private float _rayLength = 0.45f;                        // the length of the ray that tests against collision in order to prevent 'sticky' colliders
-        private readonly float _jumpForce = 6.0f;               // the force applied to the rigidbody at the start of a jump
+        private Vector3 _colExtents = Vector3.zero;                    // the extents of the collider
+        private Vector2 _movementConstraints = Vector2.zero;
+        private float _horizontalMovement = 0.0f;                      // float that stores the value of the movement on the x-axis
+        private float _jumpTimer = 0.0f;                               // float to compare the current runtime to the jump call time to determine if the call happened inside the jump delay interval
+        private float _placementDistance = 0.4f;                       // how far from the climber the ladder will be placed
+        private float _rayLength = 0.45f;                              // the length of the ray that tests against collision in order to prevent 'sticky' colliders
+        private readonly float _jumpForce = 6.0f;                      // the force applied to the rigidbody at the start of a jump
+        private readonly float _ladderUnitDistance = 1.0f / Mathf.Tan(75.0f * Mathf.Deg2Rad);   // the 'constant' unit distance for a ladder placed under an angle of 75 degrees
         private int _highestYPositionReached = 0;
 
-        private bool _isJumping = false;                        // bool to determine if the character is jumping or not
-        private bool _hasLadder = true;                         // backup field that determines if the climber has his ladder or not
-        private Vector2 _movementConstraints;
         private bool _canPush = true;
+        private bool _hasLadder = true;                                // backup field that determines if the climber has his ladder or not
+        private bool _isJumping = false;                               // bool to determine if the character is jumping or not
+
         #endregion
 
         private bool IsCarryingLadder
@@ -104,6 +103,7 @@ namespace GameSystem.Characters
             // set up the components
             _rb = GetComponent<Rigidbody>();
             _col = GetComponent<Collider>();
+            _animation = GetComponent<Animation>();
             _colExtents = _col.bounds.extents;
             SetMovementConstraints();
         }
@@ -111,10 +111,10 @@ namespace GameSystem.Characters
         private void FixedUpdate()
         {
             CheckIfNewHeightIsReached();
-            var horizontalMovement = _horizontalMovement;
+
             if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + _colExtents.y / 2, transform.position.z), transform.forward, _rayLength, _collisionMask)
                 || Physics.Raycast(new Vector3(transform.position.x, transform.position.y - _colExtents.y / 2, transform.position.z), transform.forward, _rayLength, _collisionMask))
-                horizontalMovement = 0f;
+                _horizontalMovement = 0f;
 
             if (_rb.velocity.y <= 0)
             {
@@ -130,7 +130,7 @@ namespace GameSystem.Characters
                 //}
             }
 
-            float movement = horizontalMovement * _maxSpeed * Time.fixedDeltaTime;
+            float movement = _horizontalMovement * _maxSpeed * Time.fixedDeltaTime;
             transform.position += new Vector3(movement, 0.0f, 0.0f);
 
             float clampedX = Mathf.Clamp(transform.position.x, _movementConstraints.x, _movementConstraints.y);
@@ -144,8 +144,8 @@ namespace GameSystem.Characters
         public void InitializePlayer(PlayerConfiguration config)
         {
             _playerConfig = config;
-            _meshFilter.mesh = config.Character;
-            _meshRenderer.material = config.PlayerMaterial;
+            //_meshFilter.mesh = config.Character;
+            //_spriteRenderer.sprite = config.PlayerMaterial;
         }
 
         public void CheckIfTrapped()
@@ -175,57 +175,46 @@ namespace GameSystem.Characters
         }
 
 
-        private bool FindSuitablePlacementOnSide(int direction, BlockPosition climberBlock, ref int ladderLength, ref bool isAtPreferredSide)
+        private bool HasFoundSuitablePlacementOnSide(int direction, BlockPosition climberBlock, ref int ladderLength)
         {
-            for (int i = 1; i <= _maxLadderHeight; i++)
+            int dirNormal = direction / Mathf.Abs(direction);
+            ladderLength = 0;
+            // determine the height of the ladder, based on the blocks on the side
+            for (int i = _maxLadderHeight; i >= 1; i--)
             {
-                Block blockNorth2 = _blockField.BlockAt(new BlockPosition(climberBlock.X, climberBlock.Y + i));
-                if (blockNorth2 != null)
+                Block blockNorthBeside = _blockField.BlockAt(new BlockPosition(climberBlock.X + dirNormal, climberBlock.Y + i));
+                if (blockNorthBeside != null)
                 {
-                    ladderLength = i;
-                    print(ladderLength);
+                    continue;
+                }
+
+                Block blockUnderNorthBeside = _blockField.BlockAt(new BlockPosition(climberBlock.X + dirNormal, climberBlock.Y + i - 1));
+                if (blockUnderNorthBeside == null)
+                {
+                    continue;
+                }
+                ladderLength = i;
+                break;
+            }
+
+            // determine if all positions above the current cell are free to put a ladder in
+            for (int i = 1; i <= ladderLength; i++)
+            {
+                Block blockNorth = _blockField.BlockAt(new BlockPosition(climberBlock.X, climberBlock.Y + i));
+                if (blockNorth != null)
+                {
+                    ladderLength = 0;
                     break;
                 }
             }
+
             if (ladderLength < 2)
             {
                 print("Can't place ladder here. Placement blocked.");
                 return false;
             }
 
-            int dirNormal = (int)(direction / Mathf.Abs(direction));
-            // check west side
-            for (int i = 2; i <= ladderLength; i++)
-            {
-                Block blockNorthWest = _blockField.BlockAt(new BlockPosition(climberBlock.X - (1 * dirNormal), climberBlock.Y + i));
-                Block blockUnderNorthWest = _blockField.BlockAt(new BlockPosition(climberBlock.X - (1 * dirNormal), climberBlock.Y + i - 1));
-
-                if (blockNorthWest == null && blockUnderNorthWest != null)
-                {
-                    ladderLength = i;
-                    isAtPreferredSide = true;
-                    print("Placed at preferred side.");
-                    return true;
-                }
-            }
-
-            // check east side
-            for (int i = 2; i <= ladderLength; i++)
-            {
-                Block blockNorthEast = _blockField.BlockAt(new BlockPosition(climberBlock.X + (1 * dirNormal), climberBlock.Y + i));
-                Block blockUnderNorthEast = _blockField.BlockAt(new BlockPosition(climberBlock.X + (1 * dirNormal), climberBlock.Y + i - 1));
-
-                if (blockNorthEast == null && blockUnderNorthEast != null)
-                {
-                    ladderLength = i;
-                    isAtPreferredSide = false;
-                    print("Placed at opposite side.");
-                    return true;
-                }
-            }
-
-            print("No suitable placement found for ladder.");
-            return false;
+            return true;
         }
 
         private bool IsGrounded()
@@ -274,12 +263,14 @@ namespace GameSystem.Characters
 
             if (direction <= 0.01f && direction >= -0.01f)
             {
+                // TODO: set sprite animation to idle
                 transform.rotation = Quaternion.LookRotation(-_cameraTransform.forward, _cameraTransform.up);
                 return;
             }
 
             if (transform.rotation != Quaternion.LookRotation(direction * _cameraTransform.right, _cameraTransform.up))
             {
+                // TODO: set sprite animation to walk
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction * _cameraTransform.right, _cameraTransform.up), 0.5f);
             }
         }
@@ -312,67 +303,60 @@ namespace GameSystem.Characters
             }
         }
 
-        private void PlaceLadderAt(BlockPosition climberBlock)
+        private void DetermineLadderPosition()
         {
-            bool placeLadderWest;
-            bool isPlacedOnPreferredSide = true;
-            bool hasFoundPlacement;
+            BlockPosition climberBlock = GetClimberBlockPosition();
+            bool placeLadderWest = false;
+            bool placeLadderEast = false;
             int ladderLength = _maxLadderHeight;
 
-            if (GetXLocationOnBlock() >= 0.5f)
+            if (GetXLocationOnBlock() <= 0.5f)
             {
-                print("Looking for placement West/Left...");
-                placeLadderWest = true;
-                hasFoundPlacement = FindSuitablePlacementOnSide(1, climberBlock, ref ladderLength, ref isPlacedOnPreferredSide);
+                placeLadderWest = HasFoundSuitablePlacementOnSide(-1, climberBlock, ref ladderLength);
+                if (!placeLadderWest)
+                {
+                    placeLadderEast = HasFoundSuitablePlacementOnSide(1, climberBlock, ref ladderLength);
+                }
             }
             else
             {
-                print("Looking for placement East/Right...");
-                placeLadderWest = false;
-                hasFoundPlacement = FindSuitablePlacementOnSide(-1, climberBlock, ref ladderLength, ref isPlacedOnPreferredSide);
+                placeLadderEast = HasFoundSuitablePlacementOnSide(1, climberBlock, ref ladderLength);
+                if (!placeLadderEast)
+                {
+                    placeLadderWest = HasFoundSuitablePlacementOnSide(-1, climberBlock, ref ladderLength);
+                }
             }
 
-            if (hasFoundPlacement)
+            if (placeLadderEast)
             {
-                PlaceLadder(placeLadderWest, isPlacedOnPreferredSide, ladderLength);
+                PlaceLadder(climberBlock, false, ladderLength);
+            }
+
+            if (placeLadderWest)
+            {
+                PlaceLadder(climberBlock, true, ladderLength);
             }
         }
 
-        private void PlaceLadder(bool placeLadderLeft, bool isAtPreferredSide, int ladderLength)
+        private void PlaceLadder(BlockPosition climberBlock, bool placeLadderWest, int ladderLength)
         {
-            Vector3 position = transform.position;
-            position.y -= _colExtents.y;
+            Vector3 cellPosition = _blockFieldView.PositionConverter.ToWorldPosition(_blockField, climberBlock);
+            cellPosition.x = Mathf.Floor(cellPosition.x);
+            cellPosition.y = transform.position.y - _colExtents.y;
             Quaternion rotation;
-            //_placementDistance = _blockFieldView.PositionConverter.BlockScale.x - (GetXLocationOnBlock() + Mathf.Cos(30.0f * Mathf.Deg2Rad) * ladderLength);
 
-            if (placeLadderLeft)
+            if (placeLadderWest)
             {
-                print("Place Ladder West/Left");
-                position.x -= _placementDistance;
-                if (!isAtPreferredSide)
-                {
-                    rotation = Quaternion.LookRotation(-_cameraTransform.right, _cameraTransform.up);
-                }
-                else
-                {
-                    rotation = Quaternion.LookRotation(_cameraTransform.right, _cameraTransform.up);
-                }
+                rotation = Quaternion.LookRotation(_cameraTransform.right, _cameraTransform.up);
+                cellPosition.x += ladderLength * _ladderUnitDistance;
             }
             else
             {
-                print("Place Ladder East/Right");
-                position.x += _placementDistance;
-                if (!isAtPreferredSide)
-                {
-                    rotation = Quaternion.LookRotation(_cameraTransform.right, _cameraTransform.up);
-                }
-                else
-                {
-                    rotation = Quaternion.LookRotation(-_cameraTransform.right, _cameraTransform.up);
-                }
+                rotation = Quaternion.LookRotation(-_cameraTransform.right, _cameraTransform.up);
+                cellPosition.x += _blockFieldView.PositionConverter.BlockScale.x - (ladderLength * _ladderUnitDistance);
             }
 
-            GameObject ladder = Instantiate(_ladderPrefab, position, rotation);
+            GameObject ladder = Instantiate(_ladderPrefab, cellPosition, rotation);
             ladder.GetComponent<Ladder>().Owner = gameObject;
             ladder.GetComponent<Ladder>().Length = ladderLength;
             IsCarryingLadder = false;
@@ -540,18 +524,10 @@ namespace GameSystem.Characters
             {
                 if (IsCarryingLadder)
                 {
-                    BlockPosition climberBlock = GetClimberBlockPosition();
-                    Block blockNorth = _blockField.BlockAt(new BlockPosition(climberBlock.X, climberBlock.Y + 1));
-
-                    if (blockNorth != null)
-                    {
-                        print("Can't place ladder here. Placement blocked.");
-                        return;
-                    }
-
-                    PlaceLadderAt(climberBlock);
+                    DetermineLadderPosition();
                     return;
                 }
+
                 PickupLadder();
             }
         }

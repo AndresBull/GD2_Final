@@ -22,13 +22,13 @@ namespace GameSystem.Management
             PlayerConfigManager.Instance.OnScoreChanged += OnScoreChanged;
             PlayerConfigManager.Instance.OnLadderEquipChanged += OnLadderEquipChanged;
             _ladderImage.gameObject.SetActive(true);
-            _scoreText.text = "0000";
         }
 
         public void SetPlayerIndex(int index)
         {
             _playerIndex = index;
             _playerName.SetText($"Player {_playerIndex + 1}");
+            _scoreText.text =PlayerConfigManager.Instance.GetPlayerConfigs()[_playerIndex].TotalScore.ToString("0000");
         }
 
         private void OnScoreChanged(object sender, ScoreChangedEventArgs e)

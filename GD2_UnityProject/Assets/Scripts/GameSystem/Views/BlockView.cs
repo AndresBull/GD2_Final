@@ -20,24 +20,6 @@ namespace GameSystem.Views
         private float _minTimeDelay = 0.1f;
         private bool _wasThrownHard;
 
-        internal Vector3 Size
-        {
-            set
-            {
-                transform.localScale = Vector3.one;
-
-                MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-                Vector3 meshSize = meshRenderer.bounds.size;
-
-                float ratioX = value.x / meshSize.x;
-                float ratioY = value.y / meshSize.y;
-                float ratioZ = value.z / meshSize.z;
-
-                transform.localScale = new Vector3(ratioX, ratioY, ratioZ);
-            }
-        }
-
-
         public FloodFill floodFiller;
         public int BlockWidth { get; internal set; }
         public int BlockHeight { get; internal set; }
@@ -71,11 +53,6 @@ namespace GameSystem.Views
 
             SetDimensions();
             enabled = false;
-        }
-
-        private void SetSize()
-        {
-            Size = _fieldView.PositionConverter.BlockScale;
         }
 
         private void SetShape()

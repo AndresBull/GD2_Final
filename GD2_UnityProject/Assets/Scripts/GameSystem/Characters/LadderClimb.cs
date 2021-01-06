@@ -108,11 +108,13 @@ namespace GameSystem.Characters
             if (lTrigger.CompareTag("LEnterTrigger"))
             {
                 _isOnBottomTrigger = false;
+                _direction = 0;
             }
 
             if (lTrigger.CompareTag("LExitTrigger"))
             {
                 _isOnTopTrigger = false;
+                _direction = 0;
             }
         }
 

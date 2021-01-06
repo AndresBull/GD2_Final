@@ -23,7 +23,7 @@ namespace GameSystem.Props
         void Awake()
         {
             _model = transform.GetChild(0).transform;
-            _targetRot = Quaternion.Euler(-20.0f, _model.eulerAngles.y, _model.eulerAngles.z);
+            _targetRot = Quaternion.Euler(-15.0f, transform.eulerAngles.y, transform.eulerAngles.z);
 
             _timer = Time.time;
         }
@@ -37,9 +37,9 @@ namespace GameSystem.Props
 
         void FixedUpdate()
         {
-            if (Time.time <= _timer + 1.0f)
+            if (Time.time <= _timer + 5.0f)
             {
-                _model.rotation = Quaternion.Slerp(_model.rotation, _targetRot, Time.fixedDeltaTime * 0.5f);
+                transform.rotation = Quaternion.Slerp(transform.rotation, _targetRot, Time.fixedDeltaTime * 4f);
                 return;
             }
         }

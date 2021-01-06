@@ -25,7 +25,6 @@ namespace GameSystem.Management
 
         public event EventHandler<ScoreChangedEventArgs> OnScoreChanged;
         public event EventHandler<LadderEquipChangedEventArgs> OnLadderEquipChanged;
-        public event EventHandler<SpecialChangedEventArgs> OnSpecialChanged;
         public event EventHandler OnCharacterMeshChanged;
         public event EventHandler OnCharacterMaterialChanged;
 
@@ -195,11 +194,6 @@ namespace GameSystem.Management
             UnreadyPlayer(playerIndex);
         }
 
-        internal void ToggleSpecialUsed(int playerIndex, bool canUseSpecial)
-        {
-            OnSpecialChanged?.Invoke(this, new SpecialChangedEventArgs(playerIndex, canUseSpecial));
-        }
-
         internal void UpdatePlayerRoundScore(int playerIndex, int addedScore)
         {
             int newScore = _playerConfigs[playerIndex].RoundScore + addedScore;
@@ -316,18 +310,6 @@ namespace GameSystem.Management
         {
             PlayerIndex = playerIndex;
             IsCarryingLadder = isCarryingLadder;
-        }
-    }
-
-    public class SpecialChangedEventArgs : EventArgs
-    {
-        public int PlayerIndex;
-        public bool CanUseSpecial;
-
-        public SpecialChangedEventArgs(int playerIndex, bool canUseSpecial)
-        {
-            PlayerIndex = playerIndex;
-            CanUseSpecial = canUseSpecial;
         }
     }
 }

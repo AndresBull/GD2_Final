@@ -67,7 +67,6 @@ namespace GameSystem.Characters
         private int _highestYPositionReached = 0;
 
         private bool _canPush = true;
-        private bool _isGrounded = true;
         private bool _hasLadder = true;                                // backup field that determines if the climber has his ladder or not
         private bool _isJumping = false;                               // bool to determine if the character is jumping or not
 
@@ -111,13 +110,11 @@ namespace GameSystem.Characters
 
         private void FixedUpdate()
         {
-            _isGrounded = IsGrounded();
             CheckIfNewHeightIsReached();
 
-            var horizontalMovement = _horizontalMovement;
             if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + _colExtents.y / 2, transform.position.z), transform.forward, _rayLength, _collisionMask)
                 || Physics.Raycast(new Vector3(transform.position.x, transform.position.y - _colExtents.y / 2, transform.position.z), transform.forward, _rayLength, _collisionMask))
-                horizontalMovement = 0f;
+                _horizontalMovement = 0f;
 
             if (_rb.velocity.y <= 0)
             {
@@ -133,7 +130,7 @@ namespace GameSystem.Characters
                 //}
             }
 
-            float movement = horizontalMovement * _maxSpeed * Time.fixedDeltaTime;
+            float movement = _horizontalMovement * _maxSpeed * Time.fixedDeltaTime;
             transform.position += new Vector3(movement, 0.0f, 0.0f);
 
             float clampedX = Mathf.Clamp(transform.position.x, _movementConstraints.x, _movementConstraints.y);
@@ -235,16 +232,13 @@ namespace GameSystem.Characters
 
         private void CheckIfNewHeightIsReached()
         {
-            if (_isGrounded)
-            {
-                int currentYPosition = GetClimberBlockPosition().Y;
+            int currentYPosition = GetClimberBlockPosition().Y;
 
-                if (_highestYPositionReached < currentYPosition)
-                {
-                    int scoreMultiplier = currentYPosition - _highestYPositionReached;
-                    PointSystemScript.PlayerReachedNewHeight(_playerConfig.PlayerIndex, scoreMultiplier);
-                    _highestYPositionReached = currentYPosition;
-                }
+            if (_highestYPositionReached < currentYPosition)
+            {
+                int scoreMultiplier = currentYPosition - _highestYPositionReached;
+                PointSystemScript.PlayerReachedNewHeight(_playerConfig.PlayerIndex, scoreMultiplier);
+                _highestYPositionReached = currentYPosition;
             }
         }
 
@@ -380,7 +374,7 @@ namespace GameSystem.Characters
 
         private void UseGravity()
         {
-            if (_isGrounded || IsClimbing)
+            if (IsGrounded() || IsClimbing)
             {
                 _rb.useGravity = false;
                 _rb.velocity = new Vector3(_rb.velocity.x, 0.0f, 0.0f);
@@ -514,7 +508,7 @@ namespace GameSystem.Characters
         {
             if (value.isPressed)
             {
-                if (!_isJumping && _isGrounded)
+                if (!_isJumping && IsGrounded())
                 {
                     _isJumping = true;
                     Jump();

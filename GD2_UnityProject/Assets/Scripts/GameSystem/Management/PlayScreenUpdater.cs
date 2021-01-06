@@ -13,8 +13,7 @@ namespace GameSystem.Management
     {
         [SerializeField] private TextMeshProUGUI _playerName = null;
         [SerializeField] private TextMeshProUGUI _scoreText = null;
-        [SerializeField] private Image _ladderImage, _lightImage = null;
-        [SerializeField] private Sprite _redLight, _greenLight = null;
+        [SerializeField] private Image _ladderImage = null;
 
         private int _playerIndex;
 
@@ -22,7 +21,6 @@ namespace GameSystem.Management
         {
             PlayerConfigManager.Instance.OnScoreChanged += OnScoreChanged;
             PlayerConfigManager.Instance.OnLadderEquipChanged += OnLadderEquipChanged;
-            PlayerConfigManager.Instance.OnSpecialChanged += OnSpecialChanged;
             _ladderImage.gameObject.SetActive(true);
         }
 
@@ -30,7 +28,7 @@ namespace GameSystem.Management
         {
             _playerIndex = index;
             _playerName.SetText($"Player {_playerIndex + 1}");
-            _scoreText.text =PlayerConfigManager.Instance.GetPlayerConfigs()[_playerIndex].RoundScore.ToString("0000");
+            _scoreText.text =PlayerConfigManager.Instance.GetPlayerConfigs()[_playerIndex].TotalScore.ToString("0000");
         }
 
         private void OnScoreChanged(object sender, ScoreChangedEventArgs e)
@@ -47,11 +45,6 @@ namespace GameSystem.Management
                 return;
             
             //_ladderImage.gameObject.SetActive(e.IsCarryingLadder);
-        }
-
-        private void OnSpecialChanged(object sender, SpecialChangedEventArgs e)
-        {
-
         }
 
     }

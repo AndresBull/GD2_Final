@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8846775840814833897}
   - component: {fileID: 3024878164629085200}
   - component: {fileID: 4051763268834329261}
-  - component: {fileID: 7494220635569755465}
+  - component: {fileID: 3507995853397324927}
   m_Layer: 0
   m_Name: BlockyArch_3x2_Prefab
   m_TagString: Untagged
@@ -100,7 +100,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 3043012073124743903, guid: a7d4d33526fcae144b16d7e41a81e458, type: 3}
---- !u!114 &7494220635569755465
+--- !u!114 &3507995853397324927
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -112,10 +112,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a94edb9e376f8b648a2505cc28ee2c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _smallSmokePrefab: {fileID: 6649812136396034264, guid: e768432a476bb8e4a9df5b2a280e0d98,
-    type: 3}
-  _bigSmokePrefab: {fileID: 4552428218854777542, guid: ec8594cd701c58f4e89e3805c005ec00,
-    type: 3}
 --- !u!1001 &3460004933346571853
 PrefabInstance:
   m_ObjectHideFlags: 0

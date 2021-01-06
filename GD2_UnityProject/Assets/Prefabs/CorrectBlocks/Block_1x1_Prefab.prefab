@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4050593997394047392}
   - component: {fileID: 7712995646315924825}
   - component: {fileID: 6618596678572941120}
-  - component: {fileID: -244957376969043776}
+  - component: {fileID: 4196106317378615934}
   m_Layer: 0
   m_Name: Block_1x1_Prefab
   m_TagString: Untagged
@@ -96,7 +96,7 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 3735029673142812049, guid: 3227e60ca5fa89941944e88ba3b5460d, type: 3}
---- !u!114 &-244957376969043776
+--- !u!114 &4196106317378615934
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,10 +108,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a94edb9e376f8b648a2505cc28ee2c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _smallSmokePrefab: {fileID: 6649812136396034264, guid: e768432a476bb8e4a9df5b2a280e0d98,
-    type: 3}
-  _bigSmokePrefab: {fileID: 4552428218854777542, guid: ec8594cd701c58f4e89e3805c005ec00,
-    type: 3}
 --- !u!1001 &1274326625671037605
 PrefabInstance:
   m_ObjectHideFlags: 0

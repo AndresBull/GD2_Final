@@ -31,6 +31,10 @@ namespace GameSystem.Characters
         [Header("Physics")]
         [Tooltip("The layers to test collision against. Default tests against everything.")]
         [SerializeField] private LayerMask _collisionMask = ~0;
+        
+        [Header("Animator")]
+        [Tooltip("The sprite animator used for the climbers animations")]
+        [SerializeField] private Animator _animator = null;
 
         [Header("Ladders")]
         [Tooltip("The ladder prefab for this character.")]
@@ -264,15 +268,18 @@ namespace GameSystem.Characters
 
             if (direction <= 0.01f && direction >= -0.01f)
             {
-                // TODO: set sprite animation to idle
                 transform.rotation = Quaternion.LookRotation(-_cameraTransform.forward, _cameraTransform.up);
                 return;
             }
 
             if (transform.rotation != Quaternion.LookRotation(direction * _cameraTransform.right, _cameraTransform.up))
             {
-                // TODO: set sprite animation to walk
+                _animator.SetBool("IsWalking", true);
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction * _cameraTransform.right, _cameraTransform.up), 0.5f);
+            }
+            else
+            {
+                _animator.SetBool("IsWalking", false);
             }
         }
 
@@ -294,6 +301,7 @@ namespace GameSystem.Characters
                 {
                     if (ladderScript.Owner == gameObject)
                     {
+                        _animator.SetTrigger("PickupLadder");
                         Destroy(ladderScript.gameObject);
                         IsCarryingLadder = true;
                         break;
@@ -356,6 +364,7 @@ namespace GameSystem.Characters
                 cellPosition.x += _blockFieldView.PositionConverter.BlockScale.x - (ladderLength * _ladderUnitDistance);
             }
 
+            _animator.SetTrigger("PlaceLadder");
             GameObject ladder = Instantiate(_ladderPrefab, cellPosition, rotation);
             ladder.GetComponent<Ladder>().Owner = gameObject;
             ladder.GetComponent<Ladder>().Length = ladderLength;
@@ -569,7 +578,10 @@ namespace GameSystem.Characters
                     if (checkblockView != null)
                     {
                         if (checkblockView.PushBlock(transform.position, direction))
+                        {
+                            _animator.SetTrigger("PlaceLadder");
                             StartCoroutine(PushCooldown(5));
+                        }
                     }
                 }
             }

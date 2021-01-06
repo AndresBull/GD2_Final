@@ -38,14 +38,6 @@
                     "interactions": ""
                 },
                 {
-                    "name": "KillOverlord",
-                    "type": "Button",
-                    "id": "3514e7b0-3e25-4a8a-9607-9a0c2bb3ca59",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
                     "name": "PushBlock",
                     "type": "Button",
                     "id": "e834b0a9-0b30-499e-83b5-85b9fcc27dd9",
@@ -186,28 +178,6 @@
                     "action": "ClimbLadder",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "4d5f7e6b-4f98-49cb-91a5-3050c00e2e91",
-                    "path": "<Gamepad>/buttonNorth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "KillOverlord",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1b517186-a533-41d8-a430-f6e8f8c0a976",
-                    "path": "<Keyboard>/enter",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "KillOverlord",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 },
                 {
                     "name": "",

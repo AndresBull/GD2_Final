@@ -9278,7 +9278,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3667099708009434597, guid: fd20969ff7706da46b86ae9317bc8a9a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fd20969ff7706da46b86ae9317bc8a9a, type: 3}
 --- !u!4 &391365091 stripped
 Transform:
@@ -10153,7 +10154,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7026617906773883447, guid: e5f11ee99df15ae45b0d1382a45fe148, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e5f11ee99df15ae45b0d1382a45fe148, type: 3}
 --- !u!4 &433876250 stripped
 Transform:
@@ -12272,7 +12274,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: BlockSmallL_2x2_Variation3
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1578853859970696033, guid: a447d35794de0e24d96cab1b31cc14b1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a447d35794de0e24d96cab1b31cc14b1, type: 3}
 --- !u!4 &648804190 stripped
 Transform:
@@ -20998,7 +21001,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Block_2x2_Variant3 Variant
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 382817113926558682, guid: b663702315dc49b43975f5d36b693dec, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b663702315dc49b43975f5d36b693dec, type: 3}
 --- !u!4 &988711997 stripped
 Transform:
@@ -28889,7 +28893,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7026617906773883447, guid: e5f11ee99df15ae45b0d1382a45fe148, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e5f11ee99df15ae45b0d1382a45fe148, type: 3}
 --- !u!4 &1273906163 stripped
 Transform:
@@ -30380,7 +30385,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7026617906773883447, guid: e5f11ee99df15ae45b0d1382a45fe148, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e5f11ee99df15ae45b0d1382a45fe148, type: 3}
 --- !u!4 &1389362869 stripped
 Transform:
@@ -32060,7 +32066,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Block_3x1_Variant2
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4460150494581331805, guid: bff22c54c2631274483ced344782d0dc, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bff22c54c2631274483ced344782d0dc, type: 3}
 --- !u!4 &1594729247 stripped
 Transform:
@@ -35135,7 +35142,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: BlockSmallL_2x2_Variation3 (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1578853859970696033, guid: a447d35794de0e24d96cab1b31cc14b1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a447d35794de0e24d96cab1b31cc14b1, type: 3}
 --- !u!4 &1890884792 stripped
 Transform:

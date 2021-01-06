@@ -57,6 +57,18 @@ namespace GameSystem.Management
         }
     }
 
+    public class RulesState : BaseState
+    {
+        protected override void CleanUpScene()
+        {
+        }
+
+        protected override void SetupScene()
+        {
+            SceneManager.LoadScene("Rules");
+        }
+    }
+
     public class PlayState : BaseState
     {
         public event EventHandler OnPlayStateEntered;

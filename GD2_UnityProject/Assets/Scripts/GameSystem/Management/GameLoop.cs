@@ -49,6 +49,7 @@ namespace GameSystem.Management
             StartState startState = new StartState();
             MenuState menuState = new MenuState();
             SetupState setupState = new SetupState();
+            RulesState rulesState = new RulesState();
             _playState = new PlayState();
             RoundOverState roundOverState = new RoundOverState();
             EndState endState = new EndState();
@@ -56,6 +57,7 @@ namespace GameSystem.Management
             _stateMachine.RegisterState(GameStates.Start, startState);
             _stateMachine.RegisterState(GameStates.Menu, menuState);
             _stateMachine.RegisterState(GameStates.Setup, setupState);
+            _stateMachine.RegisterState(GameStates.Rules, rulesState);
             _stateMachine.RegisterState(GameStates.Play, _playState);
             _stateMachine.RegisterState(GameStates.RoundOver, roundOverState);
             _stateMachine.RegisterState(GameStates.End, endState);

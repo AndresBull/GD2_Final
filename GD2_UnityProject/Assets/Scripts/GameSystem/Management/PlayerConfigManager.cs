@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using Utils;
 
 namespace GameSystem.Management
@@ -53,7 +54,7 @@ namespace GameSystem.Management
             {
                 // prevent the scene from continuous loading
                 _isTimerActive = false;
-                GameLoop.Instance.StateMachine.MoveTo(GameStates.Play);
+                GameLoop.Instance.StateMachine.MoveTo(GameStates.Rules);
             }
         }
 

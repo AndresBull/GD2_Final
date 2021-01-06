@@ -42,6 +42,7 @@ namespace GameSystem.Management
         public const string Start = "Start";
         public const string Menu = "Menu";
         public const string Setup = "Setup";
+        public const string Rules = "Rules";
         public const string Play = "Play";
         public const string RoundOver = "RoundOver";
         public const string End = "End";

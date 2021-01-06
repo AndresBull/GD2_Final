@@ -74,7 +74,7 @@ namespace GameSystem.Characters
         private void DropBlock()
         {
             _hasBlock = false;
-            _holdBlockView.gameObject.GetComponent<MeshCollider>().enabled = true;
+            _holdBlockView.gameObject.GetComponent<Collider>().enabled = true;
             _holdBlockView?.SlowDrop();
             _holdBlockView = null;
             _nextBlockTimer = 0;
@@ -84,7 +84,7 @@ namespace GameSystem.Characters
         private void FastDropBlock()
         {
             _hasBlock = false;
-            _holdBlockView.gameObject.GetComponent<MeshCollider>().enabled = true;
+            _holdBlockView.gameObject.GetComponent<Collider>().enabled = true;
             _holdBlockView?.FastDrop();
             _holdBlockView = null;
             _nextBlockTimer = 0;
@@ -138,7 +138,7 @@ namespace GameSystem.Characters
             Vector3 offscreenPosition = new Vector3(-20, 0, 0);
             GameObject go = Instantiate(nextBlock, offscreenPosition, nextBlock.transform.rotation);
             _nextBlockView = go.GetComponent<BlockView>();
-            _nextBlockView.gameObject.GetComponent<MeshCollider>().enabled = false;
+            _nextBlockView.gameObject.GetComponent<Collider>().enabled = false;
         }
 
         // TODO: REMOVE the following methods if PlayerInput uses BroadcastMessages()

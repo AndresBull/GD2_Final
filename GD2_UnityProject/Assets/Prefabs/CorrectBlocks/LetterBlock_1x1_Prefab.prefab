@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 2899405421766869239}
   - component: {fileID: 6154106637508328129}
   - component: {fileID: 458045595358414392}
-  - component: {fileID: 4223146279110361984}
   - component: {fileID: 3023448552287102836}
+  - component: {fileID: -770894924282231319}
   m_Layer: 0
   m_Name: LetterBlock_1x1_Prefab
   m_TagString: Untagged
@@ -82,18 +82,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &4223146279110361984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2190886897421087460}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a94edb9e376f8b648a2505cc28ee2c25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!64 &3023448552287102836
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -108,6 +96,22 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -74484678090002835, guid: be6d3de0d2d73b448b7a61770b4f8683, type: 3}
+--- !u!114 &-770894924282231319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2190886897421087460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a94edb9e376f8b648a2505cc28ee2c25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _smallSmokePrefab: {fileID: 6649812136396034264, guid: e768432a476bb8e4a9df5b2a280e0d98,
+    type: 3}
+  _bigSmokePrefab: {fileID: 4552428218854777542, guid: ec8594cd701c58f4e89e3805c005ec00,
+    type: 3}
 --- !u!1001 &5634383648248451079
 PrefabInstance:
   m_ObjectHideFlags: 0

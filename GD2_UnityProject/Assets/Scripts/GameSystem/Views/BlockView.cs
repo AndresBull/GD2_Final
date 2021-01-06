@@ -12,6 +12,8 @@ namespace GameSystem.Views
 {
     public class BlockView : MonoBehaviour
     {
+        [SerializeField]
+        private GameObject _smallSmokePrefab, _bigSmokePrefab;
         private List<Block> _shapeBlocks = new List<Block>();
         private BlockPosition _blockPosition;
         private BlockField _field;
@@ -179,11 +181,7 @@ namespace GameSystem.Views
                         }
 
                         //Floodfill and check for trapped players
-                        floodFiller.FloodedPositions = floodFiller.Flood(new BlockPosition(0, _field.Rows));
-                        foreach (GameObject climber in PlayerConfigManager.Instance.GetAllClimbers())
-                        {
-                            climber.GetComponent<ClimberBehaviour>().CheckIfTrapped();
-                        }
+                        FloodFillCheck();
 
                         //Check for next round
                         if (PlayerConfigManager.Instance.GetAllClimbers().All(c => !c.activeInHierarchy))
@@ -198,11 +196,13 @@ namespace GameSystem.Views
                         {
                             Camera.main.gameObject.GetComponent<ScreenShake>().BigShake();
                             SoundManager.Instance.PlayFastBlockLanded();
+                            Instantiate(_bigSmokePrefab, transform.position, Quaternion.identity);
                         }
                         else
                         {
                             Camera.main.gameObject.GetComponent<ScreenShake>().SmallShake();
                             SoundManager.Instance.PlaySlowBlockLanded();
+                            Instantiate(_smallSmokePrefab, transform.position, Quaternion.identity);
                         }
 
                         //call when nothing special happenend
@@ -217,6 +217,15 @@ namespace GameSystem.Views
                     //Need to make this a smoother function
                     DropDownDelay = Mathf.Max(DropDownDelay * 0.8f, _minTimeDelay);
                 }
+            }
+        }
+
+        private void FloodFillCheck()
+        {
+            floodFiller.FloodedPositions = floodFiller.Flood(new BlockPosition(0, _field.Rows));
+            foreach (GameObject climber in PlayerConfigManager.Instance.GetAllClimbers())
+            {
+                climber.GetComponent<ClimberBehaviour>().CheckIfTrapped();
             }
         }
 
@@ -351,6 +360,7 @@ namespace GameSystem.Views
 
 
             //Move blockView to the Direction
+            Instantiate(_smallSmokePrefab, transform.position, Quaternion.identity);
             UpdateBlockView(new Vector2Int(direction, 0));
             SoundManager.Instance.PlayPushBlock();
 
@@ -367,6 +377,8 @@ namespace GameSystem.Views
                     {
                         _field.AddToDictionary(b);
                     }
+                    FloodFillCheck();
+                    Instantiate(_smallSmokePrefab, transform.position, Quaternion.identity);
                     return true;
                 }
 
@@ -380,6 +392,8 @@ namespace GameSystem.Views
                     {
                         _field.AddToDictionary(b);
                     }
+                    FloodFillCheck();
+                    Instantiate(_smallSmokePrefab, transform.position, Quaternion.identity);
                     return true;
                 }
             }

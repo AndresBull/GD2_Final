@@ -8,24 +8,6 @@ using UnityEngine.SceneManagement;
 
 namespace GameSystem.Management
 {
-    public class StartState : BaseState
-    {
-        protected sealed override void CleanUpScene()
-        {
-        }
-
-        protected sealed override void SetupScene()
-        {
-            // prevent loading the scene on startup and creating an infinite loop
-            if (Time.time >= Time.deltaTime)
-            {
-                SceneManager.LoadScene("Start");
-                PlayerConfigManager.Instance.RemovePlayers();
-                InputManager.Instance.SwitchToActionMap("UI");
-            }
-        }
-    }
-
     public class MenuState : BaseState
     {
         protected sealed override void CleanUpScene()
@@ -34,9 +16,12 @@ namespace GameSystem.Management
 
         protected sealed override void SetupScene()
         {
-            SceneManager.LoadScene("MainMenu");
-            InputManager.Instance.SwitchToActionMap("UI");
-            PlayerConfigManager.Instance.RemovePlayers(1);
+            if (Time.time >= Time.deltaTime)
+            {
+                SceneManager.LoadScene("MainMenu");
+                InputManager.Instance.SwitchToActionMap("UI");
+                PlayerConfigManager.Instance.RemovePlayers(1);
+            }
         }
     }
 

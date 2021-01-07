@@ -58,7 +58,7 @@ namespace GameSystem.Characters
         private PlayerConfiguration _playerConfig = null;
         private Rigidbody _rb = null;                                  // reference to the rigidbody component attached to this gameobject
         private Transform _cameraTransform = null;                     // holds the camera transform locally to preserve the original transform from changes
-        private Transform _ladderClimbed = null;                       // the current ladder being climbed
+        private Transform _model = null;
 
         // Structs
         private Vector3 _colExtents = Vector3.zero;                    // the extents of the collider
@@ -111,6 +111,7 @@ namespace GameSystem.Characters
             _col = GetComponent<Collider>();
             _animation = GetComponent<Animation>();
             _colExtents = _col.bounds.extents;
+            _model = transform.GetChild(0);
             SetMovementConstraints();
         }
 
@@ -129,10 +130,14 @@ namespace GameSystem.Characters
                 _rb.AddForce(Physics.gravity.normalized * _jumpHeight, ForceMode.Impulse);
             }
 
-            //if (_isJumping)
-            //{
-            //    _horizontalMovement -= Mathf.Sign(_horizontalMovement) * Mathf.Abs(_rb.velocity.y * 10);
-            //}
+            if (horizontalMovement == 0f)
+            {
+                _animator.SetBool("IsWalking", false);
+            }
+            else
+            {
+                _animator.SetBool("IsWalking", true);
+            }
 
             float movement = horizontalMovement * _maxSpeed * Time.fixedDeltaTime;
             transform.position += new Vector3(movement, 0.0f, 0.0f);
@@ -148,8 +153,6 @@ namespace GameSystem.Characters
         public void InitializePlayer(PlayerConfiguration config)
         {
             _playerConfig = config;
-            //_meshFilter.mesh = config.Character;
-            //_spriteRenderer.sprite = config.PlayerMaterial;
         }
 
         public void CheckIfTrapped()
@@ -275,20 +278,19 @@ namespace GameSystem.Characters
 
         private void RotateToMoveDirection()
         {
-            float direction = Mathf.Clamp(_horizontalMovement, -1, 1);
-
+            float direction = _horizontalMovement / Mathf.Abs(_horizontalMovement);
             if (direction <= 0.01f && direction >= -0.01f)
             {
                 transform.rotation = Quaternion.LookRotation(-_cameraTransform.forward, _cameraTransform.up);
+                _model.rotation = Quaternion.LookRotation(_cameraTransform.forward, _cameraTransform.up);
                 return;
             }
 
             if (transform.rotation != Quaternion.LookRotation(direction * _cameraTransform.right, _cameraTransform.up))
             {
-                _animator.SetBool("IsWalking", true);
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction * _cameraTransform.right, _cameraTransform.up), 0.5f);
             }
-            _animator.SetBool("IsWalking", false);
+            _model.rotation = Quaternion.LookRotation(direction * -_cameraTransform.forward, _cameraTransform.up);
         }
 
         private void PickupLadder()

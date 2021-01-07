@@ -10,7 +10,7 @@ namespace GameSystem.Management
     {
         [SerializeField] private TextMeshProUGUI _playerName = null;
         [SerializeField] private Button _readyButton = null;
-        //[SerializeField] private Button _colorPicker = null;
+
 
         private PlayerConfiguration _config;
         private int _playerIndex;

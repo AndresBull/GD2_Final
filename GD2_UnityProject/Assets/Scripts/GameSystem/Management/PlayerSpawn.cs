@@ -33,7 +33,7 @@ namespace GameSystem.Management
         [SerializeField] private GameObject _playerInfoPrefab = null;
 
         private GameObject _character;
-        private Transform _playerScreen, _joinText, _colorPicker, _readyButton, _eventSystem;
+        private Transform _playerScreen, _joinText, _readyButton, _eventSystem;
         private PlayerConfiguration _config;
 
         private void Awake()

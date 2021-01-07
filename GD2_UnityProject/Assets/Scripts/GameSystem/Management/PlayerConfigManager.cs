@@ -17,9 +17,9 @@ namespace GameSystem.Management
         [Tooltip("The amount of players that needs to be 'Ready' before the round can start")]
         [SerializeField] private int _playersNeededReadyBeforeStarting = 3;
         [Tooltip("Time before the round starts when not all joined players are ready yet (in seconds).")]
-        [SerializeField] private float _timeBeforeStarting = 15f;
+        [SerializeField] private int _timeBeforeStarting = 15;
         [Tooltip("Time before the round starts when all joined players are ready (in seconds).")]
-        [SerializeField] private float _timeBeforeStartingIfReady = 5f;
+        [SerializeField] private int _timeBeforeStartingIfReady = 5;
 
         private List<PlayerConfiguration> _playerConfigs;
         private float _timer = 0.0f;
@@ -30,35 +30,17 @@ namespace GameSystem.Management
         public event EventHandler<LadderEquipChangedEventArgs> OnLadderEquipChanged;
         public event EventHandler<SpecialChangedEventArgs> OnSpecialChanged;
         public event EventHandler<RoundOverEventArgs> OnRoundOver;
+        public event EventHandler<TimerEventArgs> OnTimerSet;
         public event EventHandler OnCharacterSpriteChanged;
         public event EventHandler OnCharacterColorChanged;
-
-        public float Timer => _timer;
 
         private void Awake()
         {
             _playerConfigs = new List<PlayerConfiguration>();
+            PlayerInput input = GetComponentInChildren<PlayerInput>();
+            PlayerConfiguration config = new PlayerConfiguration(input);
+            _playerConfigs.Add(config);
             DontDestroyOnLoad(gameObject);
-        }
-
-        private void Update()
-        {
-            if (!_isTimerActive)
-                return;
-
-            if (_timer > 0.0f)
-            {
-                _timer -= Time.deltaTime;
-                print((int)_timer);
-                return;
-            }
-
-            if (_timer <= 0.0f)
-            {
-                // prevent the scene from continuous loading
-                _isTimerActive = false;
-                GameLoop.Instance.StateMachine.MoveTo(GameStates.Rules);
-            }
         }
 
         private void OnDestroy()
@@ -67,6 +49,19 @@ namespace GameSystem.Management
             {
                 Destroy(config.Input.gameObject);
             }
+        }
+
+        internal int GetOverlordIndex()
+        {
+            foreach (var playerConfig in _playerConfigs)
+            {
+                if (playerConfig.IsOverlord)
+                {
+                    return playerConfig.Input.playerIndex;
+                }
+            }
+
+            return 0;
         }
 
         internal List<GameObject> GetAllClimbers()
@@ -82,18 +77,6 @@ namespace GameSystem.Management
             return climbers;
         }
 
-        internal int GetOverlordIndex()
-        {
-            foreach (var playerConfig in _playerConfigs)
-            {
-                if (playerConfig.IsOverlord)
-                {
-                    return playerConfig.Input.playerIndex;
-                }
-            }
-
-            return 0;
-        }
 
         internal List<PlayerConfiguration> GetAllClimberConfigs()
         {
@@ -139,9 +122,14 @@ namespace GameSystem.Management
                     return;
                 }
                 JoinPlayer(input);
-                GameLoop.Instance.StateMachine.MoveTo(GameStates.Menu);
                 return;
             }
+
+            if(GameLoop.Instance.StateMachine.CurrentState is PlayState)
+            {
+                InputManager.Instance.OpenOptionsMenu();
+            }
+
             JoinPlayer(input);
         }
 
@@ -266,15 +254,14 @@ namespace GameSystem.Management
             }
         }
 
-        private void SetTimer(float timeInSeconds)
+        private void SetTimer(int timeInSeconds)
         {
-            _timer = timeInSeconds;
-            _isTimerActive = true;
+            OnTimerSet?.Invoke(this, new TimerEventArgs(true, timeInSeconds));
         }
 
         private void StopTimer()
         {
-            _isTimerActive = false;
+            OnTimerSet?.Invoke(this, new TimerEventArgs(false));
         }
 
         private void ReadyPlayer(int playerIndex)
@@ -371,6 +358,18 @@ namespace GameSystem.Management
         public RoundOverEventArgs(int playerIndex)
         {
             PlayerIndex = playerIndex;
+        }
+    }
+
+    public class TimerEventArgs : EventArgs
+    {
+        public int Time;
+        public bool IsActivated;
+
+        public TimerEventArgs(bool isActivated, int time = 0)
+        {
+            IsActivated = isActivated;
+            Time = time;
         }
     }
 }

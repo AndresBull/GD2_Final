@@ -6,6 +6,7 @@ using Utils;
 using BoardSystem;
 using GameSystem.Views;
 using System;
+using UnityEngine.InputSystem;
 
 namespace GameSystem.Management
 {
@@ -24,12 +25,9 @@ namespace GameSystem.Management
         #region Unity Lifecycle
         private void Awake()
         {
-            if (Time.time <= Time.deltaTime)
-            {
-                SetupStateMachine();
-            }
+            SetupStateMachine();
         }
-        
+
         private void OnDestroy()
         {
             _playState.OnPlayStateEntered -= OnPlayStateEntered;
@@ -46,7 +44,6 @@ namespace GameSystem.Management
         {
             _stateMachine = new StateMachine<BaseState>();
 
-            StartState startState = new StartState();
             MenuState menuState = new MenuState();
             SetupState setupState = new SetupState();
             RulesState rulesState = new RulesState();
@@ -54,7 +51,6 @@ namespace GameSystem.Management
             RoundOverState roundOverState = new RoundOverState();
             EndState endState = new EndState();
 
-            _stateMachine.RegisterState(GameStates.Start, startState);
             _stateMachine.RegisterState(GameStates.Menu, menuState);
             _stateMachine.RegisterState(GameStates.Setup, setupState);
             _stateMachine.RegisterState(GameStates.Rules, rulesState);
@@ -62,7 +58,7 @@ namespace GameSystem.Management
             _stateMachine.RegisterState(GameStates.RoundOver, roundOverState);
             _stateMachine.RegisterState(GameStates.End, endState);
 
-            _stateMachine.MoveTo(GameStates.Start);
+            _stateMachine.MoveTo(GameStates.Menu);
 
             _playState.OnPlayStateEntered += OnPlayStateEntered;
         }

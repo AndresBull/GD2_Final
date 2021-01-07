@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Utils;
@@ -7,6 +8,9 @@ namespace GameSystem.Management
 {
     public class InputManager : SingletonMonoBehaviour<InputManager>
     {
+        public event EventHandler OnOptionsOpened;
+        public event EventHandler OnOptionsClosed;
+
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
@@ -40,9 +44,9 @@ namespace GameSystem.Management
             }
         }
 
-        public void OnNavigate()
+        public void OpenOptionsMenu()
         {
-            
+            OnOptionsOpened?.Invoke(this, EventArgs.Empty);
         }
 
         public void OnSubmit(Button button)
@@ -54,6 +58,9 @@ namespace GameSystem.Management
             {
                 case "Button - Play":
                     GameLoop.Instance.StateMachine.MoveTo(GameStates.Setup);
+                    break;
+                case "Button - Options":
+                    OpenOptionsMenu();
                     break;
                 case "Button - Quit":
                     GameLoop.Instance.StateMachine.MoveTo(GameStates.End);

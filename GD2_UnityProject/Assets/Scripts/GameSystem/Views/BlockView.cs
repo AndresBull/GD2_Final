@@ -2,6 +2,7 @@
 using GameSystem.Characters;
 using GameSystem.Management;
 using Graphical;
+using SoundSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace GameSystem.Views
     public class BlockView : MonoBehaviour
     {
         [SerializeField]
-        private GameObject _smallSmokePrefab, _bigSmokePrefab;
+        private GameObject _smallSmokePrefab = null, _bigSmokePrefab = null;
         private List<Block> _shapeBlocks = new List<Block>();
         private BlockPosition _blockPosition;
         private BlockField _field;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SoundSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,7 @@ namespace GameSystem.Management
                 InputManager.Instance.SwitchToActionMap("UI");
                 PlayerConfigManager.Instance.RemovePlayers(1);
             }
+            SoundManager.Instance.PlayTitle();
         }
     }
 
@@ -40,6 +42,7 @@ namespace GameSystem.Management
         {
             SceneManager.LoadScene("CharacterSetup");
             InputManager.Instance.SwitchToActionMap("UI");
+            SoundManager.Instance.PlayOverworld();
         }
     }
 
@@ -70,6 +73,7 @@ namespace GameSystem.Management
             SceneManager.LoadScene("Play");
             PlayerConfigManager.Instance.SetPlayerAsOverlord();
             InputManager.Instance.SwitchToActionMap("Player");
+            SoundManager.Instance.InPlayScene = true;
         }
     }
 
@@ -97,6 +101,7 @@ namespace GameSystem.Management
         {
             SceneManager.LoadScene("HighScoreScreen");
             InputManager.Instance.SwitchToActionMap("UI");
+            SoundManager.Instance.PlayEndGame();
         }
     }
 
@@ -104,6 +109,7 @@ namespace GameSystem.Management
     {
         protected sealed override void CleanUpScene()
         {
+            SoundManager.Instance.StopCurrentlyPlaying();
             GameLoop.Destroy(PlayerConfigManager.Instance.gameObject);
             GameLoop.Destroy(SoundManager.Instance.gameObject);
             GameLoop.Destroy(GameLoop.Instance.gameObject);

@@ -1,15 +1,12 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace GameSystem.Management
 {
-    public class HighScoreDataScript : MonoBehaviour
+    public class HighScoreDataPanel : MonoBehaviour
     {
-        private  List<PlayerConfiguration> _playerRankingsList;
+        private List<PlayerConfiguration> _playerRankingsList;
 
         [SerializeField]
         private GameObject _UIPrefab = null;
@@ -20,11 +17,11 @@ namespace GameSystem.Management
             //Create rankings
             _playerRankingsList = PlayerConfigManager.Instance.GetPlayerConfigs();
 
-            for(int i = 0; i < _playerRankingsList.Count; i++)
+            for (int i = 0; i < _playerRankingsList.Count; i++)
             {
-                for(int j = 0; j < _playerRankingsList.Count; j++)
+                for (int j = 0; j < _playerRankingsList.Count; j++)
                 {
-                    if(_playerRankingsList[j].RoundScore > _playerRankingsList[i].RoundScore)
+                    if (_playerRankingsList[j].RoundScore > _playerRankingsList[i].RoundScore)
                     {
                         var temp = _playerRankingsList[i];
                         _playerRankingsList[i] = _playerRankingsList[j];

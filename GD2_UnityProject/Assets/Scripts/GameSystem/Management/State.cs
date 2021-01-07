@@ -36,6 +36,9 @@ namespace GameSystem.Management
                 config.Input.gameObject.GetComponent<PlayerSpawn>().ResetPlayerScreen();
             }
             PlayerConfigManager.Instance.NextOverlordIndex = UnityEngine.Random.Range(0, PlayerConfigManager.Instance.GetPlayerConfigs().Count);
+
+            RoundManager.PlayedRounds = 0;
+            RoundManager.MaxRounds = PlayerConfigManager.Instance.GetPlayerConfigs().Count;
         }
 
         protected sealed override void SetupScene()
@@ -69,10 +72,6 @@ namespace GameSystem.Management
 
         protected sealed override void SetupScene()
         {
-            RoundManager.PlayedRounds = 0;
-            RoundManager.MaxRounds = PlayerConfigManager.Instance.GetPlayerConfigs().Count;
-
-
             OnPlayStateEntered?.Invoke(this, EventArgs.Empty);
             SceneManager.LoadScene("Play");
             PlayerConfigManager.Instance.SetPlayerAsOverlord();

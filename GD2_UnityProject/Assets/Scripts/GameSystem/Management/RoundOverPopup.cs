@@ -75,18 +75,28 @@ namespace GameSystem.Management
 
             if (RoundManager.PlayedRounds >= RoundManager.MaxRounds)
             {
-                HighScoreDataScript.SetAmountOfPlayers(PlayerConfigManager.Instance.GetAllClimberConfigs().Count());
-
+                HighScoreDataScript.SetAmountOfPlayers(PlayerConfigManager.Instance.GetPlayerConfigs().Count);
                 for (int i=0; i<HighScoreDataScript.GetAmountOfPlayers();i++)
                 {
-                    HighScoreDataScript.SetScoreForPlayer(PlayerConfigManager.Instance.GetPlayerConfigs()[i].TotalScore ,i);
-                } 
+                    HighScoreDataScript.SetScoreForPlayer(PlayerConfigManager.Instance.GetPlayerConfigs()[i].RoundScore ,i);
+                }
+
+                PlayerConfiguration[] finalRanking = new PlayerConfiguration[PlayerConfigManager.Instance.GetPlayerConfigs().Count];
+                foreach (var config in PlayerConfigManager.Instance.GetPlayerConfigs())
+                {
+                    var configScore = config.RoundScore;
+
+
+                }
+
+
 
                 GameLoop.Instance.StateMachine.MoveTo(GameStates.GameOverState);
                 
             }
             else
                 GameLoop.Instance.StateMachine.MoveTo(GameStates.Play);
+
             yield break;
         }
 

@@ -6,7 +6,5 @@ public static class RoundManager
 {
     public static int PlayedRounds;
     public static int MaxRounds;
-
-
     
 }

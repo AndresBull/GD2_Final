@@ -13,8 +13,8 @@ namespace GameSystem.Management
     {
         [SerializeField] private TextMeshProUGUI _playerName = null;
         [SerializeField] private TextMeshProUGUI _scoreText = null;
-        [SerializeField] private Image _ladderImage, _lightImage = null;
-        [SerializeField] private Sprite _redLight, _greenLight = null;
+        [SerializeField] private Image _ladderImage = null, _lightImage = null;
+        [SerializeField] private Sprite _redLight = null, _greenLight = null;
 
         private int _playerIndex;
 

@@ -69,6 +69,10 @@ namespace GameSystem.Management
 
         protected sealed override void SetupScene()
         {
+            RoundManager.PlayedRounds = 0;
+            RoundManager.MaxRounds = PlayerConfigManager.Instance.GetPlayerConfigs().Count;
+
+
             OnPlayStateEntered?.Invoke(this, EventArgs.Empty);
             SceneManager.LoadScene("Play");
             PlayerConfigManager.Instance.SetPlayerAsOverlord();

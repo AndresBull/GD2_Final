@@ -46,6 +46,7 @@ namespace GameSystem.Management
         public const string Play = "Play";
         public const string RoundOver = "RoundOver";
         public const string End = "End";
+        public const string GameOverState = "GameOverState";
     }
 
     public abstract class BaseState : IState<BaseState>

@@ -1,4 +1,5 @@
-﻿using GameSystem.Characters;
+﻿using Assets.Scripts.GameSystem.Management;
+using GameSystem.Characters;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace GameSystem.Management
 {
@@ -51,8 +53,12 @@ namespace GameSystem.Management
                 PlayerConfigManager.Instance.NextOverlordIndex = nextIdx;
             }
 
+            RoundManager.PlayedRounds++;
+            
             StartCoroutine(EndOfRoundCountdown(10));
         }
+
+
 
         private IEnumerator EndOfRoundCountdown(int seconds)
         {
@@ -67,7 +73,20 @@ namespace GameSystem.Management
                 yield return new WaitForSeconds(1);
             }
 
-            GameLoop.Instance.StateMachine.MoveTo(GameStates.Play);
+            if (RoundManager.PlayedRounds >= RoundManager.MaxRounds)
+            {
+                HighScoreDataScript.SetAmountOfPlayers(PlayerConfigManager.Instance.GetAllClimberConfigs().Count());
+
+                for (int i=0; i<HighScoreDataScript.GetAmountOfPlayers();i++)
+                {
+                    HighScoreDataScript.SetScoreForPlayer(PlayerConfigManager.Instance.GetPlayerConfigs()[i].TotalScore ,i);
+                } 
+
+                GameLoop.Instance.StateMachine.MoveTo(GameStates.GameOverState);
+                
+            }
+            else
+                GameLoop.Instance.StateMachine.MoveTo(GameStates.Play);
             yield break;
         }
 

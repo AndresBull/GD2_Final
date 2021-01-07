@@ -65,6 +65,9 @@ namespace GameSystem.Management
                 case "Button - Quit":
                     GameLoop.Instance.StateMachine.MoveTo(GameStates.End);
                     break;
+                case "Button - Menu":
+                    GameLoop.Instance.StateMachine.MoveTo(GameStates.Menu);
+                    break;
             }
         }
 

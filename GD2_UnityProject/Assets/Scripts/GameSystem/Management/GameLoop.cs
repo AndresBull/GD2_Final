@@ -7,6 +7,7 @@ using BoardSystem;
 using GameSystem.Views;
 using System;
 using UnityEngine.InputSystem;
+using UnityEditorInternal;
 
 namespace GameSystem.Management
 {
@@ -50,7 +51,9 @@ namespace GameSystem.Management
             _playState = new PlayState();
             RoundOverState roundOverState = new RoundOverState();
             EndState endState = new EndState();
+            GameOverState gameOverState = new GameOverState();
 
+            _stateMachine.RegisterState(GameStates.GameOverState, gameOverState);
             _stateMachine.RegisterState(GameStates.Menu, menuState);
             _stateMachine.RegisterState(GameStates.Setup, setupState);
             _stateMachine.RegisterState(GameStates.Rules, rulesState);

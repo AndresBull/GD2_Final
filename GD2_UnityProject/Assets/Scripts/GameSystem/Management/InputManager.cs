@@ -8,8 +8,6 @@ namespace GameSystem.Management
 {
     public class InputManager : SingletonMonoBehaviour<InputManager>
     {
-        public event EventHandler OnOptionsOpened;
-        public event EventHandler OnOptionsClosed;
 
         private void Awake()
         {
@@ -44,16 +42,6 @@ namespace GameSystem.Management
             }
         }
 
-        internal void CloseOptionsMenu()
-        {
-            OnOptionsClosed?.Invoke(this, EventArgs.Empty);
-        }
-
-        internal void OpenOptionsMenu()
-        {
-            OnOptionsOpened?.Invoke(this, EventArgs.Empty);
-        }
-
         public void OnSubmit(Button button)
         {
             if (button == null)
@@ -63,12 +51,6 @@ namespace GameSystem.Management
             {
                 case "Button - Play":
                     GameLoop.Instance.StateMachine.MoveTo(GameStates.Setup);
-                    break;
-                case "Button - Options":
-                    OpenOptionsMenu();
-                    break;
-                case "Button - Back":
-                    CloseOptionsMenu();
                     break;
                 case "Button - Quit":
                     GameLoop.Instance.StateMachine.MoveTo(GameStates.End);

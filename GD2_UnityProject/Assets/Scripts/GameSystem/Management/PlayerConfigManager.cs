@@ -39,6 +39,7 @@ namespace GameSystem.Management
             _playerConfigs = new List<PlayerConfiguration>();
             PlayerInput input = GetComponentInChildren<PlayerInput>();
             PlayerConfiguration config = new PlayerConfiguration(input);
+            input.transform.SetParent(transform);
             _playerConfigs.Add(config);
             DontDestroyOnLoad(gameObject);
         }
@@ -117,23 +118,18 @@ namespace GameSystem.Management
         {
             if (!(GameLoop.Instance.StateMachine.CurrentState is SetupState))
             {
-                if (_playerConfigs.Count >= 1)
+                if (_playerConfigs.Count > 1)
                 {
+                    LeavePlayer(input);
                     return;
                 }
-                JoinPlayer(input);
-                return;
             }
 
-            if(GameLoop.Instance.StateMachine.CurrentState is PlayState)
-            {
-                InputManager.Instance.OpenOptionsMenu();
-            }
 
             JoinPlayer(input);
         }
 
-        internal void OnPlayerLeft(PlayerInput input)
+        private void LeavePlayer(PlayerInput input)
         {
             if (_playerConfigs.Any(p => p.PlayerIndex == input.playerIndex))
             {
@@ -144,15 +140,20 @@ namespace GameSystem.Management
             }
         }
 
+        internal void OnPlayerLeft(PlayerInput input)
+        {
+            LeavePlayer(input);
+        }
+
         internal void RemovePlayers(int lastPlayerRemoved = 0)
         {
             if (_playerConfigs.Count - 1 <= lastPlayerRemoved)
                 return;
 
-            for (int i = _playerConfigs.Count - 1; i >= lastPlayerRemoved; i++)
+            for (int i = _playerConfigs.Count - 1; i >= lastPlayerRemoved; i--)
             {
                 PlayerConfiguration config = _playerConfigs[i];
-                OnPlayerLeft(config.Input);
+                LeavePlayer(config.Input);
             }
         }
 
@@ -248,9 +249,9 @@ namespace GameSystem.Management
                 var config = new PlayerConfiguration(input);
                 _playerConfigs.Add(config);
             }
-            else
+            else if (input.playerIndex != _playerConfigs[0].PlayerIndex)
             {
-                OnPlayerLeft(input);
+                LeavePlayer(input);
             }
         }
 

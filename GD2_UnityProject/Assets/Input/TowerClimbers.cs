@@ -57,6 +57,14 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""OpenOptions"",
+                    ""type"": ""Button"",
+                    ""id"": ""13ae6585-d22c-4ee2-a84f-f7789d4f5e9e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -211,6 +219,28 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""PushBlock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""40a981ef-f480-426b-8f7b-d1666d1f3d1f"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""OpenOptions"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0f98c629-1256-41d3-ad2f-92679d3255b7"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""OpenOptions"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -514,6 +544,14 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""OpenOptions"",
+                    ""type"": ""Button"",
+                    ""id"": ""04f524bf-66c0-4023-96a1-78c680914661"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -604,6 +642,28 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                     ""action"": ""Fast Drop Block"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""485617ee-168f-4010-bbf1-8deab3fd4e5f"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""OpenOptions"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""98c85570-04d2-400e-a208-47c46716b6b8"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""OpenOptions"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -678,6 +738,7 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
         m_Climber_PlaceLadder = m_Climber.FindAction("Place Ladder", throwIfNotFound: true);
         m_Climber_ClimbLadder = m_Climber.FindAction("ClimbLadder", throwIfNotFound: true);
         m_Climber_PushBlock = m_Climber.FindAction("PushBlock", throwIfNotFound: true);
+        m_Climber_OpenOptions = m_Climber.FindAction("OpenOptions", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -689,6 +750,7 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
         m_Overlord_MoveHand = m_Overlord.FindAction("Move Hand", throwIfNotFound: true);
         m_Overlord_DropBlock = m_Overlord.FindAction("Drop Block", throwIfNotFound: true);
         m_Overlord_FastDropBlock = m_Overlord.FindAction("Fast Drop Block", throwIfNotFound: true);
+        m_Overlord_OpenOptions = m_Overlord.FindAction("OpenOptions", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -743,6 +805,7 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
     private readonly InputAction m_Climber_PlaceLadder;
     private readonly InputAction m_Climber_ClimbLadder;
     private readonly InputAction m_Climber_PushBlock;
+    private readonly InputAction m_Climber_OpenOptions;
     public struct ClimberActions
     {
         private @TowerClimbers m_Wrapper;
@@ -752,6 +815,7 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
         public InputAction @PlaceLadder => m_Wrapper.m_Climber_PlaceLadder;
         public InputAction @ClimbLadder => m_Wrapper.m_Climber_ClimbLadder;
         public InputAction @PushBlock => m_Wrapper.m_Climber_PushBlock;
+        public InputAction @OpenOptions => m_Wrapper.m_Climber_OpenOptions;
         public InputActionMap Get() { return m_Wrapper.m_Climber; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -776,6 +840,9 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 @PushBlock.started -= m_Wrapper.m_ClimberActionsCallbackInterface.OnPushBlock;
                 @PushBlock.performed -= m_Wrapper.m_ClimberActionsCallbackInterface.OnPushBlock;
                 @PushBlock.canceled -= m_Wrapper.m_ClimberActionsCallbackInterface.OnPushBlock;
+                @OpenOptions.started -= m_Wrapper.m_ClimberActionsCallbackInterface.OnOpenOptions;
+                @OpenOptions.performed -= m_Wrapper.m_ClimberActionsCallbackInterface.OnOpenOptions;
+                @OpenOptions.canceled -= m_Wrapper.m_ClimberActionsCallbackInterface.OnOpenOptions;
             }
             m_Wrapper.m_ClimberActionsCallbackInterface = instance;
             if (instance != null)
@@ -795,6 +862,9 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 @PushBlock.started += instance.OnPushBlock;
                 @PushBlock.performed += instance.OnPushBlock;
                 @PushBlock.canceled += instance.OnPushBlock;
+                @OpenOptions.started += instance.OnOpenOptions;
+                @OpenOptions.performed += instance.OnOpenOptions;
+                @OpenOptions.canceled += instance.OnOpenOptions;
             }
         }
     }
@@ -863,6 +933,7 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
     private readonly InputAction m_Overlord_MoveHand;
     private readonly InputAction m_Overlord_DropBlock;
     private readonly InputAction m_Overlord_FastDropBlock;
+    private readonly InputAction m_Overlord_OpenOptions;
     public struct OverlordActions
     {
         private @TowerClimbers m_Wrapper;
@@ -870,6 +941,7 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
         public InputAction @MoveHand => m_Wrapper.m_Overlord_MoveHand;
         public InputAction @DropBlock => m_Wrapper.m_Overlord_DropBlock;
         public InputAction @FastDropBlock => m_Wrapper.m_Overlord_FastDropBlock;
+        public InputAction @OpenOptions => m_Wrapper.m_Overlord_OpenOptions;
         public InputActionMap Get() { return m_Wrapper.m_Overlord; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -888,6 +960,9 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 @FastDropBlock.started -= m_Wrapper.m_OverlordActionsCallbackInterface.OnFastDropBlock;
                 @FastDropBlock.performed -= m_Wrapper.m_OverlordActionsCallbackInterface.OnFastDropBlock;
                 @FastDropBlock.canceled -= m_Wrapper.m_OverlordActionsCallbackInterface.OnFastDropBlock;
+                @OpenOptions.started -= m_Wrapper.m_OverlordActionsCallbackInterface.OnOpenOptions;
+                @OpenOptions.performed -= m_Wrapper.m_OverlordActionsCallbackInterface.OnOpenOptions;
+                @OpenOptions.canceled -= m_Wrapper.m_OverlordActionsCallbackInterface.OnOpenOptions;
             }
             m_Wrapper.m_OverlordActionsCallbackInterface = instance;
             if (instance != null)
@@ -901,6 +976,9 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
                 @FastDropBlock.started += instance.OnFastDropBlock;
                 @FastDropBlock.performed += instance.OnFastDropBlock;
                 @FastDropBlock.canceled += instance.OnFastDropBlock;
+                @OpenOptions.started += instance.OnOpenOptions;
+                @OpenOptions.performed += instance.OnOpenOptions;
+                @OpenOptions.canceled += instance.OnOpenOptions;
             }
         }
     }
@@ -957,6 +1035,7 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
         void OnPlaceLadder(InputAction.CallbackContext context);
         void OnClimbLadder(InputAction.CallbackContext context);
         void OnPushBlock(InputAction.CallbackContext context);
+        void OnOpenOptions(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
@@ -970,5 +1049,6 @@ public class @TowerClimbers : IInputActionCollection, IDisposable
         void OnMoveHand(InputAction.CallbackContext context);
         void OnDropBlock(InputAction.CallbackContext context);
         void OnFastDropBlock(InputAction.CallbackContext context);
+        void OnOpenOptions(InputAction.CallbackContext context);
     }
 }

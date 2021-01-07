@@ -597,6 +597,17 @@ namespace GameSystem.Characters
                 }
             }
         }
+
+        public void OnOpenOptions(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                if (_playerConfig.PlayerIndex != 0)
+                    return;
+
+                GameObject.Find("Canvas").GetComponent<OptionsMenu>().OpenOptions();
+            }
+        }
         #endregion
     }
 }

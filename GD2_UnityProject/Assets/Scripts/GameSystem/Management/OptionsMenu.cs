@@ -15,6 +15,11 @@ namespace GameSystem.Management
         [SerializeField] private GameObject _newFirstSelected = null;
 
         public static bool IsGamePaused;
+        
+        public void AdjustVolume(float sliderValue)
+        {
+            AudioListener.volume = sliderValue;
+        }
 
         public void CloseOptions()
         {
@@ -37,10 +42,6 @@ namespace GameSystem.Management
             GameObject.Find("EventSystem").GetComponent<EventSystem>().SetSelectedGameObject(_newFirstSelected);
         }
 
-        public void AdjustVolume(float sliderValue)
-        {
-            AudioListener.volume = sliderValue;
-        }
 
         public void ReturnToMenu()
         {

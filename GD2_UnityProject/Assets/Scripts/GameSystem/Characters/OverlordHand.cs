@@ -48,24 +48,6 @@ namespace GameSystem.Characters
             RandomNextBlock();
         }
 
-        public void SetPlayerConfig(PlayerConfiguration config)
-        {
-            _playerConfig = config;
-        }
-
-        private void SetMovementConstraints(int blockWidthAmount)
-        {
-            float fieldWidth = GameLoop.Instance.Field.Columns * GameLoop.Instance.FieldView.PositionConverter.BlockScale.x;
-
-            float overlordWidth = 1f; // set to ~model width
-            float blockWidth = blockWidthAmount * GameLoop.Instance.FieldView.PositionConverter.BlockScale.x;
-
-            float maxWidth = Mathf.Max(overlordWidth, blockWidth);
-
-            float range = (fieldWidth - maxWidth) / 2;
-            _movementConstraints = new Vector2(-range, range);
-        }
-
         private void Update()
         {
             if (GameLoop.Instance.StateMachine.CurrentState is PlayState)
@@ -76,6 +58,24 @@ namespace GameSystem.Characters
                 DropBlock();
                 return;
             }
+        }
+
+        private void FixedUpdate()
+        {
+            // Hand movement
+            float movement = _horizontalMovement * _speed * Time.fixedDeltaTime;
+            transform.position = transform.position + new Vector3(movement, 0.0f, 0.0f);
+            float clampedX = Mathf.Clamp(transform.position.x, _movementConstraints.x, _movementConstraints.y);
+            transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
+
+
+            // Block movement
+            _holdBlockView?.MoveAccordingToHand(transform.position);
+        }
+
+        private void OnDestroy()
+        {
+            StopAllCoroutines();
         }
 
         private void DropBlock()
@@ -98,45 +98,6 @@ namespace GameSystem.Characters
             _holdTimer = 0;
         }
 
-        private IEnumerator FastThrowCooldown(float timeInSec)
-        {
-            _canFastThrow = false;
-            PlayerConfigManager.Instance.ToggleSpecialUsed(_playerConfig.PlayerIndex, _canFastThrow);
-
-            yield return new WaitForSeconds(timeInSec);
-            _canFastThrow = true;
-            PlayerConfigManager.Instance.ToggleSpecialUsed(_playerConfig.PlayerIndex, _canFastThrow);
-
-        }
-
-        private void FixedUpdate()
-        {
-            // Hand movement
-            float movement = _horizontalMovement * _speed * Time.fixedDeltaTime;
-            transform.position = transform.position + new Vector3(movement, 0.0f, 0.0f);
-            float clampedX = Mathf.Clamp(transform.position.x, _movementConstraints.x, _movementConstraints.y);
-            transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
-
-
-            // Block movement
-            _holdBlockView?.MoveAccordingToHand(transform.position);
-        }
-
-        public void DropDelay()
-        {
-            if (!_hasBlock)
-            {
-                _nextBlockTimer += Time.deltaTime;
-                if (_nextBlockTimer >= _nextBlockDelay)
-                {
-                    RandomNextBlock();
-                }
-                return;
-            }
-
-            _holdTimer += Time.deltaTime;
-        }
-
         private void RandomNextBlock()
         {
             _hasBlock = true;
@@ -152,29 +113,53 @@ namespace GameSystem.Characters
             _nextBlockView.gameObject.GetComponent<Collider>().enabled = false;
         }
 
-        // TODO: REMOVE the following methods if PlayerInput uses BroadcastMessages()
-        //       UNCOMMMENT the following methods if PlayerInput uses Invoke Unity Events
-        //public void OnMoveHand(InputAction.CallbackContext context)
-        //{
-        //    _horizontalMovement = context.ReadValue<float>();
-        //}
+        private void SetMovementConstraints(int blockWidthAmount)
+        {
+            float fieldWidth = GameLoop.Instance.Field.Columns * GameLoop.Instance.FieldView.PositionConverter.BlockScale.x;
 
-        //public void OnDropBlock(InputAction.CallbackContext context)
-        //{
-        //    if (context.ReadValueAsButton())
-        //    {
-        //        if (_hasBlock)
-        //        {
-        //            _hasBlock = false;
-        //            Drop();
-        //            _dropTimer = 0;
-        //            return;
-        //        }
-        //    }
-        //}
+            float overlordWidth = 1f; // set to ~model width
+            float blockWidth = blockWidthAmount * GameLoop.Instance.FieldView.PositionConverter.BlockScale.x;
 
-        // TODO: USE the following methods if PlayerInput uses BroadcastMessages()
-        //       REMOVE the following methods if PlayerInput uses Invoke Unity Events
+            float maxWidth = Mathf.Max(overlordWidth, blockWidth);
+
+            float range = (fieldWidth - maxWidth) / 2;
+            _movementConstraints = new Vector2(-range, range);
+        }
+
+
+        private IEnumerator FastThrowCooldown(float timeInSec)
+        {
+            _canFastThrow = false;
+            PlayerConfigManager.Instance.ToggleSpecialUsed(_playerConfig.PlayerIndex, _canFastThrow);
+
+            yield return new WaitForSeconds(timeInSec);
+            _canFastThrow = true;
+            PlayerConfigManager.Instance.ToggleSpecialUsed(_playerConfig.PlayerIndex, _canFastThrow);
+
+        }
+
+        
+        public void DropDelay()
+        {
+            if (!_hasBlock)
+            {
+                _nextBlockTimer += Time.deltaTime;
+                if (_nextBlockTimer >= _nextBlockDelay)
+                {
+                    RandomNextBlock();
+                }
+                return;
+            }
+
+            _holdTimer += Time.deltaTime;
+        }
+
+        public void SetPlayerConfig(PlayerConfiguration config)
+        {
+            _playerConfig = config;
+        }
+
+        #region Input
         public void OnMoveHand(InputValue value)
         {
             _horizontalMovement = value.Get<float>();
@@ -213,10 +198,6 @@ namespace GameSystem.Characters
                 GameObject.Find("Canvas").GetComponent<OptionsMenu>().OpenOptions();
             }
         }
-
-        private void OnDestroy()
-        {
-            StopAllCoroutines();
-        }
+        #endregion
     }
 }

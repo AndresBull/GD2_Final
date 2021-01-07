@@ -22,8 +22,6 @@ namespace GameSystem.Management
         [SerializeField] private int _timeBeforeStartingIfReady = 5;
 
         private List<PlayerConfiguration> _playerConfigs;
-        private float _timer = 0.0f;
-        private bool _isTimerActive = false;
         public int NextOverlordIndex;
 
         public event EventHandler<ScoreChangedEventArgs> OnScoreChanged;
@@ -172,7 +170,7 @@ namespace GameSystem.Management
                 _playerConfigs[NextOverlordIndex].IsOverlord = true;
                 return;
             }
-            // TODO: enable this after testing to set an overlord
+
             if (overlord.Count <= 0)
             {
                 _playerConfigs[NextOverlordIndex].IsOverlord = true;

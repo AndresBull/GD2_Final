@@ -122,22 +122,6 @@ namespace GameSystem.Characters
         }
 
         #region Input
-        // TODO: REMOVE the following methods if PlayerInput uses BroadcastMessages()
-        //       USE the following methods if PlayerInput uses Invoke Unity Events
-
-        //public void OnClimbLadder(InputAction.CallbackContext context)
-        //{
-        //    float direction = context.ReadValue<float>();
-
-        //    if (direction < 0.5f && direction > -0.5f)
-        //        return;
-
-        //    normalize direction
-        //    _direction = (int)(direction / Mathf.Abs(direction));
-        //}
-
-        // TODO: USE the following methods if PlayerInput uses BroadcastMessages()
-        //       REMOVE the follwing methods if PlayerInput uses Invoke Unity Events
         public void OnClimbLadder(InputValue value)
         {
             float direction = value.Get<float>();

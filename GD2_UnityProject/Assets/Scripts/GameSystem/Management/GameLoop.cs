@@ -7,7 +7,6 @@ using BoardSystem;
 using GameSystem.Views;
 using System;
 using UnityEngine.InputSystem;
-using UnityEditorInternal;
 
 namespace GameSystem.Management
 {

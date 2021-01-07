@@ -12,6 +12,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Dark red
+    second: {fileID: 2100000, guid: 1c5706ed8387d334b96900a185aa7a40, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Extra01
     second: {fileID: 2100000, guid: 5df3470a28091a14d8c99b59e5731bac, type: 2}
   - first:

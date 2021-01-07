@@ -44,7 +44,12 @@ namespace GameSystem.Management
             }
         }
 
-        public void OpenOptionsMenu()
+        internal void CloseOptionsMenu()
+        {
+            OnOptionsClosed?.Invoke(this, EventArgs.Empty);
+        }
+
+        internal void OpenOptionsMenu()
         {
             OnOptionsOpened?.Invoke(this, EventArgs.Empty);
         }
@@ -61,6 +66,9 @@ namespace GameSystem.Management
                     break;
                 case "Button - Options":
                     OpenOptionsMenu();
+                    break;
+                case "Button - Back":
+                    CloseOptionsMenu();
                     break;
                 case "Button - Quit":
                     GameLoop.Instance.StateMachine.MoveTo(GameStates.End);

@@ -26,7 +26,10 @@ namespace GameSystem.Management
         #region Unity Lifecycle
         private void Awake()
         {
-            SetupStateMachine();
+            if (Time.time <= Time.deltaTime)
+            {
+                SetupStateMachine();
+            }
         }
 
         private void OnDestroy()

@@ -23,7 +23,7 @@ namespace GameSystem.Management
             PlayerConfigManager.Instance.OnScoreChanged += OnScoreChanged;
             PlayerConfigManager.Instance.OnLadderEquipChanged += OnLadderEquipChanged;
             PlayerConfigManager.Instance.OnSpecialChanged += OnSpecialChanged;
-            _ladderImage.gameObject.SetActive(true);
+            //_ladderImage.gameObject.SetActive(true);
         }
         private void OnDestroy()
         {

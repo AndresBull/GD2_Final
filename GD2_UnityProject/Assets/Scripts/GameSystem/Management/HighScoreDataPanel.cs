@@ -21,7 +21,7 @@ namespace GameSystem.Management
             {
                 for (int j = 0; j < _playerRankingsList.Count; j++)
                 {
-                    if (_playerRankingsList[j].RoundScore > _playerRankingsList[i].RoundScore)
+                    if (_playerRankingsList[j].RoundScore < _playerRankingsList[i].RoundScore)
                     {
                         var temp = _playerRankingsList[i];
                         _playerRankingsList[i] = _playerRankingsList[j];
@@ -36,7 +36,7 @@ namespace GameSystem.Management
             for (int i = 0; i < _playerRankingsList.Count; i++)
             {
                 var config = _playerRankingsList[i];
-                var go = Instantiate(_UIPrefab, transform.parent);
+                var go = Instantiate(_UIPrefab, transform.position, Quaternion.identity, transform);
                 go.GetComponent<HighScorePanel>().SetRankingText(i + 1, config.PlayerIndex);
                 go.GetComponent<HighScorePanel>().SetScoreText(config.RoundScore);
             }

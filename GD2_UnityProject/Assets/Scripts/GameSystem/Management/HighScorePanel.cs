@@ -19,13 +19,13 @@ namespace GameSystem.Management
         public void SetRankingText(int placement, int playerIndex)
         {
             if (placement == 1)
-                _rankingText.text = $"First place - Player {playerIndex}!";
+                _rankingText.text = $"First place - Player {playerIndex + 1}!";
             else if(placement == 2)
-                _rankingText.text = $"Second place - Player {playerIndex}!";
+                _rankingText.text = $"Second place - Player {playerIndex + 1}!";
             else if (placement == 3)
-                _rankingText.text = $"Third place - Player {playerIndex}!";
+                _rankingText.text = $"Third place - Player {playerIndex + 1}!";
             else if (placement >= 4)
-                _rankingText.text = $"Fourth place - Player {playerIndex}!";
+                _rankingText.text = $"Fourth place - Player {playerIndex + 1}!";
 
         }
 
